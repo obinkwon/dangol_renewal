@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.dangol.dao.IMyPageDao">
+	<sql id="mjob">
+		<choose>
+			<when test="mjob !=null">
+				#{mjob}
+			</when>
+			<otherwise>
+				null
+			</otherwise>
+		</choose>
+	</sql>
+	<sql id="marea1">
+		<choose>
+			<when test="marea1 !=null">
+				#{marea1}
+			</when>
+			<otherwise>
+				null
+			</otherwise>
+		</choose>
+	</sql>
+	<sql id="marea2">
+		<choose>
+			<when test="marea2 !=null">
+				#{marea2}
+			</when>
+			<otherwise>
+				null
+			</otherwise>
+		</choose>
+	</sql>
+	<sql id="mimage">
+		<choose>
+			<when test="mimage !=null">
+				#{mimage}
+			</when>
+			<otherwise>
+				null
+			</otherwise>
+		</choose>
+	</sql>
+    <!-- 회원 수정 -->
+	<update id="updateMemberOne" parameterType="member">
+		UPDATE 
+			MEMBERS 
+		SET 
+			MPW = #{mpw}
+			, MPHONE = #{mphone}
+			, MADDRESS = #{maddress}
+			, MADDRESS_D = #{maddress_d}
+			, MGENDER = #{mgender}
+			, MJOB = <include refid="mjob"/>
+			, MAREA1 = <include refid="marea1"/>
+			, MAREA2 = <include refid="marea2"/>
+			, MIMAGE = <include refid="mimage"/> 
+		WHERE 
+			MID = #{mid}
+	</update>
+	 
+	<!-- 회원 태그 삭제 -->
+	<delete id="deleteMtag" parameterType="member">
+		DELETE FROM MTAG WHERE MID = #{mid}
+	</delete>
+	
+	<!-- 회원 삭제 -->
+	<delete id="deleteMemberOne" parameterType="member">
+		DELETE FROM MEMBERS WHERE MID = #{mid}
+	</delete>
+	
+	<!-- 방문내역 -->
+	<select id="selectHistoryList" parameterType="member" resultType="details">
+	 	SELECT 
+	 		D.DNUM AS dnum
+			,D.GNUM AS gnum 
+			,TO_CHAR(D.DDATE,'YYYY-MM-DD') AS ddate
+			,D.DPERSON AS dperson
+			,D.DMENU AS dmenu
+			,D.DTYPE AS dtype
+			,D.DASK AS dask
+			,D.DCHECK AS dcheck
+			,D.DTIME AS dtime
+			,D.DCOUNT AS dcount
+			,D.DLIMIT AS dlimit
+			,S.SNAME AS sname
+			,S.SNUM AS snum
+			,S.SIMAGE AS simage
+			,S.SADDRESS AS saddress
+			,S.SDETAILADDR AS sdetailaddr
+	 	FROM 
+	 		DETAILS D
+	 		INNER JOIN GRADES G ON D.GNUM = G.GNUM
+	 		INNER JOIN STORES S ON G.SNUM = S.SNUM 
+	 	WHERE 
+			G.MID = #{mid} 
+	 		AND D.DCHECK = 'Y' 
+	 	ORDER BY D.DDATE DESC
+	</select>
+	
+	<!-- 즐겨찾기 리스트 -->
+	<select id="selectBookmarkList" parameterType="details" resultType="details">
+	    SELECT
+	    	S.SNUM AS snum
+	    	,S.SNAME AS sname 
+	    	,S.SIMAGE AS simage 
+	    	,S.SADDRESS AS saddress 
+	    	,S.SDETAILADDR AS sdetailaddr 
+	    	,T.GLEVEL AS glevel 
+	    	,T.GLIKE AS glike 
+		FROM STORES S
+		INNER JOIN (
+        SELECT 
+	        G.GNUM AS gnum
+	        ,G.GLEVEL AS glevel
+	        ,G.GLIKE AS glike
+            ,G.SNUM AS snum
+	    FROM 
+	        DETAILS D
+	        INNER JOIN GRADES G ON D.GNUM = G.GNUM
+	    WHERE 
+	        G.MID = #{mid}
+	        AND G.GCURRENT = 'Y' 
+	        AND G.GLIKE = 1
+	        AND D.DCHECK = 'Y' 
+	    GROUP BY G.GNUM, G.SNUM, G.GLEVEL, G.GLIKE
+        ) T ON S.SNUM = T.SNUM
+        ORDER BY S.SNAME ASC
+	</select>
+	
+	<!-- 나의 등급 정보 리스트 -->
+	<select id="selectGradeList" parameterType="member" resultType="grade">
+		SELECT 
+			GNUM AS gnum
+			,MID AS mid
+			,SNUM AS snum
+			,GLEVEL AS glevel
+			,GCURRENT AS gcurrent
+			,GLIKE AS glike
+			,GCOUNT AS gcount
+		FROM
+			GRADES
+		WHERE
+			MID = #{mid} 
+			<!-- AND GCURRENT = 'Y' -->
+	</select>
+	
+	<!-- 등급 강등 -->
+	<update id="updateGrade" parameterType="grade">
+		UPDATE
+			GRADES
+		SET 
+			<if test="glevel != null and glevel != ''">
+			GLEVEL = #{glevel} 
+			</if>
+			<if test="gcount != null and gcount != ''">
+			,GCOUNT = #{gcount}
+			</if>
+		WHERE 
+			GNUM = #{gnum} 
+			<!-- AND GCURRENT = 'Y' -->
+	</update>
+	
+	<!-- 예약 리스트 -->
+	<select id="selectReserveState" parameterType="member" resultType="details">
+		SELECT 
+	        G.MID AS mid
+	        ,D.DNUM AS dnum
+	        ,TO_CHAR(D.DDATE,'YYYY-MM-DD') AS ddate
+	        ,D.DTIME AS dtime
+	        ,D.DPERSON AS dperson
+	        ,D.DMENU AS dmenu
+	        ,S.SNUM AS snum
+	        ,S.SIMAGE AS simage
+	        ,S.SNAME AS sname
+	    FROM 
+	        DETAILS D
+	        INNER JOIN GRADES G ON D.GNUM = G.GNUM
+	        INNER JOIN STORES S ON G.SNUM = S.SNUM
+	    WHERE 
+	        G.MID = #{mid}
+	        AND D.DTYPE = 'Y'
+	        AND D.DCHECK = 'N'  
+	    ORDER BY D.DDATE ASC
+	</select>
+	
+	<!-- 예약 날짜 조회 -->
+	<select id="selectddate" parameterType="details" resultType="details">
+		SELECT
+			DNUM
+			,GNUM
+			,DDATE
+			,DPERSON
+			,DMENU
+			,DTYPE
+			,DASK
+			,DCHECK
+			,DTIME
+			,DCOUNT
+			,DLIMIT
+		FROM
+			DETAILS
+		WHERE
+			DDATE LIKE SYSDATE 
+			AND DNUM = #{dnum}
+	</select>
+	
+	<!-- 예약 삭제 -->
+	<delete id="deleteReserve" parameterType="details">
+		DELETE FROM DETAILS WHERE DNUM = #{dnum}
+	</delete>
+	
+	<!-- 즐겨찾기 변경 -->
+	<update id="updateLike" parameterType="member">
+		UPDATE 
+			GRADES 
+		SET 
+			GLIKE = #{glike}
+		WHERE 
+			MID = #{mid}
+			AND SNUM = #{snum}
+			AND GCURRENT = 'Y'
+	</update>
+	
+	<!-- 후기 작성 여부 수정 -->
+	<update id="updatedetailsComment" parameterType="details">
+		UPDATE
+			DETAILS
+		SET
+			DCOUNT = #{dcount} 
+		WHERE 
+			DNUM = #{dnum}
+	</update>
+	
+	<!-- 후기 작성 -->
+	<insert id="insertComment" parameterType="comment">
+		INSERT INTO COMMENTS(
+			CNUM
+			,DNUM
+			,CTOTAL
+			,CTASTE
+			,CSERVICE
+			,CPRICE
+			,CDATE
+			,CREVIEW
+		)VALUES(	
+			COMMENTS_SEQ.NEXTVAL
+			,#{dnum}
+			,#{ctotal}
+			,#{ctaste}
+			,#{cservice}
+			,#{cprice}
+			,SYSDATE
+			,#{creview}
+		)
+	</insert>
+	
+	<!-- 등급 업데이트 -->
+	<update id="updateGradeInfo" parameterType="grade">
+		UPDATE 
+			GRADES
+		SET
+			GLEVEL = #{glevel}
+		WHERE
+			GNUM = #{gnum}
+	</update>
+	
+	<!-- 후기 카운트 업데이트 -->
+	<update id="updateGradeCount" parameterType="grade">
+		UPDATE
+			GRADES
+		SET
+			GCOUNT = #{gcount} 
+		WHERE
+			GNUM = #{gnum}
+	</update>
+</mapper> 

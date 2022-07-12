@@ -1,0 +1,770 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.dangol.dao.ICategoryDao">
+	<sql id="topPaging">
+		SELECT
+			*
+		FROM(
+			SELECT
+				ROWNUM AS RNUM
+				,t1.*
+			FROM(
+	</sql>
+	<sql id="btmPaging">
+			)t1
+		) WHERE RNUM BETWEEN #{offset} AND #{offset} + (#{storesPerPage} - 1)
+	</sql>
+	<!-- 음식종류별 가게 리스트 가져오기 -->
+	<select id="selectStoreListFood" parameterType="admin" resultType="store">
+		<include refid="topPaging"/>
+		SELECT
+			S.SNUM AS snum
+			,S.BID AS bid
+			,S.SINTRO AS sintro
+			,S.SNAME AS sname
+			,S.SADDRESS AS saddress
+			,S.SDETAILADDR AS sdetailaddr
+			,S.SPHONE AS sphone
+			,S.STIME_START AS stime_start
+			,S.STIME_END AS stime_end
+			,S.SPARKING AS sparking
+			,S.SIMAGE AS simage
+			,S.STYPE AS stype
+			,S.SHOLIDAY AS sholiday
+			,S.SDATE AS sdate
+			,S.SRATELV0 AS sratelv0
+			,S.SRATELV1 AS sratelv1
+			,S.SRATELV2 AS sratelv2
+			,S.SRATELV3 AS sratelv3
+			,S.SLIMIT AS slimit
+			,(SELECT 
+					COUNT(*) 
+				FROM 
+					GRADES G
+				WHERE 
+					S.SNUM = G.SNUM
+					AND G.GLEVEL <![CDATA[>]]> 0
+			) AS dancnt 
+			,(SELECT 
+					MOD(NVL(SUM(C.CTOTAL),0),COUNT(*))
+				FROM 
+					GRADES G
+					LEFT JOIN DETAILS D ON G.GNUM = D.GNUM
+					LEFT JOIN COMMENTS C ON D.DNUM = C.DNUM
+				WHERE 
+					S.SNUM = G.SNUM
+					AND D.DCOUNT <![CDATA[>]]> 0
+			) AS commentTotal
+		FROM 
+			STORES S
+		WHERE 
+			S.STYPE = #{anum}
+		<if test="type == '' or type == 'new' or type == null">
+		ORDER BY S.SDATE DESC
+		</if>
+		<if test="type == 'star'">
+		ORDER BY commentTotal DESC
+		</if>
+		<if test="type == 'dan'">
+		ORDER BY dancnt DESC
+		</if>
+		<include refid="btmPaging"/>
+	</select>
+	<!-- 음식종류별 가게 리스트 가져오기 -->
+	<select id="selectStoreListTheme" parameterType="admin" resultType="store">
+		<include refid="topPaging"/>
+		SELECT
+			S.SNUM AS snum
+			,S.BID AS bid
+			,S.SINTRO AS sintro
+			,S.SNAME AS sname
+			,S.SADDRESS AS saddress
+			,S.SDETAILADDR AS sdetailaddr
+			,S.SPHONE AS sphone
+			,S.STIME_START AS stime_start
+			,S.STIME_END AS stime_end
+			,S.SPARKING AS sparking
+			,S.SIMAGE AS simage
+			,S.STYPE AS stype
+			,S.SHOLIDAY AS sholiday
+			,S.SDATE AS sdate
+			,S.SRATELV0 AS sratelv0
+			,S.SRATELV1 AS sratelv1
+			,S.SRATELV2 AS sratelv2
+			,S.SRATELV3 AS sratelv3
+			,S.SLIMIT AS slimit
+			,(SELECT 
+					COUNT(*) 
+				FROM 
+					GRADES G
+				WHERE 
+					S.SNUM = G.SNUM
+					AND G.GLEVEL <![CDATA[>]]> 0
+			) AS dancnt 
+			,(SELECT 
+					MOD(NVL(SUM(C.CTOTAL),0),COUNT(*))
+				FROM 
+					GRADES G
+					LEFT JOIN DETAILS D ON G.GNUM = D.GNUM
+					LEFT JOIN COMMENTS C ON D.DNUM = C.DNUM
+				WHERE 
+					S.SNUM = G.SNUM
+					AND D.DCOUNT <![CDATA[>]]> 0
+			) AS commentTotal
+		FROM 
+			STORES S
+			INNER JOIN STAG ST ON S.SNUM = ST.SNUM
+		WHERE 
+			ST.ANUM = #{anum}
+		<if test="type == '' or type == 'new' or type == null">
+		ORDER BY S.SDATE DESC
+		</if>
+		<if test="type == 'star'">
+		ORDER BY commentTotal DESC
+		</if>
+		<if test="type == 'dan'">
+		ORDER BY dancnt DESC
+		</if>
+		<include refid="btmPaging"/>
+	</select>
+	<!-- 지역별 가게 리스트 가져오기 -->
+	<select id="selectStoreListArea" parameterType="admin" resultType="store">
+		<include refid="topPaging"/>
+		SELECT
+			S.SNUM AS snum
+			,S.BID AS bid
+			,S.SINTRO AS sintro
+			,S.SNAME AS sname
+			,S.SADDRESS AS saddress
+			,S.SDETAILADDR AS sdetailaddr
+			,S.SPHONE AS sphone
+			,S.STIME_START AS stime_start
+			,S.STIME_END AS stime_end
+			,S.SPARKING AS sparking
+			,S.SIMAGE AS simage
+			,S.STYPE AS stype
+			,S.SHOLIDAY AS sholiday
+			,S.SDATE AS sdate
+			,S.SRATELV0 AS sratelv0
+			,S.SRATELV1 AS sratelv1
+			,S.SRATELV2 AS sratelv2
+			,S.SRATELV3 AS sratelv3
+			,S.SLIMIT AS slimit
+			,(SELECT 
+					COUNT(*) 
+				FROM 
+					GRADES G
+				WHERE 
+					S.SNUM = G.SNUM
+					AND G.GLEVEL <![CDATA[>]]> 0
+			) AS dancnt 
+			,(SELECT 
+					MOD(NVL(SUM(C.CTOTAL),0),COUNT(*))
+				FROM 
+					GRADES G
+					LEFT JOIN DETAILS D ON G.GNUM = D.GNUM
+					LEFT JOIN COMMENTS C ON D.DNUM = C.DNUM
+				WHERE 
+					S.SNUM = G.SNUM
+					AND D.DCOUNT <![CDATA[>]]> 0
+			) AS commentTotal
+		FROM 
+			STORES S
+		WHERE 
+			S.SADDRESS LIKE '${areaName}%'
+		<if test="type == '' or type == 'new' or type == null">
+		ORDER BY S.SDATE DESC
+		</if>
+		<if test="type == 'star'">
+		ORDER BY commentTotal DESC
+		</if>
+		<if test="type == 'dan'">
+		ORDER BY dancnt DESC
+		</if>
+		<include refid="btmPaging"/>
+	</select>
+	<!-- 추천별 가게 리스트 가져오기 -->
+	<select id="selectStoreListRecommend" parameterType="admin" resultType="store">
+		<include refid="topPaging"/>
+		SELECT
+			DISTINCT
+			S.SNUM AS snum
+			,S.BID AS bid
+			,S.SINTRO AS sintro
+			,S.SNAME AS sname
+			,S.SADDRESS AS saddress
+			,S.SDETAILADDR AS sdetailaddr
+			,S.SPHONE AS sphone
+			,S.STIME_START AS stime_start
+			,S.STIME_END AS stime_end
+			,S.SPARKING AS sparking
+			,S.SIMAGE AS simage
+			,S.STYPE AS stype
+			,S.SHOLIDAY AS sholiday
+			,S.SDATE AS sdate
+			,S.SRATELV0 AS sratelv0
+			,S.SRATELV1 AS sratelv1
+			,S.SRATELV2 AS sratelv2
+			,S.SRATELV3 AS sratelv3
+			,S.SLIMIT AS slimit
+			,(SELECT 
+					COUNT(*) 
+				FROM 
+					GRADES G
+				WHERE 
+					S.SNUM = G.SNUM
+					AND G.GLEVEL <![CDATA[>]]> 0
+			) AS dancnt 
+			,(SELECT 
+					MOD(NVL(SUM(C.CTOTAL),0),COUNT(*))
+				FROM 
+					GRADES G
+					LEFT JOIN DETAILS D ON G.GNUM = D.GNUM
+					LEFT JOIN COMMENTS C ON D.DNUM = C.DNUM
+				WHERE 
+					S.SNUM = G.SNUM
+					AND D.DCOUNT <![CDATA[>]]> 0
+			) AS commentTotal
+			,(SELECT
+					COUNT(SST.ANUM)
+				FROM
+					STAG SST
+				WHERE SST.SNUM = S.SNUM
+			) AS stagTotal
+		FROM 
+			STORES S
+			INNER JOIN STAG ST ON S.SNUM = ST.SNUM
+		WHERE
+			ST.ANUM IN
+			<foreach collection="anumList" item="anum" open="(" separator="," close=")">
+		        #{anum}
+		    </foreach>
+			<if test="maddress != '' and maddress != null">
+			OR SADDRESS = #{maddress} 
+			</if>
+			<if test="marea1 != '' and marea1 != null">
+			OR SADDRESS = #{marea1} 
+			</if>
+			<if test="marea2 != '' and marea2 != null">
+			OR SADDRESS = #{marea2}
+			</if>
+		ORDER BY stagTotal DESC
+		<include refid="btmPaging"/>
+	</select>
+	<!-- 신규 가게 리스트 가져오기 -->
+	<select id="selectStoreListNew" parameterType="admin" resultType="store">
+		<include refid="topPaging"/>
+		SELECT
+			S.SNUM AS snum
+			,S.BID AS bid
+			,S.SINTRO AS sintro
+			,S.SNAME AS sname
+			,S.SADDRESS AS saddress
+			,S.SDETAILADDR AS sdetailaddr
+			,S.SPHONE AS sphone
+			,S.STIME_START AS stime_start
+			,S.STIME_END AS stime_end
+			,S.SPARKING AS sparking
+			,S.SIMAGE AS simage
+			,S.STYPE AS stype
+			,S.SHOLIDAY AS sholiday
+			,S.SDATE AS sdate
+			,S.SRATELV0 AS sratelv0
+			,S.SRATELV1 AS sratelv1
+			,S.SRATELV2 AS sratelv2
+			,S.SRATELV3 AS sratelv3
+			,S.SLIMIT AS slimit
+			,(SELECT 
+					COUNT(*) 
+				FROM 
+					GRADES G
+				WHERE 
+					S.SNUM = G.SNUM
+					AND G.GLEVEL <![CDATA[>]]> 0
+			) AS dancnt 
+			,(SELECT 
+					MOD(NVL(SUM(C.CTOTAL),0),COUNT(*))
+				FROM 
+					GRADES G
+					LEFT JOIN DETAILS D ON G.GNUM = D.GNUM
+					LEFT JOIN COMMENTS C ON D.DNUM = C.DNUM
+				WHERE 
+					S.SNUM = G.SNUM
+					AND D.DCOUNT <![CDATA[>]]> 0
+			) AS commentTotal
+		FROM 
+			STORES S
+		WHERE
+			S.SDATE BETWEEN (SYSDATE - 10) AND SYSDATE
+		<if test="type == '' or type == 'new' or type == null">
+		ORDER BY S.SDATE DESC
+		</if>
+		<if test="type == 'star'">
+		ORDER BY commentTotal DESC
+		</if>
+		<if test="type == 'dan'">
+		ORDER BY dancnt DESC
+		</if>
+		<include refid="btmPaging"/>
+	</select>
+	<!-- 가게 리뷰 총점 -->
+	<select id="selectCommentTotal" parameterType="store" resultType="int">
+		SELECT 
+			NVL(SUM(C.CTOTAL),0)
+		FROM 
+			GRADES A
+			LEFT JOIN DETAILS B ON A.GNUM = B.GNUM
+			LEFT JOIN COMMENTS C ON B.DNUM = C.DNUM
+		WHERE 
+			A.SNUM = #{snum} 
+			AND B.DCOUNT <![CDATA[>]]> 0
+	</select>
+	<!-- 가게 리뷰 총 갯수 -->
+	<select id="selectCommentTotalCnt" parameterType="store" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM 
+			GRADES A
+			LEFT JOIN DETAILS B ON A.GNUM = B.GNUM
+		WHERE 
+			A.SNUM = #{snum} 
+			AND B.DCOUNT <![CDATA[>]]> 0
+	</select>
+	<!-- 등급 정보 등록 -->
+	<insert id="insertGrade" parameterType="grade" keyProperty="gnum" useGeneratedKeys="true">
+		<selectKey keyProperty="gnum" order="BEFORE" resultType="int">SELECT GRADES_SEQ.NEXTVAL FROM DUAL</selectKey>
+		INSERT INTO GRADES(
+			GNUM
+			,MID
+			,SNUM
+			,GLEVEL
+			,GCURRENT
+			,GLIKE
+			,GCOUNT
+		)VALUES(
+			#{gnum}
+			,#{mid}
+			,#{snum}
+			,0
+			,'Y'
+			,0
+			,0
+		)
+	</insert>
+	<!-- 해당가게 내 등급 -->
+	<select id="selectGradeAtStore" parameterType="grade" resultType="grade">
+		SELECT
+			GNUM AS gnum
+			,MID AS mid
+			,SNUM AS snum
+			,GLEVEL AS glevel
+			,GCURRENT AS gcurrent
+			,GLIKE AS glike
+		FROM 
+			GRADES 
+		WHERE 
+			SNUM = #{snum} 
+			AND MID = #{mid} 
+			AND GCURRENT = 'Y'
+	</select>
+	<!-- 해당가게 메뉴 리스트 -->
+	<select id="selectOrderList" parameterType="store" resultType="order">
+		SELECT 
+			ORD AS ord
+			,SNUM AS snum
+			,ONAME AS oname
+			,OPRICE AS oprice
+			,OIMAGE AS oimage
+		FROM 
+			ORDERS 
+		WHERE 
+			SNUM = #{snum}
+	</select>
+	<!-- 해당가게 단골 정보 -->
+	<select id="selectStoreGlevel" parameterType="store" resultType="grade">
+		SELECT 
+			GLEVEL AS glevel
+			,COUNT(*) AS dangolCnt 
+		FROM 
+			GRADES 
+		WHERE 
+			SNUM = #{snum} 
+			AND GCURRENT = 'Y' 
+		GROUP BY GLEVEL 
+		ORDER BY GLEVEL
+	</select>
+	<!-- 예약 리스트 가져오기 -->
+	<select id="selectDetailReserveByDdate" parameterType="details" resultType="details">
+		SELECT 
+			D.DNUM AS dnum
+			,D.GNUM AS gnum
+			,D.DDATE AS ddate
+			,D.DPERSON AS dperson
+			,D.DMENU AS dmenu
+			,D.DTYPE AS dtype
+			,D.DASK AS dask
+			,D.DCHECK AS dcheck
+			,D.DTIME AS dtime
+			,D.DCOUNT AS dcount
+			,D.DLIMIT AS dlimit
+		FROM 
+			DETAILS D
+			INNER JOIN GRADES G ON D.GNUM = G.GNUM
+		WHERE 
+			G.SNUM = #{snum}
+			AND TO_CHAR(D.DDATE,'YYYY-MM-DD') = #{ddate} 
+			AND D.DTYPE = 'Y'
+	</select>
+	<!-- 예약하기 -->
+	<insert id="insertDetail" parameterType="details">
+		INSERT INTO DETAILS(
+			DNUM
+			,GNUM
+			,DDATE
+			,DPERSON
+			,DMENU
+			,DTYPE
+			<if test="dask != '' and dask != null">
+			,DASK
+			</if>
+			,DCHECK
+			,DTIME
+			,DCOUNT
+			,DLIMIT
+		)VALUES(
+			DETAILS_SEQ.NEXTVAL
+			,#{gnum}
+			,#{ddate}
+			,#{dperson}
+			,#{dmenu}
+			,'Y'
+			<if test="dask != '' and dask != null">
+			,#{dask}
+			</if>
+			,'N'
+			,#{dtime}
+			,0
+			,#{dlimit}
+		)
+	</insert>
+	<!-- 예약 정보 가져오기 -->
+	<select id="selectDetailOne" parameterType="details" resultType="details">
+		SELECT
+			DNUM AS dnum
+			,GNUM AS gnum
+			,TO_CHAR(DDATE,'YYYYMMDD') AS ddate
+			,DPERSON AS dperson
+			,DMENU AS dmenu
+			,DTYPE AS dtype
+			,DASK AS dask
+			,DCHECK AS dcheck
+			,DTIME AS dtime
+			,DCOUNT AS dcount
+			,DLIMIT AS dlimit
+		FROM
+			DETAILS
+		WHERE
+			DNUM = #{dnum}
+	</select>
+	<!-- 음식 종류별 가게 갯수 -->
+	<select id="getStoreListCountFood" parameterType="admin" resultType="int"> 
+		SELECT 
+			COUNT(*) 
+		FROM 
+			STORES 
+		WHERE 
+			STYPE = #{anum}
+	</select>
+	<!-- 테마 종류별 가게 갯수 -->
+	<select id="getStoreListCountTheme" parameterType="admin" resultType="int"> 
+		SELECT 
+			COUNT(*) 
+		FROM 
+			STORES S
+			INNER JOIN STAG ST ON S.SNUM = ST.SNUM
+		WHERE 
+			ST.ANUM = #{anum}
+	</select>
+	<!-- 지역별 가게 갯수 -->
+	<select id="getStoreListCountArea" parameterType="admin" resultType="int"> 
+		SELECT 
+			COUNT(*) 
+		FROM 
+			STORES 
+		WHERE 
+			SADDRESS LIKE '${areaName}%'
+	</select>
+	<!-- 추천별 가게 갯수 -->
+	<select id="getStoreListCountRecommend" parameterType="admin" resultType="int"> 
+		SELECT 
+			COUNT(*) 
+		FROM 
+			STORES S
+			INNER JOIN STAG ST ON S.SNUM = ST.SNUM
+		WHERE
+			ST.ANUM IN
+			<foreach collection="anumList" item="anum" open="(" separator="," close=")">
+		        #{anum}
+		    </foreach>
+			<if test="maddress != '' and maddress != null">
+			OR SADDRESS = #{maddress} 
+			</if>
+			<if test="marea1 != '' and marea1 != null">
+			OR SADDRESS = #{marea1} 
+			</if>
+			<if test="marea2 != '' and marea2 != null">
+			OR SADDRESS = #{marea2}
+			</if>
+	</select>
+	<!-- 신규 가게 갯수 -->
+	<select id="getStoreListCountNew" parameterType="admin" resultType="int"> 
+		SELECT 
+			COUNT(*) 
+		FROM 
+			STORES 
+		WHERE 
+			SDATE BETWEEN (SYSDATE - 10) AND SYSDATE
+	</select>
+	<!-- 후기 작성 정보 -->
+	<select id="selectCommentInfo" parameterType="details" resultType="details">
+		SELECT
+			D.DNUM AS dnum
+			,D.GNUM AS gnum
+			,TO_CHAR(D.DDATE,'YYYY-MM-DD') AS ddate
+			,D.DPERSON AS dperson
+			,D.DMENU AS dmenu
+			,D.DTYPE AS dtype
+			,D.DASK AS dask
+			,D.DCHECK AS dcheck
+			,D.DTIME AS dtime
+			,D.DCOUNT AS dcount
+			,D.DLIMIT AS dlimit
+			,G.GLEVEL AS glevel
+			,CASE WHEN G.GLEVEL = 0 THEN '범골'
+			     WHEN G.GLEVEL = 1 THEN '진골'
+			     WHEN G.GLEVEL = 2 THEN '성골'
+			     ELSE '단골'
+			END AS gname
+			,CASE WHEN G.GLEVEL = 0 THEN S.SRATELV0 || '% 할인'
+			     WHEN G.GLEVEL = 1 THEN S.SRATELV1 || '% 할인'
+			     WHEN G.GLEVEL = 2 THEN S.SRATELV2 || '% 할인'
+			     ELSE S.SRATELV3 || '% 할인'
+			END AS gbenefit
+		FROM
+			DETAILS D
+			INNER JOIN GRADES G ON D.GNUM = G.GNUM 
+			INNER JOIN STORES S ON G.SNUM = S.SNUM
+		WHERE
+			D.DNUM = #{dnum}
+	</select>
+	<!-- 후기 작성자 등급 정보 -->
+	<select id="selectGradeComment" parameterType="int" resultType="grade">
+		SELECT
+			G.GNUM AS gnum
+			,G.MID AS mid
+			,G.SNUM AS snum
+			,G.GLEVEL AS glevel
+			,G.GCURRENT AS gcurrent
+			,G.GLIKE AS glike
+			,G.GCOUNT AS gcount
+		FROM
+			GRADES G
+			INNER JOIN DETAILS D ON G.GNUM = D.GNUM
+		WHERE
+			D.DNUM = #{dnum}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="selectGradeCountBySnum" parameterType="int" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			GRADES 
+		WHERE 
+			SNUM = #{snum} 
+			AND GCURRENT = 'Y' 
+			AND GLEVEL <![CDATA[>]]> 0
+	</select>
+	
+	<select id="selectDetailAllByGnum" parameterType="int" resultType="details">
+		SELECT 
+			DNUM AS dnum
+			,GNUM AS gnum
+			,DDATE AS ddate
+			,DPERSON AS dperson
+			,DMENU AS dmenu
+			,DTYPE AS dtype
+			,DASK AS dask
+			,DCHECK AS dcheck
+			,DTIME AS dtime
+			,DCOUNT AS dcount
+			,DLIMIT AS dlimit
+		FROM 
+			DETAILS 
+		WHERE 
+			GNUM = #{gnum} 
+			AND DCOUNT != 0
+	</select>
+	<select id="selectDetailsListGnum" parameterType="grade" resultType="details">
+		SELECT 
+			DNUM AS dnum
+			,GNUM AS gnum
+			,DDATE AS ddate
+			,DPERSON AS dperson
+			,DMENU AS dmenu
+			,DTYPE AS dtype
+			,DASK AS dask
+			,DCHECK AS dcheck
+			,DTIME AS dtime
+			,DCOUNT AS dcount
+			,DLIMIT AS dlimit
+		FROM 
+			DETAILS 
+		WHERE 
+			GNUM = #{gnum} 
+			<!-- AND DCOUNT <![CDATA[>]]> 0 -->
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="selectCommentOneByDnum" parameterType="int" resultType="comment">
+		SELECT
+			*
+		FROM 
+			COMMENTS 
+		WHERE 
+			DNUM = #{dnum}
+	</select>
+	<select id="selectAdminOne" parameterType="int" resultType="admin">
+		SELECT * 
+		FROM 
+			ADMINS 
+		WHERE 
+			ANUM = #{anum} 
+	</select>
+	
+
+	
+	
+	
+	<select id="selectOrderOne" parameterType="order" resultType="order">
+		SELECT
+			ORD AS ord
+			,SNUM AS snum
+			,ONAME AS oname
+			,OPRICE AS oprice
+			,OIMAGE AS oimage
+		FROM 
+			ORDERS 
+		WHERE 
+			ORD = #{ord}
+			AND SNUM = #{snum}
+	</select>
+	
+	
+	<select id="selectCommentListBySnum" parameterType="store" resultType="comment">
+		SELECT 
+			C.CNUM AS cnum
+			,C.DNUM AS dnum
+			,C.CTOTAL AS ctotal
+			,C.CTASTE AS ctaste
+			,C.CSERVICE AS cservice
+			,C.CPRICE AS cprice
+			,C.CDATE AS cdate
+			,C.CREVIEW AS creview
+			,B.MID AS mid
+			,B.GNUM AS gnum
+			,(SELECT MIMAGE FROM MEMBERS WHERE MID = B.MID) AS mimage
+		FROM 
+			COMMENTS C
+            LEFT JOIN DETAILS A ON A.DNUM = C.DNUM
+            LEFT JOIN GRADES B ON A.GNUM = B.GNUM 
+		WHERE 
+            B.SNUM = #{snum}
+		ORDER BY C.CDATE DESC
+	</select>
+	<select id="selectMyCommentListByGrade" parameterType="grade" resultType="comment">
+		SELECT
+			C.CNUM AS cnum
+			,C.DNUM AS dnum
+			,C.CTOTAL AS ctotal
+			,C.CTASTE AS ctaste
+			,C.CSERVICE AS cservice
+			,C.CPRICE AS cprice
+			,C.CDATE AS cdate
+			,C.CREVIEW AS creview
+			,B.MID AS mid
+			,B.GNUM AS gnum
+			,(SELECT MIMAGE FROM MEMBERS WHERE MID = B.MID) AS mimage	
+		FROM 
+			COMMENTS C
+			LEFT JOIN DETAILS A ON A.DNUM = C.DNUM 
+			LEFT JOIN GRADES B ON A.GNUM = B.GNUM 
+		WHERE
+			B.MID = #{mid} 
+			AND B.SNUM = #{snum}
+			AND A.DCOUNT <![CDATA[>]]> 0
+		ORDER BY CDATE DESC
+	</select>
+	<select id="selectGradeByDnum" parameterType="int" resultType="grade">
+		select * from grades where gnum = (select gnum from Details where dnum = #{dnum})
+	</select>
+	
+	
+	<delete id="deleteCommentOneByCnum" parameterType="int">
+		delete from comments where cnum = #{cnum}
+	</delete>
+	<select id="selectCommentByCnum" parameterType="int" resultType="comment">
+		select * from comments where cnum = #{cnum}
+	</select>
+	<update id="updateDetailByDnum" parameterType="int">
+		update details set dcount = 0 where dnum = #{dnum}
+	</update>
+	<select id="selectDetailByMidSnum" parameterType="java.util.HashMap" resultType="details">
+		select * from details where gnum in (select gnum from grades where mid = #{mid} and snum =#{snum}) and dcount = #{dcount} order by dcount desc
+	</select>
+	<select id="selectDetailMaxDcount" parameterType="grade" resultType="int">
+		select max(dcount) from details where gnum in (select gnum from grades where mid = #{mid} and snum =#{snum})
+	</select>
+	<update id="updateDcountMinusByDnum" parameterType="int">
+		update details set dcount = dcount - 1 where dnum = #{dnum} 
+	</update>
+	<select id="selectAdminTasteTag" resultType="admin">
+		select * from admins where atype= 'taste'
+	</select>
+	<update id="updateCommentOne" parameterType="comment">
+		update comments set ctotal=#{ctotal}, cservice=#{cservice}, cprice=#{cprice}, ctaste = #{ctaste}, creview = #{creview} where cnum = #{cnum}
+	</update>
+	<select id="selectCommentByDnum" parameterType="int" resultType="comment">
+		select * from comments where dnum = #{dnum}
+	</select>
+	<select id="selectKeywordStore" parameterType="java.util.HashMap" resultType="store">
+		select * from stores where sname like '${keyword}%'
+	</select>
+</mapper>
