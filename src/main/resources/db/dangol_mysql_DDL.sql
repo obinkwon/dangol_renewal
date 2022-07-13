@@ -162,3 +162,55 @@ CREATE TABLE `inquirys` (
   `modify_id` varchar(100) NOT NULL COMMENT '수정자', 
   PRIMARY KEY (`inum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- dangol.comments definition
+
+CREATE TABLE `comments` (
+  `cnum` int(10) NOT NULL AUTO_INCREMENT COMMENT '리뷰번호',
+  `dnum` int(10) DEFAULT NULL COMMENT '내역번호',
+  `ctotal` int(1) DEFAULT '0' COMMENT '총점(0~5)',
+  `ctaste` varchar(35) DEFAULT NULL COMMENT '맛 태그',
+  `cservice` int(1) DEFAULT '0' COMMENT '서비스 별점(0~5)',
+  `cprice` int(1) DEFAULT '0' COMMENT '가격 별점(0~5)',
+  `creview` varchar(100) DEFAULT NULL COMMENT '리뷰내용',
+  `regist_dt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록일자',
+  `modify_dt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정일자',
+  `regist_id` varchar(100) NOT NULL COMMENT '등록자',
+  `modify_id` varchar(100) NOT NULL COMMENT '수정자',
+  PRIMARY KEY (`cnum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- dangol.orders definition
+
+CREATE TABLE `orders` (
+  `onum` int(10) NOT NULL AUTO_INCREMENT COMMENT '메뉴번호',
+  `snum` int(10) DEFAULT NULL COMMENT '가게번호',
+  `oname` varchar(30) NOT NULL COMMENT '메뉴이름',
+  `oprice` int(10) NOT NULL DEFAULT '0' COMMENT '메뉴가격',
+  `oimage` varchar(50) DEFAULT NULL COMMENT '메뉴이미지',
+  `regist_dt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록일자',
+  `modify_dt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정일자',
+  `regist_id` varchar(100) NOT NULL COMMENT '등록자',
+  `modify_id` varchar(100) NOT NULL COMMENT '수정자',  
+  PRIMARY KEY (`onum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- dangol.events definition
+
+CREATE TABLE `events` (
+  `eid` int(10) NOT NULL AUTO_INCREMENT COMMENT '이벤트번호',
+  `snum` int(10) DEFAULT NULL COMMENT '가게번호',
+  `etitle` varchar(50) NOT NULL COMMENT '이벤트제목',
+  `estartdate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '이벤트시작날짜',
+  `eenddate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '이벤트종료날짜',
+  `etarget` varchar(20) NOT NULL COMMENT '이벤트대상',
+  `eimage` varchar(50) NOT NULL COMMENT '이벤트내용이미지',
+  `regist_dt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록일자',
+  `modify_dt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정일자',
+  `regist_id` varchar(100) NOT NULL COMMENT '등록자',
+  `modify_id` varchar(100) NOT NULL COMMENT '수정자',    
+  PRIMARY KEY (`eid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
