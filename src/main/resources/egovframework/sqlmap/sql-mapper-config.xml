@@ -3,17 +3,16 @@
 
 <configuration>
     <typeAliases>
-		<typeAlias alias="admin" type="egovframework.dangol.model.Admin"/>
-		<typeAlias alias="comment" type="egovframework.dangol.model.Comment"/>
-		<typeAlias alias="details" type="egovframework.dangol.model.Details"/>
-		<typeAlias alias="event" type="egovframework.dangol.model.Event"/>
-		<typeAlias alias="grade" type="egovframework.dangol.model.Grade"/>
-		<typeAlias alias="inquiry" type="egovframework.dangol.model.Inquiry"/>
-		<typeAlias alias="member" type="egovframework.dangol.model.Member"/>
-		<typeAlias alias="mtag" type="egovframework.dangol.model.Mtag"/>
-		<typeAlias alias="order" type="egovframework.dangol.model.Order"/>
-		<typeAlias alias="stag" type="egovframework.dangol.model.Stag"/>
-		<typeAlias alias="stag" type="egovframework.dangol.model.Stag"/>
-		<typeAlias alias="store" type="egovframework.dangol.model.Store"/>
+		<typeAlias alias="admin" type="egovframework.model.Admin"/>
+		<typeAlias alias="comment" type="egovframework.model.Comment"/>
+		<typeAlias alias="details" type="egovframework.model.Details"/>
+		<typeAlias alias="event" type="egovframework.model.Event"/>
+		<typeAlias alias="grade" type="egovframework.model.Grade"/>
+		<typeAlias alias="inquiry" type="egovframework.model.Inquiry"/>
+		<typeAlias alias="member" type="egovframework.model.Member"/>
+		<typeAlias alias="mtag" type="egovframework.model.Mtag"/>
+		<typeAlias alias="order" type="egovframework.model.Order"/>
+		<typeAlias alias="stag" type="egovframework.model.Stag"/>
+		<typeAlias alias="store" type="egovframework.model.Store"/>
     </typeAliases>
 </configuration>

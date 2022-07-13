@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.dao.IOwnerDao">
+	<!-- 점장 정보 조회 -->
+	<select id="selectBossOne" parameterType="store" resultType="store">
+		SELECT 
+			BID AS bid
+			,BPW AS bpw
+			,BPHONE AS bphone
+		FROM 
+			BOSS 
+		WHERE 
+			BID = #{bid}
+	</select>
+	
+	<!-- 점장 ID 조회 -->
+	<select id="findOwnerId" parameterType="store" resultType="store">
+		SELECT
+			BID AS bid
+		FROM
+			BOSS 
+		WHERE 
+			BPHONE = #{bphone}
+	</select>
+	
+	<!-- 점장 PWD 조회 -->
+	<select id="findOwnerPw" parameterType="store" resultType="store">
+		SELECT 
+		FROM 
+			BOSS 
+		WHERE 
+			BID = #{bid} 
+			AND BPHONE = #{bphone}
+	</select>
+	
+	<!-- 점장 가입 -->
+	<insert id="insertOwner" parameterType="store">
+		INSERT INTO BOSS(
+			BID
+			,BPW
+			,BPHONE
+		) VALUES (
+			#{bid}
+			, #{bpw}
+			, #{bphone}
+		)
+	</insert>
+	
+	<!-- 점장 정보 삭제 -->
+	<delete id="deleteOwner" parameterType="store">
+		DELETE FROM BOSS 
+		WHERE BID = #{bid}
+		AND BPW = #{bpw}
+	</delete>
+	
+	<!-- 점장 정보 수정 -->
+	<update id="updateOwner" parameterType="store">
+		UPDATE BOSS SET 
+			BPW = #{bpw}
+			, BPHONE = #{bphone} 
+		WHERE 
+			BID = #{bid} 
+	</update> 
+	
+	<!-- 메뉴 등록 -->
+	<insert id="insertOrder" parameterType="order">
+		INSERT INTO ORDERS(
+			ORD
+			,SNUM
+			,ONAME
+			,OPRICE
+			<if test="oimage != null">
+			,OIMAGE
+			</if>
+		)VALUES(
+			ORDERS_SEQ.NEXTVAL
+			,#{snum}
+			,#{oname}
+			,#{oprice}
+			<if test="oimage != null">
+			,#{oimage}
+			</if>
+		)
+	</insert>
+	
+	<!-- 가게에 등록된 등급 정보 -->
+	<select id="selectGradeListBid" parameterType="store" resultType="grade">
+		SELECT 
+			G.GNUM AS gnum
+			,G.MID AS mid
+			,G.SNUM AS snum
+			,G.GLEVEL AS glevel
+			,G.GCURRENT AS gcurrent
+			,G.GLIKE AS glike
+			,G.GCOUNT AS gcount
+		FROM 
+			GRADES G
+			INNER JOIN BOSS B G.SNUM = B.SNUM 
+		WHERE 
+			B.BID = #{bid}
+			<!-- AND G.GCURRENT = 'Y' -->
+	</select>
+	
+	<!-- 예약 리스트 (전체) -->
+	<select id="selectDetailListTotal" parameterType="store" resultType="details">
+		SELECT 
+			D.DNUM AS dnum
+			,D.GNUM AS gnum
+			,TO_CHAR(D.DDATE,'YYYY-MM-DD') AS ddate
+			,D.DPERSON AS dperson
+			,D.DMENU AS dmenu
+			,D.DTYPE AS dtype
+			,D.DASK AS dask
+			,D.DCHECK AS dcheck
+			,D.DTIME AS dtime
+			,D.DCOUNT AS dcount
+			,D.DLIMIT AS dlimit
+			,G.MID AS mid
+			,(SELECT REGEXP_REPLACE(MPHONE, '(.{3})(.+)(.{4})', '\1-\2-\3') FROM MEMBERS WHERE MID = G.MID) AS mphone
+			,S.SNUM AS snum
+		FROM 
+			DETAILS D
+			INNER JOIN GRADES G ON G.GNUM = D.GNUM
+			INNER JOIN STORES S ON G.SNUM = S.SNUM 
+		WHERE 
+			S.BID = #{bid}
+		 	AND D.DTYPE = 'Y' 
+		 	AND D.DCHECK = 'N'
+		ORDER BY DDATE
+	</select>
+	
+	<!-- 예약 리스트 (하나만) -->
+	<select id="selectDetailListOne" parameterType="store" resultType="details">
+		SELECT 
+			D.DNUM AS dnum
+			,D.GNUM AS gnum
+			,TO_CHAR(D.DDATE,'YYYY-MM-DD') AS ddate
+			,D.DPERSON AS dperson
+			,D.DMENU AS dmenu
+			,D.DTYPE AS dtype
+			,D.DASK AS dask
+			,D.DCHECK AS dcheck
+			,D.DTIME AS dtime
+			,D.DCOUNT AS dcount
+			,D.DLIMIT AS dlimit
+			,G.MID AS mid
+			,(SELECT REGEXP_REPLACE(MPHONE, '(.{3})(.+)(.{4})', '\1-\2-\3') FROM MEMBERS WHERE MID = G.MID) AS mphone
+			,S.SNUM AS snum
+		FROM 
+			DETAILS D
+			INNER JOIN GRADES G ON G.GNUM = D.GNUM
+			INNER JOIN STORES S ON G.SNUM = S.SNUM 
+		WHERE 
+			S.SNUM = #{snum}
+		 	AND D.DTYPE = 'Y' 
+		 	AND D.DCHECK = 'N'
+		ORDER BY DDATE
+	</select>
+	
+	<!-- 예약 정보 -->
+	<select id="selectDetailOne" parameterType="details" resultType="details">
+		SELECT 
+			DNUM AS dnum
+			,GNUM AS gnum
+			,TO_CHAR(DDATE,'YYYY-MM-DD') AS ddate
+			,DPERSON AS dperson
+			,DMENU AS dmenu
+			,DTYPE AS dtype
+			,DASK AS dask
+			,DCHECK AS dcheck
+			,DTIME AS dtime
+			,DCOUNT AS dcount
+			,DLIMIT AS dlimit
+		FROM 
+			DETAILS
+		WHERE 
+			DNUM = #{dnum}
+		 	AND DTYPE = 'Y' 
+		 	AND DCHECK = 'N'
+	</select>
+	
+	<update id="updateDetail" parameterType="details">
+		UPDATE
+			DETAILS
+		SET
+			DCHECK = #{dcheck}
+			<if test="ddate != null and ddate != ''">
+			,DDATE = #{ddate}
+			</if>
+			<if test="dperson != null and dperson != ''">
+			,DPERSON = #{dperson}
+			</if>
+			<if test="dmenu != null and dmenu != ''">
+			,DMENU = #{dmenu}
+			</if>
+			<if test="dtype != null and dtype != ''">
+			,DTYPE = #{dtype}
+			</if>
+			<if test="dask != null and dask != ''">
+			,DASK = #{dask}
+			</if>
+			<if test="dtime != null and dtime != ''">
+			,DTIME = #{dtime}
+			</if>
+		WHERE
+			DNUM = #{dnum}
+	</update>
+	
+	<!-- 가게 리스트 -->	
+	<select id="selectStoreList" parameterType="store" resultType="store">
+		SELECT 
+			A.SNUM AS snum
+			,A.BID AS bid
+			,A.SINTRO AS sintro
+			,A.SNAME AS sname
+			,A.SADDRESS AS saddress
+			,A.SDETAILADDR AS sdetailaddr
+			,A.SPHONE AS sphone
+			,A.STIME_START AS stime_start
+			,A.STIME_END AS stime_end
+			,A.SPARKING AS sparking
+			,A.SIMAGE AS simage
+			,A.STYPE AS stype
+			,A.SHOLIDAY AS sholiday
+			,A.SDATE AS sdate
+			,A.SRATELV0 AS sratelv0
+			,A.SRATELV1 AS sratelv1
+			,A.SRATELV2 AS sratelv2
+			,A.SRATELV3 AS sratelv3
+			,A.SLIMIT AS slimit
+			,B.AVALUE AS avalue
+		FROM 
+			STORES A
+			LEFT JOIN ADMINS B ON A.STYPE = B.ANUM
+		WHERE 
+			BID = #{bid} 
+		ORDER BY SDATE DESC
+	</select>
+	
+	<!-- 가게 등록 -->
+	<insert id="insertStore" parameterType="store">
+		<selectKey resultType="int" keyProperty="snum" order="BEFORE">
+			SELECT STORES_SEQ.NEXTVAL FROM DUAL
+      	</selectKey>
+		INSERT INTO STORES(
+			SNUM
+			,SINTRO
+			,SNAME
+			,SADDRESS
+			,SDETAILADDR
+			,SPHONE
+			,STIME_START
+			,STIME_END
+			,SPARKING
+			,SLIMIT
+			,SHOLIDAY
+			,SDATE
+			,SRATELV0
+			,SRATELV1
+			,SRATELV2
+			,SRATELV3
+			<if test="simage != null and simage != ''">
+			,SIMAGE
+			</if>
+			,STYPE
+			,BID
+		)VALUES (
+			#{snum}
+			, #{sintro}
+			, #{sname}
+			, #{saddress}
+			, #{sdetailaddr}
+			, #{sphone}
+			, #{stime_start}
+			, #{stime_end}
+			, #{sparking}
+			, #{slimit}
+			, #{sholiday}
+			, SYSDATE
+			, #{sratelv0}
+			, #{sratelv1}
+			, #{sratelv2}
+			, #{sratelv3}
+			<if test="simage != null and simage != ''">
+			, #{simage}
+			</if>
+			, #{stype}
+			, #{bid}
+		)
+	</insert>
+	
+	<!-- 가게 태그 등록 -->
+	<insert id="insertStag" parameterType="store">
+		INSERT INTO STAG(
+			SNUM
+			,ANUM
+		)VALUES(
+			#{snum}
+			,#{stag}
+		)
+	</insert>
+	
+	<!-- 가게 태그 등록 -->
+	<delete id="deleteStag" parameterType="store">
+		DELETE FROM STAG WHERE SNUM = #{snum} 
+	</delete>
+	
+	<!-- 가게 태그 조회 -->
+	<select id="selectStagList" parameterType="store" resultType="store">
+		SELECT
+			SNUM AS snum
+			,A.ANUM AS anum
+			,B.AVALUE AS avalue
+		FROM
+			STAG A
+			LEFT JOIN ADMINS B ON A.ANUM = B.ANUM
+		WHERE
+			SNUM = #{snum}
+	</select>
+	
+	<!-- 가게 정보 가져오기 -->
+	<select id="selectStoreOne" parameterType="store" resultType="store">
+		SELECT 
+			A.SNUM AS snum
+			,A.BID AS bid
+			,A.SINTRO AS sintro
+			,A.SNAME AS sname
+			,A.SADDRESS AS saddress
+			,A.SDETAILADDR AS sdetailaddr
+			,REGEXP_REPLACE(A.SPHONE, '(.{3})(.+)(.{4})', '\1-\2-\3') AS sphone
+			,A.STIME_START AS stime_start
+			,A.STIME_END AS stime_end
+			,A.SPARKING AS sparking
+			,A.SIMAGE AS simage
+			,A.STYPE AS stype
+			,A.SHOLIDAY AS sholiday
+			,A.SDATE AS sdate
+			,A.SRATELV0 AS sratelv0
+			,A.SRATELV1 AS sratelv1
+			,A.SRATELV2 AS sratelv2
+			,A.SRATELV3 AS sratelv3
+			,A.SLIMIT AS slimit
+		FROM 
+			STORES A
+		WHERE 
+			A.SNUM = #{snum}
+	</select>
+	
+	<!-- 가게 수정하기 -->
+	<update id="updateStore" parameterType="store">
+		UPDATE STORES 
+		SET 
+			SINTRO = #{sintro}
+			, SNAME = #{sname}
+			, SADDRESS = #{saddress}
+			, SDETAILADDR = #{sdetailaddr}
+			, SPHONE = #{sphone}
+			, STIME_START = #{stime_start}
+			, STIME_END = #{stime_end}
+			, SPARKING = #{sparking}
+			, SIMAGE = #{simage}
+			, STYPE = #{stype}
+			, SHOLIDAY = #{sholiday}
+			, SRATELV0 = #{sratelv0}
+			, SRATELV1 = #{sratelv1}
+			, SRATELV2 = #{sratelv2}
+			, SRATELV3 = #{sratelv3}
+			, SLIMIT = #{slimit} 
+		WHERE 
+			SNUM = #{snum}
+	</update>
+	
+	<!-- 가게 삭제하기 -->
+	<delete id="deleteStore" parameterType="store">
+		DELETE FROM STORES WHERE SNUM = #{snum}
+	</delete>
+	
+	<!-- 메뉴 등록 -->
+	<insert id="insertMenu" parameterType="order">
+		<selectKey resultType="int" keyProperty="ord" order="BEFORE">
+			SELECT COUNT(*) FROM ORDERS WHERE SNUM = #{snum}
+      	</selectKey>
+		INSERT INTO ORDERS(
+			ORD
+			,SNUM
+			,ONAME
+			,OPRICE
+			,OIMAGE
+		)VALUES(
+			#{ord}
+			,#{snum}
+			,#{oname}
+			,#{oprice}
+			,#{oimage}
+		)
+	</insert>
+	
+	<!-- 메뉴 삭제 -->
+	<delete id="deleteMenu" parameterType="order">
+		DELETE FROM ORDERS WHERE ORD = #{ord} AND SNUM = #{snum}
+	</delete>
+	
+	<!-- 메뉴 수정 -->
+	<insert id="updateMenu" parameterType="order">
+		UPDATE ORDERS 
+		SET
+			ONAME = #{oname}
+			,OPRICE = #{oprice}
+			,OIMAGE = #{oimage}
+		WHERE  
+			ORD = #{ord}
+			AND SNUM = #{snum}
+	</insert>
+</mapper>

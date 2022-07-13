@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.dao.IMemberDao">
+
+	<!-- id 찾기 -->
+	<select id="findId" parameterType="member" resultType="member">
+		SELECT
+			MID AS mid
+			,MPHONE AS mphone
+		FROM  
+			MEMBERS 
+		WHERE 
+			MPHONE = #{mphone}
+	</select>
+	
+	<!-- 비밀번호 찾기 -->
+	<select id="findPw" parameterType="member" resultType="member">
+		SELECT
+			MPW AS mpw
+		FROM  
+			MEMBERS 
+		WHERE 
+			MID = #{mid} 
+			AND MPHONE = #{mphone} 
+	</select>
+	
+	<!-- 회원 등록 -->
+	<insert id="insertMember" parameterType="member">
+		INSERT INTO MEMBERS(
+			MID
+			,MPW
+			,MPHONE
+			,MADDRESS
+			,MADDRESS_D
+			,MGENDER
+			<if test="mjob != null and mjob != ''">
+			,MJOB
+			</if>
+			,MTYPE
+			<if test="marea1 != null and marea1 != ''">
+			,MAREA1
+			</if>
+			<if test="marea2 != null and marea2 != ''">
+			,MAREA2
+			</if>
+			<if test="mimage != null and mimage != ''">
+			,MIMAGE
+			</if>
+			,MPENALTY	
+		) 
+		VALUES (
+				#{mid}
+			, 	#{mpw}
+			, 	#{mphone}
+			, 	#{maddress}
+			,	#{maddress_d}
+			, 	#{mgender}
+			<if test="mjob != null and mjob != ''">
+			,	#{mjob}
+			</if>
+			,	'user'
+			<if test="marea1 != null and marea1 != ''">
+			,	#{marea1}
+			</if>
+			<if test="marea2 != null and marea2 != ''">
+			,	#{marea2}
+			</if>
+			<if test="mimage != null and mimage != ''">
+			,	#{mimage}
+			</if>
+			,	0
+		)
+	</insert>
+
+	<!-- 회원 태그 등록 -->
+	<insert id="insertMtag" parameterType="member">
+		INSERT INTO MTAG (
+		 	MID
+		 	,ANUM
+		) VALUES (
+			#{mid}
+			, #{anum}
+		)
+	</insert>
+	<!-- 회원 정보 조회 -->
+	<select id="selectMember" parameterType="member" resultType="member">
+		SELECT 
+			MID AS mid
+			,MPW AS mpw
+			,MPHONE AS mphone
+			,MADDRESS AS maddress
+			,MADDRESS_D AS maddress_d
+			,MGENDER AS mgender
+			,MJOB AS mjob
+			,MTYPE AS mtype
+			,MAREA1 AS marea1
+			,MAREA2 AS marea2
+			,MIMAGE AS mimage
+			,MPENALTY AS mpenalty
+		FROM 
+			MEMBERS 
+		WHERE 
+			MID = #{mid}
+	</select>
+	
+	<!-- 회원 태그 조회 -->
+	<select id="selectMtag" parameterType="member" resultType="member">
+		SELECT
+			A.ANUM AS anum
+			,B.AVALUE AS avalue
+		FROM
+			MTAG A
+			LEFT JOIN ADMINS B ON A.ANUM = B.ANUM
+		WHERE
+			MID = #{mid}
+	</select>
+	
+	<!-- 회원 패널티 수정 -->
+	<update id="updateMpenalty" parameterType="member">
+		UPDATE 
+			MEMBERS
+		SET
+			MPENALTY = #{mpenalty}
+		WHERE MID = #{mid}
+	</update>
+</mapper>
