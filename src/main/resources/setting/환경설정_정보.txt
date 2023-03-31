@@ -1,0 +1,3 @@
+egovframeWork - 3.8
+Mysql
+Tomcat - 8.5

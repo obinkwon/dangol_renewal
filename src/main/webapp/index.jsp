@@ -1,3 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-Hello World
-<jsp:forward page="/main.do"/>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javaScript">document.location.href="/main.do"</script> 
+</head>
+<body>
+</body>
+</html>
