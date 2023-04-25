@@ -42,7 +42,7 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/config/egovframework/springmvc/dispatcher-servlet.xml</param-value>
+			<param-value>/WEB-INF/config/egovframework/springmvc/*.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -66,11 +66,11 @@
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/common/error.jsp</location>
+		<location>/common/error_404.jsp</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/common/error.jsp</location>
+		<location>/common/error_500.jsp</location>
 	</error-page>
     
 </web-app>
