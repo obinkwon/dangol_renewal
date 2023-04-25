@@ -43,11 +43,12 @@ public class AdminController {
 	@RequestMapping("/recommandTag.do")
 	public String recommandTag(HttpServletRequest request
 			, HttpServletResponse response
-			, Model model) throws Exception {
+			, Model model
+			, @ModelAttribute("admin") Admin admin) throws Exception {
+		String returnPage = "";
 		
 		try {
 			// 현재 설정된 메인추천 1, 2
-			Admin admin = new Admin();
 			admin.setAtype("main1");
 			model.addAttribute("main1", aService.selectAdminTypeOne(admin));
 			
@@ -60,12 +61,14 @@ public class AdminController {
 			
 			model.addAttribute("themes",themeList);
 			model.addAttribute("themesCnt",themeList.size());
+			
+			returnPage = "admin/recommandTag";
 
 		}catch(Exception e) {
 			logger.error(" AdminController.recommandTag :: exception ::: "+e.getMessage());
 		}
 
-		return "admin/recommandTag";
+		return returnPage;
 	}
 
 	//관리자가 메인추천 태그 적용

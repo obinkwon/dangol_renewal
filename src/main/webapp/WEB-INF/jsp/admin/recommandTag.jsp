@@ -24,7 +24,6 @@
 				<li class="nav"><a href="adminFoodTag.do" class="nav">업종별 태그</a></li>
 				<li class="nav"><a href="adminTasteTag.do" class="nav">맛별 태그</a></li>
 				<li class="nav"><a href="selectAllInquirys.do" class="nav">1:1문의</a></li>
-				<li class="nav"><a href="logout.do" class="nav"><button>로그아웃</button></a></li>
 			</ul>
 		</div>
 		<div class="section">

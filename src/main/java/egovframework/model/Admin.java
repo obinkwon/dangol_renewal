@@ -21,8 +21,6 @@ public class Admin {
 	private String marea2;
 	public List<Integer> anumList;
 	
-	
-	
 	public int getAnum() {
 		return anum;
 	}
