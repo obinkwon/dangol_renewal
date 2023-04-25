@@ -1,6 +1,5 @@
 package egovframework.model;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Admin {
@@ -125,6 +124,15 @@ public class Admin {
 	}
 	public void setMarea2(String marea2) {
 		this.marea2 = marea2;
+	}
+	
+	@Override
+	public String toString() {
+		return "Admin [anum=" + anum + ", atype=" + atype + ", avalue=" + avalue + ", aimage=" + aimage + ", offset="
+				+ offset + ", storesPerPage=" + storesPerPage + ", page=" + page + ", startPage=" + startPage
+				+ ", endPage=" + endPage + ", lastPage=" + lastPage + ", type=" + type + ", areaName=" + areaName
+				+ ", mid=" + mid + ", maddress=" + maddress + ", marea1=" + marea1 + ", marea2=" + marea2
+				+ ", anumList=" + anumList + "]";
 	}
 	
 }

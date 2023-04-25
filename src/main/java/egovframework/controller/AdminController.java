@@ -4,10 +4,15 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,34 +21,51 @@ import org.springframework.web.servlet.View;
 
 import egovframework.model.Admin;
 import egovframework.model.Inquiry;
+import egovframework.model.Store;
 import egovframework.service.AdminService;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
+	
+	/** The Constant logger. */
+	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 	@Autowired
 	private AdminService aService;
 
-	//태그 관련
-	//메인추천 화면 로딩
-	@RequestMapping("adminRecommandTag.do")
-	public ModelAndView adminRecommandTag() {
-		ModelAndView mav = new ModelAndView();
-		// 현재 설정된 메인추천 1, 2
-		Admin admin = new Admin();
-		admin.setAtype("main1");
-		Admin main1 = aService.selectAdminTypeOne(admin);
-		admin.setAtype("main2");
-		Admin main2 = aService.selectAdminTypeOne(admin);
-		mav.addObject("main1", main1);
-		mav.addObject("main2", main2);
-		// 드롭다운에 들어갈 themetags 출력
-		admin.setAtype("theme");
-		List<Admin> themeList =  aService.selectAdminTypeList(admin);
-		mav.addObject("themes", themeList);
-		mav.addObject("themesCnt", themeList.size());
-		mav.setViewName("Admin/adminRecommandTag");
-		return mav;
+	/**
+	 * 태그 관련 - 메인추천 화면 로딩
+	 * @param model
+	 * @return "/recommandTag.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/recommandTag.do")
+	public String recommandTag(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model) throws Exception {
+		
+		try {
+			// 현재 설정된 메인추천 1, 2
+			Admin admin = new Admin();
+			admin.setAtype("main1");
+			model.addAttribute("main1", aService.selectAdminTypeOne(admin));
+			
+			admin.setAtype("main2");
+			model.addAttribute("main2", aService.selectAdminTypeOne(admin));
+			// 드롭다운에 들어갈 themetags 출력
+			admin.setAtype("theme");
+			
+			List<Admin> themeList =  aService.selectAdminTypeList(admin);
+			
+			model.addAttribute("themes",themeList);
+			model.addAttribute("themesCnt",themeList.size());
+
+		}catch(Exception e) {
+			logger.error(" AdminController.recommandTag :: exception ::: "+e.getMessage());
+		}
+
+		return "admin/recommandTag";
 	}
 
 	//관리자가 메인추천 태그 적용

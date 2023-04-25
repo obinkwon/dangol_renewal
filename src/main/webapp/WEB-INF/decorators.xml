@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<decorators defaultdir="/WEB-INF/jsp/layout/"> <!-- page에 대한 경로 지정 -->
+ 
+    <excludes> <!-- 예외지정 -->
+      <pattern>/ajax/*</pattern>
+      <pattern>/common/*</pattern>
+      <pattern>/updata/*</pattern>
+    </excludes>    
+      
+    <!-- admin 페이지 layout 설정 -->
+    <decorator name="layout_admin" page="layout_admin.jsp">
+       <pattern>/admin/*</pattern>
+    </decorator>
+
+    <!-- front 페이지 layout 설정 -->
+    <decorator name="layout_front" page="layout_front.jsp">
+       <pattern>/*</pattern>
+    </decorator>  
+    
+</decorators>

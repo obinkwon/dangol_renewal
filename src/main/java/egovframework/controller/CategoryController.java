@@ -6,17 +6,21 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,6 +45,9 @@ import egovframework.service.OwnerService;
 @Controller
 public class CategoryController {
 	
+	/** The Constant logger. */
+	private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
+	
 	@Autowired
 	private CategoryService cService;
 	
@@ -59,35 +66,52 @@ public class CategoryController {
 	@Autowired
 	private OwnerService oService;
 	
-	//카테고리 - 음식별
-	@RequestMapping("foodSort.do")
-	public ModelAndView foodSort(Admin admin ,ModelAndView mav
-			,@RequestParam(defaultValue="1") int page) {
-		if(admin.getType() == null){
-			admin.setType("new");
-		}
+	/**
+	 * 카테고리 - 음식별 page
+	 * @param model
+	 * @return "/foodSort.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/foodSort.do")
+	public String foodSort(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model
+			, @ModelAttribute("admin") Admin admin
+			, @RequestParam(defaultValue="1") int page
+	) throws Exception {
 		
-		admin.setAtype("food");
-		List<Admin> aList = aService.selectAdminTypeList(admin); // admin type 리스트
-		List<Store> sList = null;
-		
-		if(aList.size() > 0) { //음식 종류가 하나라도 있을때
-			if(admin.getAnum() == 0) {
-				admin = aList.get(0);
-			}
-			admin.setStoresPerPage(12);
-			admin.setPage(page);
-			int resultSize = cService.getStoreListCountFood(admin);
-			admin = maService.getPaging(admin,resultSize);
+		try {
 			
-			sList = cService.getStoreListFood(admin); //음식종류별 가게 리스트 가져오기
-			sList = cService.stagSetting(sList);//가게 태그 세팅
+			logger.debug("asdsadasdsad {}", admin);
+			if(admin.getType() == null){
+				admin.setType("new");
+			}
+			
+			admin.setAtype("food");
+			List<Admin> aList = aService.selectAdminTypeList(admin); // admin type 리스트
+			List<Store> sList = null;
+			
+			if(aList.size() > 0) { //음식 종류가 하나라도 있을때
+				if(admin.getAnum() == 0) {
+					admin = aList.get(0);
+				}
+				admin.setStoresPerPage(12);
+				admin.setPage(page);
+				int resultSize = cService.getStoreListCountFood(admin);
+				admin = maService.getPaging(admin,resultSize);
+				
+				sList = cService.getStoreListFood(admin); //음식종류별 가게 리스트 가져오기
+				sList = cService.stagSetting(sList);//가게 태그 세팅
+			}
+			model.addAttribute("viewInfo",admin); //조회 정보
+			model.addAttribute("adminList",aList); //음식 태그 리스트
+			model.addAttribute("storeList",sList); //가게 리스트
+
+		}catch(Exception e) {
+			logger.error(" CategoryController.foodSort :: exception ::: "+e.getMessage());
 		}
-		mav.addObject("viewInfo", admin); //조회 정보
-		mav.addObject("adminList", aList); //음식 태그 리스트
-		mav.addObject("storeList", sList); //가게 리스트
-		mav.setViewName("category/foodSort");
-		return mav;
+
+		return "category/foodSort";
 	}
 	
 	//카테고리 - 테마별
