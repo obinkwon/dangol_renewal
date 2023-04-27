@@ -5,57 +5,57 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import egovframework.dao.IAdminDao;
 import egovframework.model.Admin;
 import egovframework.model.Inquiry;
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.service.AdminService;
+import egovframework.service.dao.IAdminDao;
 
 @Service("adminService")
-public class AdminServiceImpl implements AdminService {
+public class AdminServiceImpl extends EgovAbstractServiceImpl implements AdminService {
 
 	@Resource(name = "IAdminDao")
-	private IAdminDao aDao;
+	private IAdminDao adminDao;
 
 	// imagePath
 	private String imagePath = "C:\\eclipse-workspace\\dangol\\WebContent\\images\\";
 
 	// admin 하나만 검색
-	public Admin selectAdminOne(Admin admin) {
-		return aDao.selectAdminOne(admin);
+	public Admin selectAdminOne(Admin admin) throws Exception {
+		return adminDao.selectAdminOne(admin);
 	}
 
 	// admin 하나만 검색 (타입)
-	public Admin selectAdminTypeOne(Admin admin) {
-		return aDao.selectAdminOne(admin);
+	public Admin selectAdminTypeOne(Admin admin) throws Exception {
+		return adminDao.selectAdminOne(admin);
 	}
 
 	// admin 여러개 검색 (타입)
-	public List<Admin> selectAdminTypeList(Admin admin) {
-		return aDao.selectAdminTypeList(admin);
+	public List<Admin> selectAdminTypeList(Admin admin) throws Exception {
+		return adminDao.selectAdminTypeList(admin);
 	}
 
 	// admin 여러개 검색 (mtag)
-	public List<Admin> selectAdminMtagList(Admin admin) {
-		return aDao.selectAdminMtagList(admin);
+	public List<Admin> selectAdminMtagList(Admin admin) throws Exception {
+		return adminDao.selectAdminMtagList(admin);
 	}
 
 	// 메인 태그 수정
-	public int updateAdmin(Admin admin) {
-		return aDao.updateAdmin(admin);
+	public int updateAdmin(Admin admin) throws Exception {
+		return adminDao.updateAdmin(admin);
 	}
 
 	// 태그 추가
-	public int insertTag(Admin admin) {
-		return aDao.insertTag(admin);
+	public int insertTag(Admin admin) throws Exception {
+		return adminDao.insertTag(admin);
 	}
 
 	// 태그 삭제
-	public int deleteTag(Admin admin) {
-		return aDao.deleteTag(admin);
+	public int deleteTag(Admin admin) throws Exception {
+		return adminDao.deleteTag(admin);
 	}
 
 	// 태그 추가(파일)
@@ -69,36 +69,36 @@ public class AdminServiceImpl implements AdminService {
 
 	// 1:1문의
 	// 전체 글 로드
-	public List<Inquiry> selectInquiryList(Inquiry inquiry) {
-		return aDao.selectInquiryList(inquiry);
+	public List<Inquiry> selectInquiryList(Inquiry inquiry) throws Exception {
+		return adminDao.selectInquiryList(inquiry);
 	}
 
 	// 전체 글 갯수
-	public List<Inquiry> inquiryListCount() {
-		return aDao.inquiryListCount();
+	public List<Inquiry> inquiryListCount() throws Exception {
+		return adminDao.inquiryListCount();
 	}
 
 	// 글 상세보기
-	public Inquiry selectInquiry(Inquiry inquiry) {
-		return aDao.selectInquiry(inquiry);
+	public Inquiry selectInquiry(Inquiry inquiry) throws Exception {
+		return adminDao.selectInquiry(inquiry);
 	}
 
 	// 답변 등록하기
-	public int insertInquiryAnswer(Inquiry inquiry) {
-		return aDao.insertInquiryAnswer(inquiry);
+	public int insertInquiryAnswer(Inquiry inquiry) throws Exception {
+		return adminDao.insertInquiryAnswer(inquiry);
 	}
 
 	// 파일 경로 생성
-	public File getAttachedFile(int anum) {
+	public File getAttachedFile(int anum) throws Exception {
 		Admin vo = new Admin();
 		vo.setAnum(anum);
-		Admin admin = aDao.selectAdminOne(vo);
+		Admin admin = adminDao.selectAdminOne(vo);
 		String fileName = admin.getAimage();
 		String path = imagePath + "admin\\";
 		return new File(path + fileName);
 	}
 
-	public File insertFile(MultipartFile afile) {
+	public File insertFile(MultipartFile afile) throws Exception {
 		String path = imagePath + "admin\\";
 		File dir = new File(path);
 		if (!dir.exists())

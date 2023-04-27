@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,7 +21,6 @@ import org.springframework.web.servlet.View;
 
 import egovframework.model.Admin;
 import egovframework.model.Inquiry;
-import egovframework.model.Store;
 import egovframework.service.AdminService;
 
 @Controller
@@ -31,8 +30,8 @@ public class AdminController {
 	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
-	@Autowired
-	private AdminService aService;
+	@Resource(name = "adminService")
+	private AdminService adminService;
 
 	/**
 	 * 태그 관련 - 메인추천 화면 로딩
@@ -50,14 +49,14 @@ public class AdminController {
 		try {
 			// 현재 설정된 메인추천 1, 2
 			admin.setAtype("main1");
-			model.addAttribute("main1", aService.selectAdminTypeOne(admin));
+			model.addAttribute("main1", adminService.selectAdminTypeOne(admin));
 			
 			admin.setAtype("main2");
-			model.addAttribute("main2", aService.selectAdminTypeOne(admin));
+			model.addAttribute("main2", adminService.selectAdminTypeOne(admin));
 			// 드롭다운에 들어갈 themetags 출력
 			admin.setAtype("theme");
 			
-			List<Admin> themeList =  aService.selectAdminTypeList(admin);
+			List<Admin> themeList =  adminService.selectAdminTypeList(admin);
 			
 			model.addAttribute("themes",themeList);
 			model.addAttribute("themesCnt",themeList.size());
@@ -73,13 +72,13 @@ public class AdminController {
 
 	//관리자가 메인추천 태그 적용
 	@RequestMapping("selectMain.do")
-	public String selectMain(Admin admin) {
+	public String selectMain(Admin admin) throws Exception {
 		if(admin.getAtype() != null) {
-			Admin tag = aService.selectAdminOne(admin);
+			Admin tag = adminService.selectAdminOne(admin);
 			if(tag == null) { //insert
-				aService.insertTag(admin);
+				adminService.insertTag(admin);
 			}else { //update
-				aService.updateAdmin(admin);
+				adminService.updateAdmin(admin);
 			}
 		}
 		return "redirect:adminRecommandTag.do";
@@ -87,15 +86,15 @@ public class AdminController {
 	
 	//관리자 태그 삭제
 	@RequestMapping("deleteTag.do")
-	public String deleteTag(Admin admin, String returnUrl) {
-		aService.deleteTag(admin);
+	public String deleteTag(Admin admin, String returnUrl) throws Exception {
+		adminService.deleteTag(admin);
 		return "redirect:"+returnUrl;
 	}
 	
 	//관리자 태그 추가
 	@RequestMapping("insertTag.do")
-	public String insertTag(Admin admin, String returnUrl) {
-		aService.insertTag(admin);
+	public String insertTag(Admin admin, String returnUrl) throws Exception {
+		adminService.insertTag(admin);
 		return "redirect:"+returnUrl;
 	}
 	
@@ -103,42 +102,42 @@ public class AdminController {
 	@RequestMapping("insertTagFile.do")
 	public String insertTagFile(Admin admin,
 			@RequestParam(value="afile") MultipartFile afile) throws Exception{
-		aService.insertTagFile(admin, afile);
+		adminService.insertTagFile(admin, afile);
 		return "redirect:adminFoodTag.do";
 	}
 
 	//관리자 테마 페이지 로드
 	@RequestMapping("adminThemeTag.do")
-	public ModelAndView adminThemeTag() {
+	public ModelAndView adminThemeTag() throws Exception {
 		ModelAndView mav = new ModelAndView();
 		// themeTags 출력
 		Admin admin = new Admin();
 		admin.setAtype("theme");
-		mav.addObject("themeTags", aService.selectAdminTypeList(admin));
+		mav.addObject("themeTags", adminService.selectAdminTypeList(admin));
 		mav.setViewName("Admin/adminThemeTag");
 		return mav;
 	}
 	
 	//관리자 음식 페이지 로드
 	@RequestMapping("adminFoodTag.do")
-	public ModelAndView adminFoodTag() {
+	public ModelAndView adminFoodTag() throws Exception {
 		ModelAndView mav = new ModelAndView();
 		// FoodTags 출력
 		Admin admin = new Admin();
 		admin.setAtype("food");
-		mav.addObject("foodTags", aService.selectAdminTypeList(admin));
+		mav.addObject("foodTags", adminService.selectAdminTypeList(admin));
 		mav.setViewName("Admin/adminFoodTag");
 		return mav;
 	}
 
 	//관리자 맛 페이지 로드
 	@RequestMapping("adminTasteTag.do")
-	public ModelAndView adminTasteTag() {
+	public ModelAndView adminTasteTag() throws Exception {
 		ModelAndView mav = new ModelAndView();
 		// TasteTags 출력
 		Admin admin = new Admin();
 		admin.setAtype("taste");
-		mav.addObject("tasteTags", aService.selectAdminTypeList(admin));
+		mav.addObject("tasteTags", adminService.selectAdminTypeList(admin));
 		mav.setViewName("Admin/adminTasteTag");
 		return mav;
 	}
@@ -153,9 +152,9 @@ public class AdminController {
 			state = "all";
 		}
 		// 모든 1:1문의 글 출력
-		List<Inquiry> iList = aService.selectInquiryList(inquiry);
+		List<Inquiry> iList = adminService.selectInquiryList(inquiry);
 		mav.addObject("iList", iList);
-		mav.addObject("cntList", aService.inquiryListCount());
+		mav.addObject("cntList", adminService.inquiryListCount());
 		mav.addObject("state", state);
 		mav.setViewName("Admin/adminInquiry");
 		return mav;
@@ -165,7 +164,7 @@ public class AdminController {
 	@RequestMapping("selectInquiryDetail.do")
 	public ModelAndView selectInquiryDetail(Inquiry inquiry) throws Exception{
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("inquiry", aService.selectInquiry(inquiry));
+		mav.addObject("inquiry", adminService.selectInquiry(inquiry));
 		mav.setViewName("Admin/adminInquiryDetail");
 		return mav;
 	}
@@ -174,7 +173,7 @@ public class AdminController {
 	@RequestMapping("insertInquiryAnswer.do")
 	public String insertInquiryAnswer(Inquiry inquiry
 			, HttpServletResponse response) throws Exception{
-		int result = aService.insertInquiryAnswer(inquiry);
+		int result = adminService.insertInquiryAnswer(inquiry);
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter pw = response.getWriter();
 		String str = "";
@@ -192,8 +191,8 @@ public class AdminController {
 	
 	//저장된 이미지 불러오기
 	@RequestMapping("downloadAimage.do")
-	public View download(int anum) {
-		File attachFile= aService.getAttachedFile(anum);
+	public View download(int anum) throws Exception {
+		File attachFile= adminService.getAttachedFile(anum);
 		View view = new DownloadView(attachFile);
 		
 		return view;
