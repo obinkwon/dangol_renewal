@@ -1,7 +1,12 @@
-package egovframework.dao;
+package egovframework.service.dao;
 
 import java.util.HashMap;
 import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Repository;
 
 import egovframework.model.Admin;
 import egovframework.model.Comment;
@@ -9,10 +14,16 @@ import egovframework.model.Details;
 import egovframework.model.Grade;
 import egovframework.model.Order;
 import egovframework.model.Store;
-import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
-@Mapper("ICategoryDao")
-public interface ICategoryDao {
+@Repository("ICategoryDao")
+public class ICategoryDao extends EgovAbstractMapper {
+	
+	@Resource(name = "egov.sqlSession")
+	public void setSqlSessionFactory(SqlSessionFactory sqlSession) {
+		super.setSqlSessionFactory(sqlSession);
+	}
+	
 	//해당가게 내 등급
 	public Grade selectGradeAtStore(Grade grade);
 	//해당가게 메뉴 리스트

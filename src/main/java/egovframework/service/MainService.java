@@ -7,14 +7,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import egovframework.dao.IMainDao;
-import egovframework.dao.IOwnerDao;
 import egovframework.model.Admin;
 import egovframework.model.Comment;
 import egovframework.model.Details;
 import egovframework.model.Event;
 import egovframework.model.Grade;
 import egovframework.model.Store;
+import egovframework.service.dao.IMainDao;
+import egovframework.service.dao.IOwnerDao;
 
 
 @Service

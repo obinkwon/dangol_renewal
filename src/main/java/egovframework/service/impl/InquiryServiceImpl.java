@@ -3,14 +3,12 @@ package egovframework.service.impl;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import egovframework.dao.IInquiryDao;
 import egovframework.model.Inquiry;
 import egovframework.service.InquiryService;
+import egovframework.service.dao.IInquiryDao;
 
 @Service("inquiryService")
 public class InquiryServiceImpl implements InquiryService{

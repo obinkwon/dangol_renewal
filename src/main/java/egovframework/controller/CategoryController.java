@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -49,7 +50,8 @@ public class CategoryController {
 	private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
 	
 	@Autowired
-	private CategoryService cService;
+	@Resource(name = "categoryService")
+	private CategoryService categoryService;
 	
 	@Autowired
 	private MainService maService;
@@ -60,8 +62,8 @@ public class CategoryController {
 	@Autowired
 	private MemberService mService;
 	
-	@Autowired
-	private AdminService aService;
+	@Resource(name = "adminService")
+	private AdminService adminService;
 	
 	@Autowired
 	private OwnerService oService;
@@ -88,7 +90,7 @@ public class CategoryController {
 			}
 			
 			admin.setAtype("food");
-			List<Admin> aList = aService.selectAdminTypeList(admin); // admin type 리스트
+			List<Admin> aList = adminService.selectAdminTypeList(admin); // admin type 리스트
 			List<Store> sList = null;
 			
 			if(aList.size() > 0) { //음식 종류가 하나라도 있을때
@@ -97,11 +99,11 @@ public class CategoryController {
 				}
 				admin.setStoresPerPage(12);
 				admin.setPage(page);
-				int resultSize = cService.getStoreListCountFood(admin);
+				int resultSize = categoryService.getStoreListCountFood(admin);
 				admin = maService.getPaging(admin,resultSize);
 				
-				sList = cService.getStoreListFood(admin); //음식종류별 가게 리스트 가져오기
-				sList = cService.stagSetting(sList);//가게 태그 세팅
+				sList = categoryService.getStoreListFood(admin); //음식종류별 가게 리스트 가져오기
+				sList = categoryService.stagSetting(sList);//가게 태그 세팅
 			}
 			model.addAttribute("viewInfo",admin); //조회 정보
 			model.addAttribute("adminList",aList); //음식 태그 리스트
@@ -117,13 +119,13 @@ public class CategoryController {
 	//카테고리 - 테마별
 	@RequestMapping("themeSort.do")
 	public ModelAndView themeSort(Admin admin , ModelAndView mav
-			,@RequestParam(defaultValue="1") int page) {
+			,@RequestParam(defaultValue="1") int page) throws Exception {
 		if(admin.getType() == null){
 			admin.setType("new");
 		}
 		
 		admin.setAtype("theme");
-		List<Admin> aList = aService.selectAdminTypeList(admin); // admin type 리스트
+		List<Admin> aList = adminService.selectAdminTypeList(admin); // admin type 리스트
 		List<Store> sList = null;
 		
 		if(aList.size() > 0) { //테마 종류가 하나라도 있을때
@@ -132,11 +134,11 @@ public class CategoryController {
 			}
 			admin.setStoresPerPage(12);
 			admin.setPage(page);
-			int resultSize = cService.getStoreListCountTheme(admin);
+			int resultSize = categoryService.getStoreListCountTheme(admin);
 			admin = maService.getPaging(admin,resultSize);
 			
-			sList = cService.getStoreListTheme(admin); //음식종류별 가게 리스트 가져오기
-			sList = cService.stagSetting(sList);//가게 태그 세팅
+			sList = categoryService.getStoreListTheme(admin); //음식종류별 가게 리스트 가져오기
+			sList = categoryService.stagSetting(sList);//가게 태그 세팅
 		}
 		mav.addObject("viewInfo", admin); //조회 정보
 		mav.addObject("adminList", aList); //테마 태그 리스트
@@ -159,10 +161,10 @@ public class CategoryController {
 		List<Store> areaList = maService.getAreaInfo();
 		admin.setStoresPerPage(12);
 		admin.setPage(page);
-		int resultSize = cService.getStoreListCountTheme(admin);
+		int resultSize = categoryService.getStoreListCountTheme(admin);
 		admin = maService.getPaging(admin,resultSize);
-		List<Store> sList = cService.getStoreListArea(admin); //음식종류별 가게 리스트 가져오기
-		sList = cService.stagSetting(sList);//가게 태그 세팅
+		List<Store> sList = categoryService.getStoreListArea(admin); //음식종류별 가게 리스트 가져오기
+		sList = categoryService.stagSetting(sList);//가게 태그 세팅
 		
 		mav.addObject("viewInfo", admin); //조회 정보
 		mav.addObject("storeList", sList); //가게 리스트
@@ -192,7 +194,7 @@ public class CategoryController {
 			member = mService.selectMember(member);
 			if(member != null) {
 				admin.setMid(member.getMid());
-				List<Admin> aList = aService.selectAdminMtagList(admin); // admin type 리스트
+				List<Admin> aList = adminService.selectAdminMtagList(admin); // admin type 리스트
 				List<Integer> anumList = new ArrayList<Integer>();
 				for(Admin ad : aList) {
 					anumList.add(ad.getAnum());
@@ -203,11 +205,11 @@ public class CategoryController {
 				admin.setMarea2(member.getMarea2());
 				admin.setStoresPerPage(12);
 				admin.setPage(page);
-				int resultSize = cService.getStoreListCountRecommend(admin);
+				int resultSize = categoryService.getStoreListCountRecommend(admin);
 				admin = maService.getPaging(admin,resultSize);
 				
-				List<Store> sList = cService.getStoreListRecommend(admin);//추천별 가게 리스트 가져오기
-				sList = cService.stagSetting(sList);//가게 태그 세팅
+				List<Store> sList = categoryService.getStoreListRecommend(admin);//추천별 가게 리스트 가져오기
+				sList = categoryService.stagSetting(sList);//가게 태그 세팅
 				
 				mav.addObject("viewInfo", admin); //조회 정보
 				mav.addObject("mtagList", aList);
@@ -243,11 +245,11 @@ public class CategoryController {
 		
 		admin.setStoresPerPage(12);
 		admin.setPage(page);
-		int resultSize = cService.getStoreListCountNew(admin);
+		int resultSize = categoryService.getStoreListCountNew(admin);
 		admin = maService.getPaging(admin,resultSize);
 		
-		List<Store> sList = cService.getStoreListNew(admin);//신규 가게 리스트 가져오기
-		sList = cService.stagSetting(sList);//가게 태그 세팅
+		List<Store> sList = categoryService.getStoreListNew(admin);//신규 가게 리스트 가져오기
+		sList = categoryService.stagSetting(sList);//가게 태그 세팅
 		
 		mav.addObject("viewInfo", admin);
 		mav.addObject("storeList", sList);
@@ -266,7 +268,7 @@ public class CategoryController {
 		ModelAndView mav = new ModelAndView();
 		if(mid != null && !mid.equals("")) { //일반 사용자 로그인 되어있을때
 			grade.setMid(mid);
-			grade = cService.selectMyGradeInfo(grade);//내 등급 정보
+			grade = categoryService.selectMyGradeInfo(grade);//내 등급 정보
 		}
 		store = oService.selectStoreOne(store);//가게 정보
 		
@@ -274,18 +276,18 @@ public class CategoryController {
 		String[] holiday = store.getSholiday().split(",");
 		
 		//메뉴 가져오기
-		List<Order> menuList = cService.selectOrderList(store);
+		List<Order> menuList = categoryService.selectOrderList(store);
 		//후기가져오기(ing)
 		List<Comment> cList = null;
 		if(type.equals("new")){ //전체 리뷰
-			cList = cService.storeCommentList(store);
+			cList = categoryService.storeCommentList(store);
 		}else if(type.equals("my")) { //내 리뷰
 			if(mid.equals("")) {
-				cList = cService.storeMyCommentList(grade);
+				cList = categoryService.storeMyCommentList(grade);
 			}
 		}
 		//가게 단골 정보(ing)
-		Map<String, Object> dangolMap = cService.selectDangolList(store);
+		Map<String, Object> dangolMap = categoryService.selectDangolList(store);
 		//가게 태그 가져오기
 		List<Store> tagList = oService.selectStagList(store);
 		
@@ -335,15 +337,15 @@ public class CategoryController {
 		int snum = detail.getSnum();
 		int result = 0;
 		store = oService.selectStoreOne(store);//가게정보 가져오기
-		grade = cService.selectMyGradeInfo(grade);//등급정보 가져오기
+		grade = categoryService.selectMyGradeInfo(grade);//등급정보 가져오기
 		if(grade == null) {
 			grade = new Grade();
 			grade.setMid(mid);
 			grade.setSnum(snum);
-			cService.insertGrade(grade);
+			categoryService.insertGrade(grade);
 		}
 		
-		List<Details> dList = cService.todayReserve(detail);//예약 리스트 가져오기
+		List<Details> dList = categoryService.todayReserve(detail);//예약 리스트 가져오기
 		int maxPerson = 0;
 		int todayLimit = store.getSlimit();//하루 예약 가능한 최대 인원수
 		for(Details dd : dList) { //하루 총 예약한 인원수
@@ -353,7 +355,7 @@ public class CategoryController {
 		if(todayLimit >= maxPerson && todayLimit >= detail.getDperson()) {//예약 가능 인원 체크
 			detail.setGnum(grade.getGnum());
 			detail.setDlimit(store.getSlimit());
-			result = cService.insertDetail(detail);//예약하기
+			result = categoryService.insertDetail(detail);//예약하기
 		}
 		
 		if(result > 0) {
@@ -369,7 +371,7 @@ public class CategoryController {
 	
 	@RequestMapping("removeComment.do")
 	public String removeComment(int snum,int cnum) {
-		cService.deleteComment(cnum);
+		categoryService.deleteComment(cnum);
 		return "redirect:storeView.do?snum="+snum;
 	}
 	
@@ -382,17 +384,17 @@ public class CategoryController {
 		Member member = new Member();
 		member.setMid(mid);
 		Member m = mService.selectMember(member);
-		Comment c = cService.selectComment(cnum,dnum);
+		Comment c = categoryService.selectComment(cnum,dnum);
 		Details detail = new Details();
 		detail.setDnum(c.getDnum());
-		Details d = cService.getDetailOne(detail);
+		Details d = categoryService.getDetailOne(detail);
 		String[] menuList = null;
 		if(d.getDmenu()!=null) menuList = d.getDmenu().split(",");
-		Grade g = cService.getGradeComment(d);
+		Grade g = categoryService.getGradeComment(d);
 		Store store = new Store();
 		store.setSnum(g.getSnum());
 		Store s = oService.selectStoreOne(store);
-		List<Admin> tasteTag = cService.selectTasteTagList();
+		List<Admin> tasteTag = categoryService.selectTasteTagList();
 		if(dnum==0) mav.addObject("type","m");
 		else mav.addObject("type","h");
 		mav.addObject("menuList",menuList);
@@ -410,7 +412,7 @@ public class CategoryController {
 	public String modifyComment(Comment comment,String[] tag,String type,String snum) {
 		String ctaste = "#"+tag[0]+",#"+tag[1];
 		comment.setCtaste(ctaste);
-		cService.updateComment(comment);
+		categoryService.updateComment(comment);
 		System.out.println(comment);
 		if(type.equals("h")) return "redirect:historyView.do?snum="+snum;
 		else return "redirect:storeView.do?snum="+snum;
@@ -418,7 +420,7 @@ public class CategoryController {
 	
 	@RequestMapping("downloadStoreImg.do")
 	public View downloadStoreImg(int snum) {
-		File attachFile= cService.getAttachedFile(snum);
+		File attachFile= categoryService.getAttachedFile(snum);
 		View view = null;
 		if(attachFile != null) {
 			view = new DownloadView(attachFile);
@@ -428,7 +430,7 @@ public class CategoryController {
 	
 	@RequestMapping("downloadStoreMenuImg.do")
 	public View downloadStoreMenuImg(Order order) throws Exception{
-		File attachFile = cService.getAttachedFileMenu(order);
+		File attachFile = categoryService.getAttachedFileMenu(order);
 		View view = null;
 		if(attachFile != null) {
 			view = new DownloadView(attachFile);
@@ -438,7 +440,7 @@ public class CategoryController {
 	
 	@RequestMapping("insertStoreMenu.do")//메뉴 입력 요청
 	public void insertStoreMenu() {
-		cService.insertStoreMenu();
+		categoryService.insertStoreMenu();
 	}
 		
 }

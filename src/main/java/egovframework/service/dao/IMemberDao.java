@@ -1,4 +1,4 @@
-package egovframework.dao;
+package egovframework.service.dao;
 
 import java.util.List;
 

@@ -9,11 +9,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import egovframework.dao.IAdminDao;
-import egovframework.dao.ICategoryDao;
-import egovframework.dao.IMemberDao;
-import egovframework.dao.IMyPageDao;
-import egovframework.dao.IOwnerDao;
 import egovframework.model.Admin;
 import egovframework.model.Comment;
 import egovframework.model.Details;
@@ -21,6 +16,11 @@ import egovframework.model.Grade;
 import egovframework.model.Order;
 import egovframework.model.Store;
 import egovframework.service.CategoryService;
+import egovframework.service.dao.IAdminDao;
+import egovframework.service.dao.ICategoryDao;
+import egovframework.service.dao.IMemberDao;
+import egovframework.service.dao.IMyPageDao;
+import egovframework.service.dao.IOwnerDao;
 
 @Service("categoryService")
 public class CategoryServiceImpl implements CategoryService {

@@ -1,19 +1,15 @@
 package egovframework.service;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import egovframework.dao.IAdminDao;
-import egovframework.dao.IMemberDao;
 import egovframework.model.Member;
+import egovframework.service.dao.IAdminDao;
+import egovframework.service.dao.IMemberDao;
 
 
 @Service

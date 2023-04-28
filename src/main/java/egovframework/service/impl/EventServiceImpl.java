@@ -1,7 +1,6 @@
 package egovframework.service.impl;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import egovframework.dao.IEventDao;
 import egovframework.model.Event;
 import egovframework.model.Store;
 import egovframework.service.EventService;
+import egovframework.service.dao.IEventDao;
 
 
 @Service("eventService")

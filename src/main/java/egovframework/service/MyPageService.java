@@ -1,27 +1,21 @@
 package egovframework.service;
 
 import java.io.File;
-import java.io.IOException;
-import java.sql.Date;
-import java.util.ArrayList;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import egovframework.dao.ICategoryDao;
-import egovframework.dao.IMemberDao;
-import egovframework.dao.IMyPageDao;
-import egovframework.dao.IOwnerDao;
 import egovframework.model.Comment;
 import egovframework.model.Details;
 import egovframework.model.Grade;
 import egovframework.model.Member;
 import egovframework.model.Store;
+import egovframework.service.dao.ICategoryDao;
+import egovframework.service.dao.IMemberDao;
+import egovframework.service.dao.IMyPageDao;
+import egovframework.service.dao.IOwnerDao;
 
 
 @Service
