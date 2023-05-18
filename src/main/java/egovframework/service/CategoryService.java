@@ -14,22 +14,22 @@ import egovframework.model.Store;
 public interface CategoryService {
 
 	// 등급 정보 등록
-	public int insertGrade(Grade grade);
+	public int insertGrade(Grade grade) throws Exception ;
 
 	// 예약하기 기능
-	public int insertDetail(Details detail);
+	public int insertDetail(Details detail) throws Exception ;
 
 	// 음식종류별 가게 리스트 가져오기
-	public List<Store> getStoreListFood(Admin admin);
+	public List<Store> getStoreListFood(Admin admin) throws Exception ;
 
 	// 테마종류별 가게 리스트 가져오기
-	public List<Store> getStoreListTheme(Admin admin);
+	public List<Store> getStoreListTheme(Admin admin) throws Exception ;
 
 	// 지역별 가게 리스트 가져오기
-	public List<Store> getStoreListArea(Admin admin);
+	public List<Store> getStoreListArea(Admin admin) throws Exception ;
 
 	// 추천별 가게 리스트 가져오기
-	public List<Store> getStoreListRecommend(Admin admin);
+	public List<Store> getStoreListRecommend(Admin admin) throws Exception ;
 
 	// 신규 가게 리스트 가져오기
 	public List<Store> getStoreListNew(Admin admin);
@@ -56,33 +56,33 @@ public interface CategoryService {
 	public List<Store> stagSetting(List<Store> sList);
 
 	// 해당가게 내 등급
-	public Grade selectMyGradeInfo(Grade grade);
+	public Grade selectMyGradeInfo(Grade grade) throws Exception ;
 
 	// 후기 작성 정보 가져오기
-	public Details getCommentInfo(Details details);
+	public Details getCommentInfo(Details details) throws Exception ;
 
-	public List<Order> selectOrderList(Store store);
+	public List<Order> selectOrderList(Store store) throws Exception ;
 
-	public Map<String, Object> selectDangolList(Store store);
+	public Map<String, Object> selectDangolList(Store store) throws Exception ;
 
 	// 해당 가게 태그 리스트
 	public List<String[]> selectStagList(List<Store> sList);
 
 	public Grade getGradeComment(Details details);
 
-	public List<Comment> storeCommentList(Store store);
+	public List<Comment> storeCommentList(Store store) throws Exception ;
 
 	public List<Comment> storeMyCommentList(Grade grade);
 
 	// 예약 리스트 가져오기
-	public List<Details> todayReserve(Details detail);
+	public List<Details> todayReserve(Details detail) throws Exception ;
 
 	// 후기 삭제 기능
 	public void deleteComment(int cnum);
 
 	public Comment selectComment(int cnum, int dnum);
 
-	public Details getDetailOne(Details details);
+	public Details getDetailOne(Details details) throws Exception ;
 
 	public List<Admin> selectTasteTagList();
 

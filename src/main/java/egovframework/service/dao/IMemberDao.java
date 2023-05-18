@@ -2,11 +2,26 @@ package egovframework.service.dao;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import egovframework.model.Member;
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("IMemberDao")
-public interface IMemberDao {//memberMapper.xml
+public class IMemberDao extends EgovAbstractMapper {//memberMapper.xml
+	
+	private final Logger logger = LoggerFactory.getLogger(IMemberDao.class);
+	
+	@Resource(name = "egov.sqlSession")
+	public void setSqlSessionFactory(SqlSessionFactory sqlSession) {
+		super.setSqlSessionFactory(sqlSession);
+	}
+	
 	//ID 찾기
 	public List<Member> findId(Member member);
 	//비밀번호 찾기

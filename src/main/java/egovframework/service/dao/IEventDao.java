@@ -3,12 +3,27 @@ package egovframework.service.dao;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import egovframework.model.Event;
 import egovframework.model.Store;
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("IEventDao")
-public interface IEventDao {
+public class IEventDao extends EgovAbstractMapper {
+	
+	private final Logger logger = LoggerFactory.getLogger(ICategoryDao.class);
+	
+	@Resource(name = "egov.sqlSession")
+	public void setSqlSessionFactory(SqlSessionFactory sqlSession) {
+		super.setSqlSessionFactory(sqlSession);
+	}
+	
 	public List<Event> selectEventList(Event event);
 	public List<Event> selectAllEvents();
 	public List<Event> selectIngEvents();

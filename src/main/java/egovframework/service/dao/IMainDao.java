@@ -3,16 +3,31 @@ package egovframework.service.dao;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import egovframework.model.Admin;
 import egovframework.model.Comment;
 import egovframework.model.Details;
 import egovframework.model.Event;
 import egovframework.model.Grade;
 import egovframework.model.Store;
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("IMainDao")
-public interface IMainDao {
+public class IMainDao extends EgovAbstractMapper {
+	
+	private final Logger logger = LoggerFactory.getLogger(IMainDao.class);
+	
+	@Resource(name = "egov.sqlSession")
+	public void setSqlSessionFactory(SqlSessionFactory sqlSession) {
+		super.setSqlSessionFactory(sqlSession);
+	}
+	
 	//지역별 가게 리스트
 	public List<Store> selectStoreByArea(Store store);
 	//지역별 가게 리스트 수

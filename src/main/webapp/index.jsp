@@ -4,7 +4,7 @@
 <html lang="ko">
 <head>
 	<meta charset="UTF-8">
-	<script type="text/javaScript">document.location.href="/main.do"</script> 
+	<script type="text/javaScript">document.location.href="/admin/recommandTag.do"</script> 
 </head>
 <body>
 </body>

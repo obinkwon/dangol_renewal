@@ -41,26 +41,26 @@ public class CategoryServiceImpl implements CategoryService {
 
 	private String imagePath = "C:\\eclipse-workspace\\dangol\\WebContent\\images\\";
 
-	public int insertGrade(Grade grade) {// 등급 정보 등록
+	public int insertGrade(Grade grade) throws Exception {// 등급 정보 등록
 		return icdao.insertGrade(grade);
 	}
 
-	public int insertDetail(Details detail) {// 예약하기 기능
+	public int insertDetail(Details detail) throws Exception {// 예약하기 기능
 		return icdao.insertDetail(detail);
 	}
 
 	// 음식종류별 가게 리스트 가져오기
-	public List<Store> getStoreListFood(Admin admin) {
+	public List<Store> getStoreListFood(Admin admin) throws Exception {
 		return icdao.selectStoreListFood(admin);
 	}
 
 	// 테마종류별 가게 리스트 가져오기
-	public List<Store> getStoreListTheme(Admin admin) {
+	public List<Store> getStoreListTheme(Admin admin) throws Exception {
 		return icdao.selectStoreListTheme(admin);
 	}
 
 	// 지역별 가게 리스트 가져오기
-	public List<Store> getStoreListArea(Admin admin) {
+	public List<Store> getStoreListArea(Admin admin) throws Exception {
 		return icdao.selectStoreListArea(admin);
 	}
 
@@ -133,20 +133,20 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	// 해당가게 내 등급
-	public Grade selectMyGradeInfo(Grade grade) {
+	public Grade selectMyGradeInfo(Grade grade) throws Exception {
 		return icdao.selectGradeAtStore(grade);
 	}
 
 	// 후기 작성 정보 가져오기
-	public Details getCommentInfo(Details details) {
+	public Details getCommentInfo(Details details) throws Exception {
 		return icdao.selectCommentInfo(details);
 	}
 
-	public List<Order> selectOrderList(Store store) {
+	public List<Order> selectOrderList(Store store) throws Exception {
 		return icdao.selectOrderList(store);
 	}
 
-	public Map<String, Object> selectDangolList(Store store) {
+	public Map<String, Object> selectDangolList(Store store) throws Exception {
 		List<Grade> dangolList = icdao.selectStoreGlevel(store);
 		HashMap<String, Object> dangolMap = new HashMap<String, Object>();
 		dangolMap.put("glevel0", 0);
@@ -194,7 +194,7 @@ public class CategoryServiceImpl implements CategoryService {
 		return icdao.selectGradeComment(details);
 	}
 
-	public List<Comment> storeCommentList(Store store) {
+	public List<Comment> storeCommentList(Store store) throws Exception {
 		return icdao.selectCommentListBySnum(store);
 	}
 
@@ -202,7 +202,8 @@ public class CategoryServiceImpl implements CategoryService {
 		return icdao.selectMyCommentListByGrade(grade);
 	}
 
-	public List<Details> todayReserve(Details detail) {// 예약 리스트 가져오기
+	// 예약 리스트 가져오기
+	public List<Details> todayReserve(Details detail) throws Exception {
 		return icdao.selectDetailReserveByDdate(detail);
 	}
 
@@ -233,7 +234,7 @@ public class CategoryServiceImpl implements CategoryService {
 			return icdao.selectCommentByDnum(dnum);
 	}
 
-	public Details getDetailOne(Details details) {
+	public Details getDetailOne(Details details) throws Exception {
 		return icdao.selectDetailOne(details);
 	}
 

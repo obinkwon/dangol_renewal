@@ -2,14 +2,29 @@ package egovframework.service.dao;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import egovframework.model.Details;
 import egovframework.model.Grade;
 import egovframework.model.Order;
 import egovframework.model.Store;
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("IOwnerDao")
-public interface IOwnerDao {
+public class IOwnerDao extends EgovAbstractMapper {
+	
+	private final Logger logger = LoggerFactory.getLogger(IOwnerDao.class);
+	
+	@Resource(name = "egov.sqlSession")
+	public void setSqlSessionFactory(SqlSessionFactory sqlSession) {
+		super.setSqlSessionFactory(sqlSession);
+	}
+	
 	/* 점장 */
 	//점장 정보 조회
 	public Store selectBossOne(Store store);

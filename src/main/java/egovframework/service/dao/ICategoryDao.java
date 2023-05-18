@@ -6,6 +6,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import egovframework.model.Admin;
@@ -19,33 +21,134 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 @Repository("ICategoryDao")
 public class ICategoryDao extends EgovAbstractMapper {
 	
+	private final Logger logger = LoggerFactory.getLogger(ICategoryDao.class);
+	
 	@Resource(name = "egov.sqlSession")
 	public void setSqlSessionFactory(SqlSessionFactory sqlSession) {
 		super.setSqlSessionFactory(sqlSession);
 	}
 	
-	//해당가게 내 등급
-	public Grade selectGradeAtStore(Grade grade);
-	//해당가게 메뉴 리스트
-	public List<Order> selectOrderList(Store store);
-	//해당가게 리뷰 리스트(ing)
-	public List<Comment> selectCommentListBySnum(Store store);
-	//해당가게 단골 정보
-	public List<Grade> selectStoreGlevel(Store store);
-	//해당가게 등급 등록
-	public int insertGrade(Grade grade);
-	//예약 리스트 가져오기
-	public List<Details> selectDetailReserveByDdate(Details detail);
-	//예약 하기
-	public int insertDetail(Details details);
-	//예약 정보 가져오기
-	public Details selectDetailOne(Details details);
-	//음식종류별 가게 리스트 가져오기
-	public List<Store> selectStoreListFood(Admin admin);
-	//테마별 가게 리스트 가져오기
-	public List<Store> selectStoreListTheme(Admin admin);
-	//지역별 가게 리스트 가져오기
-	public List<Store> selectStoreListArea(Admin admin);
+	/**
+	 * 해당가게 내 등급
+	 * 
+	 * @param
+	 * @return Grade Grade
+	 * @exception Exception
+	 */
+	public Grade selectGradeAtStore(Grade vo) throws Exception {
+		return selectOne("category.selectGradeAtStore",vo);
+	}
+	
+	/**
+	 * 해당가게 메뉴 리스트
+	 * 
+	 * @param
+	 * @return Store List
+	 * @exception Exception
+	 */
+	public List<Order> selectOrderList(Store vo) throws Exception {
+		return selectList("category.selectOrderList",vo);
+	}
+	
+	/**
+	 * 해당가게 리뷰 리스트(ing)
+	 * 
+	 * @param
+	 * @return Store List
+	 * @exception Exception
+	 */
+	public List<Comment> selectCommentListBySnum(Store vo) throws Exception {
+		return selectList("category.selectCommentListBySnum",vo);
+	}
+	
+	/**
+	 * 해당가게 단골 정보
+	 * 
+	 * @param
+	 * @return Store List
+	 * @exception Exception
+	 */
+	public List<Grade> selectStoreGlevel(Store vo) throws Exception {
+		return selectList("category.selectStoreGlevel",vo);
+	}
+	
+	/**
+	 * 해당가게 등급 등록
+	 * 
+	 * @param	Grade
+	 * @return 	int
+	 * @exception Exception
+	 */
+	public int insertGrade(Grade vo) throws Exception {
+		return insert("category.insertGrade",vo);
+	}
+	
+	/**
+	 * 예약 리스트 가져오기
+	 * 
+	 * @param
+	 * @return Details List
+	 * @exception Exception
+	 */
+	public List<Details> selectDetailReserveByDdate(Details vo) throws Exception {
+		return selectList("category.selectDetailReserveByDdate",vo);
+	}
+	
+	/**
+	 * 예약 하기
+	 * 
+	 * @param
+	 * @return int List
+	 * @exception Exception
+	 */
+	public int insertDetail(Details vo) throws Exception {
+		return insert("category.insertDetail",vo);
+	}
+	
+	/**
+	 * 예약 정보 가져오기
+	 * 
+	 * @param
+	 * @return int List
+	 * @exception Exception
+	 */
+	public Details selectDetailOne(Details vo) throws Exception {
+		return selectOne("category.selectDetailOne",vo);
+	}
+	
+	/**
+	 * 음식종류별 가게 리스트 가져오기
+	 * 
+	 * @param
+	 * @return int List
+	 * @exception Exception
+	 */
+	public List<Store> selectStoreListFood(Admin vo) throws Exception {
+		return selectOne("category.selectStoreListFood",vo);
+	}
+	
+	/**
+	 * 테마별 가게 리스트 가져오기
+	 * 
+	 * @param
+	 * @return int List
+	 * @exception Exception
+	 */
+	public List<Store> selectStoreListTheme(Admin vo) throws Exception {
+		return selectOne("category.selectStoreListTheme",vo);
+	}
+	
+	/**
+	 * 지역별 가게 리스트 가져오기
+	 * 
+	 * @param
+	 * @return int List
+	 * @exception Exception
+	 */
+	public List<Store> selectStoreListArea(Admin vo) throws Exception {
+		return selectOne("category.selectStoreListArea",vo);
+	}
+	
 	//추천별 가게 리스트 가져오기
 	public List<Store> selectStoreListRecommend(Admin admin);
 	//신규 가게 리스트 가져오기
