@@ -14,7 +14,8 @@
 	<meta charset="UTF-8">
 	<title>추천태그_관리자화면</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
 	<link href="/css/headers.css" rel="stylesheet">
 	<link href="/css/sidebars.css" rel="stylesheet">
 	<link href="/css/dashboard.css" rel="stylesheet">
@@ -24,12 +25,6 @@
 			float: left;
 			width: 13%;
 			margin-left: 50px;
-		}
-		div.section{
-			margin-top : 50px;
-			float : right;
-			width : 60%;
-			margin-right : 200px;
 		}
 		li.nav_active {
 			background-color: #66ccff;
@@ -99,15 +94,23 @@
 				<div class="position-sticky pt-3">
 		        	<ul class="nav flex-column">
 		          		<li class="nav-item">
-		            		<a class="nav-link active" aria-current="page" href="#">
-		              			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-		              			Dashboard
+		            		<a class="nav-link active" aria-current="page" href="/admin/recommandTag.do">
+		              			추천태그
 		            		</a>
 		          		</li>
 		          		<li class="nav-item">
-		            		<a class="nav-link" href="#">
-		              			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file" aria-hidden="true"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-		              			Orders
+		            		<a class="nav-link" href="/admin/adminThemeTag.do">
+		              			테마별 태그
+		            		</a>
+		          		</li>
+		          		<li class="nav-item">
+		            		<a class="nav-link" href="/admin/adminFoodTag.do">
+								업종별 태그
+		            		</a>
+		          		</li>
+		          		<li class="nav-item">
+		            		<a class="nav-link" href="/admin/adminTasteTag.do">
+								맛별 태그
 		            		</a>
 		          		</li>
 		        	</ul>
