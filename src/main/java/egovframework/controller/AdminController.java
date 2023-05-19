@@ -118,7 +118,6 @@ public class AdminController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
-			logger.debug("admin ::: {}",admin);
 			int result = adminService.insertTag(admin);
 			if(result > 0) {
 				// 정상 데이터 결과
@@ -137,7 +136,43 @@ public class AdminController {
 		
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
-
+	
+	/**
+	 * 관리자 태그 삭제
+	 * @param model
+	 * @return "/deleteTag.do"
+	 * @exception Exception
+	 */
+	@ResponseBody
+	@RequestMapping("/deleteTag.do")
+	public ResponseEntity<?> adminDeleteTag(HttpServletRequest request
+			, HttpSession session 
+			, HttpServletResponse response
+			, Model model
+			, @ModelAttribute("admin") Admin admin) throws Exception {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int result = adminService.deleteTag(admin);
+			if(result > 0) {
+				// 정상 데이터 결과
+				resultMap.put("code", "3001");
+				resultMap.put("message", "success");
+				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+			}else {
+				// 정상 데이터 결과
+				resultMap.put("code", "3000");
+				resultMap.put("message", "fail");
+				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+			}
+		}catch(Exception e) {
+			logger.error(" AdminController.adminDeleteTag :: exception ::: " + e.getMessage());
+		}
+		
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
+	}
+	
 	//관리자가 메인추천 태그 적용
 	@RequestMapping("selectMain.do")
 	public String selectMain(Admin admin) throws Exception {
@@ -150,13 +185,6 @@ public class AdminController {
 			}
 		}
 		return "redirect:adminRecommandTag.do";
-	}
-	
-	//관리자 태그 삭제
-	@RequestMapping("deleteTag.do")
-	public String deleteTag(Admin admin, String returnUrl) throws Exception {
-		adminService.deleteTag(admin);
-		return "redirect:"+returnUrl;
 	}
 	
 	//관리자 태그 추가(파일)

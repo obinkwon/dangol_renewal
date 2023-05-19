@@ -5,7 +5,8 @@
 <head>
 	<title>테마태그_관리자화면</title>
 	<script type="text/javascript">
-		function addThemeTag(){ //태그 추가
+		//태그 추가
+		function addThemeTag(){
 			var tagTxt = $('#themeTagText').val();
 			var params = {
 				atype : 'theme',
@@ -34,9 +35,33 @@
 			}
 		}
 		
-		function deleteTag(anum){ //태그 삭제
+		//태그 삭제
+		function deleteTag(anum){
+			var params = {
+				anum : anum
+			};
+			
 			if (confirm("정말로 삭제하시겠습니까?")) {
-				location.href="deleteTag.do?returnUrl=adminThemeTag.do&anum="+anum;			
+				if(anum == ''){
+					alert('추가할 태그를 입력하세요');
+				}else{
+					$.ajax({
+				        url : "/admin/deleteTag.do",
+				        type : "post",
+				        dataType : "json",
+				        data : params,
+				        success : function(response) {
+				            console.log(response);
+				            if( response.code != "3001"){
+				            	alert(response.message);
+				            }else{
+				            	location.reload();
+				            }
+				        }, error : function(jqXHR, status, e) {
+				            console.error(status + " : " + e);
+				        }
+				    });	 
+				}
 			}
 		}
 	</script>
@@ -67,7 +92,7 @@
 				<tr>
 					<td><c:out value="${themeTag.avalue}"/></td>
 					<td>
-						<input type="button" onclick="deleteTag('<c:out value="${themeTag.anum}"/>');" class="btn_del_ThemeTag" value="x">
+						<button type="button" class="btn-close" aria-label="Close" onclick="deleteTag('<c:out value="${themeTag.anum}"/>');"></button>
 					</td>
 				</tr>
 			</c:forEach>
