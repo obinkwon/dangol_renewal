@@ -3,13 +3,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>테마태그_관리자화면</title>
+	<title>맛태그_관리자화면</title>
 	<script type="text/javascript">
 		//태그 추가
 		function addTag(){
-			var tagTxt = $('#themeTagText').val();
+			var tagTxt = $('#tasteTagText').val();
 			var params = {
-				atype : 'theme',
+				atype : 'taste',
 				avalue : tagTxt
 			};
 		
@@ -69,15 +69,17 @@
 <body>
 <div class="container-fluid">
 	<div class="p-5">
-		<h3>테마태그 설정</h3>
-		<div class="row g-3 mt-2">
-			<div class="col">
-				<input type="text" class="form-control" name="keyword" placeholder="추가할 태그를 입력하세요" aria-label="keyword" id="themeTagText">
+		<h3>맛태그 설정</h3>
+		<form id="frmList" action="insertTasteTag.do" method="get">
+			<div class="row g-3 mt-2">
+				<div class="col">
+					<input type="text" class="form-control" name="keyword" aria-label="keyword" id="tasteTagText" placeholder="추가할 태그를 입력하세요">
+				</div>
+				<div class="col">
+					<button type="button" class="btn btn-outline-primary" onclick="addTag();">추가하기</button>
+				</div>
 			</div>
-			<div class="col">
-				<button type="button" class="btn btn-outline-primary" onclick="addTag();">추가하기</button>
-			</div>
-		</div>
+		</form>
 		<table class="table table-hover mt-3">
 			<thead>
 				<tr>
@@ -86,11 +88,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="themeTag" items="${themeTags}">
+				<c:forEach var="tasteTag" items="${tasteTags}">
 					<tr>
-						<td><c:out value="${themeTag.avalue}"/></td>
+						<td><c:out value="${tasteTag.avalue}"/></td>
 						<td>
-							<button type="button" class="btn-close" aria-label="delete" onclick="deleteTag('<c:out value="${themeTag.anum}"/>');"></button>
+							<button type="button" class="btn-close" aria-label="delete" onclick="deleteTag('<c:out value="${tasteTag.anum}"/>');" ></button>
 						</td>
 					</tr>
 				</c:forEach>

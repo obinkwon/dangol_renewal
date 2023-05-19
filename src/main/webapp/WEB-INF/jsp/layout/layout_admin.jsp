@@ -56,6 +56,11 @@
 								맛별 태그
 		            		</a>
 		          		</li>
+		          		<li class="nav-item">
+		            		<a class="nav-link <c:if test="${empty atype}">active</c:if>" href="/admin/inquirys.do">
+								1:1문의
+		            		</a>
+		          		</li>
 		        	</ul>
 		      	</div>
 		    </nav>

@@ -95,38 +95,6 @@
 		WHERE ANUM = #{anum}
 	</delete>
 	
-	<!-- 1:1문의 리스트 조회-->
-	<select id="selectInquiryList" parameterType="inquiry" resultType="inquiry">
-		SELECT 
-			ROWNUM
-			,INUM AS inum
-			,ITYPE AS itype
-			,ITITLE AS ititle
-			,ICONTENT AS icontent
-			,IDATE AS idate
-			,ISTATE AS istate
-			,IANSWER AS ianswer
-		FROM 
-			INQUIRYS
-		WHERE 1=1
-		<if test="istate != null and istate != ''">
-			AND ISTATE = #{istate}
-		</if>
-		<if test="keyword != null and keyword != ''" >
-			<if test="type == 'title'">
-				AND ITITLE LIKE '%'||#{keyword}||'%'
-			</if>
-			<if test="type == 'content'">
-				AND ICONTENT LIKE '%'||#{keyword}||'%'
-			</if>
-			<if test="type == 'mid'">
-				AND mid LIKE '%'||#{keyword}||'%'
-				OR bid LIKE '%'||#{keyword}||'%'
-			</if>
-		</if>
-		ORDER BY IDATE DESC
-	</select>
-	
 	<!-- 1:1문의 전체 / 답변 / 미답변 수-->
 	<select id="inquiryListCount" resultType="inquiry">
 		SELECT 

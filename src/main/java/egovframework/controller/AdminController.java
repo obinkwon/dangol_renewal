@@ -19,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,6 +27,7 @@ import org.springframework.web.servlet.View;
 import egovframework.model.Admin;
 import egovframework.model.Inquiry;
 import egovframework.service.AdminService;
+import egovframework.service.InquiryService;
 
 @Controller
 @RequestMapping("/admin")
@@ -38,9 +38,12 @@ public class AdminController {
 
 	@Resource(name = "adminService")
 	private AdminService adminService;
+	
+	@Resource(name = "inquiryService")
+	private InquiryService inquiryService;
 
 	/**
-	 * 태그 관련 - 메인추천 화면 로딩
+	 * 메인추천 화면 로딩 - 태그
 	 * @param model
 	 * @return "/recommandTag.do"
 	 * @exception Exception
@@ -78,7 +81,7 @@ public class AdminController {
 	}
 	
 	/**
-	 * 관리자가 메인추천 태그 적용
+	 * 관리자가 메인추천 태그 적용 - 태그
 	 * @param model
 	 * @return "/insertTag.do"
 	 * @exception Exception
@@ -125,7 +128,7 @@ public class AdminController {
 	}
 	
 	/**
-	 * 관리자 테마 페이지 로드
+	 * 관리자 테마 페이지 로드 - 태그
 	 * @param model
 	 * @return "/adminThemeTag.do"
 	 * @exception Exception
@@ -152,7 +155,7 @@ public class AdminController {
 	}
 	
 	/**
-	 * 관리자 태그 추가
+	 * 관리자 태그 추가 - 태그
 	 * @param model
 	 * @return "/insertTag.do"
 	 * @exception Exception
@@ -187,7 +190,7 @@ public class AdminController {
 	}
 	
 	/**
-	 * 관리자 태그 삭제
+	 * 관리자 태그 삭제 - 태그
 	 * @param model
 	 * @return "/deleteTag.do"
 	 * @exception Exception
@@ -222,7 +225,7 @@ public class AdminController {
 	}
 	
 	/**
-	 * 관리자 음식 페이지 로드
+	 * 관리자 음식 페이지 로드 - 태그
 	 * @param model
 	 * @return "/foodTag.do"
 	 * @exception Exception
@@ -249,7 +252,7 @@ public class AdminController {
 	}
 	
 	/**
-	 * 관리자 태그 추가(파일)
+	 * 관리자 태그 추가(파일) - 태그
 	 * @param model
 	 * @return "/insertTagFile.do"
 	 * @exception Exception
@@ -283,35 +286,65 @@ public class AdminController {
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 	
+	/**
+	 * 관리자 맛 페이지 로드 - 태그
+	 * @param model
+	 * @return "/tasteTag.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/tasteTag.do")
+	public String adminTasteTag(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model
+			, @ModelAttribute("admin") Admin admin) throws Exception {
+		String returnPage = "";
+		
+		try {
+			admin.setAtype("taste");
+			model.addAttribute("tasteTags", adminService.selectAdminList(admin));
+			
+			model.addAttribute("atype","taste");
+			returnPage = "admin/tasteTag";
 
-	//관리자 맛 페이지 로드
-	@RequestMapping("adminTasteTag.do")
-	public ModelAndView adminTasteTag() throws Exception {
-		ModelAndView mav = new ModelAndView();
-		// TasteTags 출력
-		Admin admin = new Admin();
-		admin.setAtype("taste");
-		mav.addObject("tasteTags", adminService.selectAdminList(admin));
-		mav.setViewName("Admin/adminTasteTag");
-		return mav;
+		}catch(Exception e) {
+			logger.error(" AdminController.adminTasteTag :: exception ::: " + e.getMessage());
+		}
+		
+		return returnPage;
 	}
 
-	// 1:1문의
-	//1:1문의 전체 글 불러오기
-	@RequestMapping("selectAllInquirys.do")
-	public ModelAndView selectAllInquirys(Inquiry inquiry) throws Exception{
-		ModelAndView mav = new ModelAndView();
+	/**
+	 * 1:1문의 전체 글 불러오기 - 1:1문의
+	 * @param model
+	 * @return "/inquirys.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/inquirys.do")
+	public String selectAllInquirys(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model
+			, @ModelAttribute("inquiry") Inquiry inquiry) throws Exception{
+		
+		String returnPage = "";
 		String state = inquiry.getIstate();
+		
 		if(state == null) {
 			state = "all";
 		}
-		// 모든 1:1문의 글 출력
-		List<Inquiry> iList = adminService.selectInquiryList(inquiry);
-		mav.addObject("iList", iList);
-		mav.addObject("cntList", adminService.inquiryListCount());
-		mav.addObject("state", state);
-		mav.setViewName("Admin/adminInquiry");
-		return mav;
+		try {
+			// 모든 1:1문의 글 출력
+			List<Inquiry> iList = inquiryService.selectInquiryList(inquiry);
+			model.addAttribute("iList", iList);
+			model.addAttribute("cntList", adminService.inquiryListCount());
+			
+			model.addAttribute("state","state");
+			returnPage = "admin/inquiry";
+
+		}catch(Exception e) {
+			logger.error(" AdminController.adminTasteTag :: exception ::: " + e.getMessage());
+		}
+		
+		return returnPage;
 	}
 	
 	//1:1문의 상세 글 불러오기

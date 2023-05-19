@@ -75,8 +75,6 @@ public interface AdminService {
 	public int insertTagFile(Admin admin, MultipartFile afile) throws Exception;
 
 	//1:1문의 
-	//전체 글 로드
-	public List<Inquiry> selectInquiryList(Inquiry inquiry) throws Exception;
 	//전체 글 갯수
 	public List<Inquiry> inquiryListCount() throws Exception;
 	

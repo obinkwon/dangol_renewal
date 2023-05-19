@@ -14,29 +14,34 @@ import egovframework.service.dao.IInquiryDao;
 public class InquiryServiceImpl implements InquiryService{
 
 	@Autowired
-	private IInquiryDao idao;
+	private IInquiryDao inqryDao;
 
+	// 문의 리스트
+	public List<Inquiry> selectInquiryList(Inquiry inquiry) throws Exception {
+		return inqryDao.selectInquiryList(inquiry);
+	}
+		
 	public List<Inquiry> selectInquiryByMid(String mid) {
-		List<Inquiry> inquiry = idao.selectInquiryByMid(mid);
+		List<Inquiry> inquiry = inqryDao.selectInquiryByMid(mid);
 		return inquiry;
 	}
 
 	public List<Inquiry> selectInquiryByBid(String bid) {
-		List<Inquiry> inquiry = idao.selectInquiryByBid(bid);
+		List<Inquiry> inquiry = inqryDao.selectInquiryByBid(bid);
 		return inquiry;
 	}
 
 	public void deleteInquiryOne(int inum) {
-		idao.deleteInquiryOne(inum);
+		inqryDao.deleteInquiryOne(inum);
 
 	}
 
 	public void insertInquiry(Inquiry inquiry) {
-		idao.insertInquiry(inquiry);
+		inqryDao.insertInquiry(inquiry);
 	}
 
 	public Inquiry selectInquiryOne(int inum) {
-		Inquiry inquiry = idao.selectInquiryOne(inum);
+		Inquiry inquiry = inqryDao.selectInquiryOne(inum);
 		return inquiry;
 	}
 
@@ -44,7 +49,7 @@ public class InquiryServiceImpl implements InquiryService{
 		HashMap<String, Object> param = new HashMap<String, Object>();
 		param.put("mid", mid);
 		param.put("keyword", keyword);
-		List<Inquiry> inquiry = idao.searchInquiryListByMid(param);
+		List<Inquiry> inquiry = inqryDao.searchInquiryListByMid(param);
 		return inquiry;
 	}
 
@@ -52,7 +57,7 @@ public class InquiryServiceImpl implements InquiryService{
 		HashMap<String, Object> param = new HashMap<String, Object>();
 		param.put("bid", bid);
 		param.put("keyword", keyword);
-		List<Inquiry> inquiry = idao.searchInquiryListByBid(param);
+		List<Inquiry> inquiry = inqryDao.searchInquiryListByBid(param);
 		return inquiry;
 	}
 }

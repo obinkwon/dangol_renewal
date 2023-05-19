@@ -66,12 +66,6 @@ public class AdminServiceImpl extends EgovAbstractServiceImpl implements AdminSe
 		return adminDao.insertTag(admin);
 	}
 
-	// 1:1문의
-	// 전체 글 로드
-	public List<Inquiry> selectInquiryList(Inquiry inquiry) throws Exception {
-		return adminDao.selectInquiryList(inquiry);
-	}
-
 	// 전체 글 갯수
 	public List<Inquiry> inquiryListCount() throws Exception {
 		return adminDao.inquiryListCount();

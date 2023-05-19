@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="egovframework.dao.IinquiryDao">
+<mapper namespace="inquiry">
 <sql id="mid">
 		<choose>
 			<when test="mid!=null">
@@ -33,6 +33,43 @@
 			</otherwise>
 		</choose>
 	</sql>
+	
+	<!-- 1:1문의 리스트 조회-->
+	<select id="selectInquiryList" parameterType="inquiry" resultType="inquiry">
+		SELECT 
+			  INUM
+			, MID
+			, BID
+			, ITYPE
+			, ITITLE
+			, ICONTENT
+			, IDATE
+			, ISTATE
+			, IANSWER
+			, REGIST_DT
+			, MODIFY_DT
+			, REGIST_ID
+			, MODIFY_ID
+		FROM 
+			INQUIRYS
+		WHERE 1=1
+		<if test="istate != null and istate != ''">
+			AND ISTATE = #{istate}
+		</if>
+		<if test="keyword != null and keyword != ''" >
+			<if test="type == 'title'">
+				AND ITITLE LIKE '%'||#{keyword}||'%'
+			</if>
+			<if test="type == 'content'">
+				AND ICONTENT LIKE '%'||#{keyword}||'%'
+			</if>
+			<if test="type == 'mid'">
+				AND mid LIKE '%'||#{keyword}||'%'
+				OR bid LIKE '%'||#{keyword}||'%'
+			</if>
+		</if>
+		ORDER BY IDATE DESC
+	</select>
 	
 
 <select id="selectInquiryByMid" parameterType="String" resultType="inquiry">

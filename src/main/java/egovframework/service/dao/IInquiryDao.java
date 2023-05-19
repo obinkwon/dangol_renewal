@@ -23,6 +23,17 @@ public class IInquiryDao extends EgovAbstractMapper {
 		super.setSqlSessionFactory(sqlSession);
 	}
 
+	/**
+	 * 1:1문의 리스트 조회
+	 * 
+	 * @param
+	 * @return List Inquiry
+	 * @exception Exception
+	 */
+	public List<Inquiry> selectInquiryList(Inquiry vo) throws Exception {
+		return selectList("inquiry.selectInquiryList",vo);
+	}
+	
 	public List<Inquiry> selectInquiryByMid (String mid);
 	public List<Inquiry> selectInquiryByBid (String bid);
 	public void deleteInquiryOne(int inum);

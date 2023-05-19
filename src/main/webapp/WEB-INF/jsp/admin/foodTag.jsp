@@ -107,7 +107,7 @@
 	<div class="p-5">
 		<h3>업종태그 설정</h3>
 		<form id="frmList" action="" enctype="multipart/form-data" method="post">
-			<div class="row g-3">
+			<div class="row g-3 mt-2">
 				<div class="col">
 					<input type="hidden" name="atype" value="food">
 					<input type="text" class="form-control" name="avalue" placeholder="추가할 태그를 입력하세요" aria-label="avalue" id="foodTagText">
@@ -128,7 +128,7 @@
 				</div>
 			</div>
 		</form>
-		<table class="table table-hover">
+		<table class="table table-hover mt-3">
 			<thead>
 				<tr>
 					<th scope="col">이미지</th>
