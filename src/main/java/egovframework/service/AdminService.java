@@ -14,26 +14,52 @@ public interface AdminService {
 	/**
 	 * admin 하나만 검색
 	 * 
-	 * @param
-	 * @return Admin Admin
+	 * @param	Admin
+	 * @return  Admin
 	 * @exception Exception
 	 */
 	public Admin selectAdminOne(Admin admin) throws Exception;
 	
-	//admin 하나만 검색 (타입)
-	public Admin selectAdminTypeOne(Admin admin) throws Exception;
+	/**
+	 * admin 카운트
+	 * 
+	 * @param	Admin
+	 * @return  int
+	 * @exception Exception
+	 */
+	public int selectAdminListCnt(Admin admin) throws Exception;
 	
-	//admin 여러개 검색 (타입)
-	public List<Admin> selectAdminTypeList(Admin admin) throws Exception;
+	/**
+	 * admin 여러개 검색
+	 * 
+	 * @param	Admin
+	 * @return  List
+	 * @exception Exception
+	 */
+	public List<Admin> selectAdminList(Admin admin) throws Exception;
+	
+	/**
+	 * 태그 추가
+	 * 
+	 * @param	Admin
+	 * @return  int
+	 * @exception Exception
+	 */
+	public int insertTag(Admin admin) throws Exception;
+	
+	/**
+	 * 태그 수정
+	 * 
+	 * @param	Admin
+	 * @return  int
+	 * @exception Exception
+	 */
+	public int updateTag(Admin admin) throws Exception;
 	
 	//admin 여러개 검색 (mtag)
 	public List<Admin> selectAdminMtagList(Admin admin) throws Exception;
 	
-	//메인 태그 수정
-	public int updateAdmin(Admin admin) throws Exception;
 	
-	//태그 추가
-	public int insertTag(Admin admin) throws Exception;
 	
 	//태그 삭제
 	public int deleteTag(Admin admin) throws Exception;

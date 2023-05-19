@@ -28,30 +28,31 @@ public class AdminServiceImpl extends EgovAbstractServiceImpl implements AdminSe
 		return adminDao.selectAdminOne(admin);
 	}
 
-	// admin 하나만 검색 (타입)
-	public Admin selectAdminTypeOne(Admin admin) throws Exception {
-		return adminDao.selectAdminOne(admin);
+	// admin 타입 카운트
+	public int selectAdminListCnt(Admin admin) throws Exception {
+		return adminDao.selectAdminListCnt(admin);
 	}
 
-	// admin 여러개 검색 (타입)
-	public List<Admin> selectAdminTypeList(Admin admin) throws Exception {
-		return adminDao.selectAdminTypeList(admin);
-	}
-
-	// admin 여러개 검색 (mtag)
-	public List<Admin> selectAdminMtagList(Admin admin) throws Exception {
-		return adminDao.selectAdminMtagList(admin);
-	}
-
-	// 메인 태그 수정
-	public int updateAdmin(Admin admin) throws Exception {
-		return adminDao.updateAdmin(admin);
+	// admin 여러개 검색
+	public List<Admin> selectAdminList(Admin admin) throws Exception {
+		return adminDao.selectAdminList(admin);
 	}
 
 	// 태그 추가
 	public int insertTag(Admin admin) throws Exception {
 		return adminDao.insertTag(admin);
 	}
+	
+	// 태그 수정
+	public int updateTag(Admin admin) throws Exception {
+		return adminDao.updateTag(admin);
+	}
+	
+	// admin 여러개 검색 (mtag)
+	public List<Admin> selectAdminMtagList(Admin admin) throws Exception {
+		return adminDao.selectAdminMtagList(admin);
+	}
+
 
 	// 태그 삭제
 	public int deleteTag(Admin admin) throws Exception {

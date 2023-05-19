@@ -25,21 +25,21 @@ public class IAdminDao extends EgovAbstractMapper {
 	
 	//태그 부분
 	/**
-	 * admin 타입으로 리스트 검색
+	 * admin 카운트
 	 * 
-	 * @param
-	 * @return Admin Admin
+	 * @param	Admin
+	 * @return	int
 	 * @exception Exception
 	 */
-	public Admin selectAdminTypeOne(Admin vo) throws Exception {
-		return selectOne("admin.selectAdminTypeOne",vo);
+	public int selectAdminListCnt(Admin vo) throws Exception {
+		return selectOne("admin.selectAdminListCnt",vo);
 	}
 	
 	/**
 	 * admin 하나만 검색
 	 * 
-	 * @param
-	 * @return Admin Admin
+	 * @param	Admin
+	 * @return	Admin
 	 * @exception Exception
 	 */
 	public Admin selectAdminOne(Admin vo) throws Exception {
@@ -47,21 +47,21 @@ public class IAdminDao extends EgovAbstractMapper {
 	}
 	
 	/**
-	 * admin 여러개 검색(타입)
+	 * admin 여러개 검색
 	 * 
-	 * @param
-	 * @return List Admin
+	 * @param	Admin
+	 * @return	List
 	 * @exception Exception
 	 */
-	public List<Admin> selectAdminTypeList(Admin vo) throws Exception {
-		return selectList("admin.selectAdminTypeList",vo);
+	public List<Admin> selectAdminList(Admin vo) throws Exception {
+		return selectList("admin.selectAdminList",vo);
 	}
 	
 	/**
 	 * admin 여러개 검색(mtag)
 	 * 
-	 * @param
-	 * @return List Admin
+	 * @param	Admin
+	 * @return 	List 
 	 * @exception Exception
 	 */
 	public List<Admin> selectAdminMtagList(Admin vo) throws Exception {
@@ -69,25 +69,25 @@ public class IAdminDao extends EgovAbstractMapper {
 	}
 	
 	/**
-	 * 메인태그 수정
-	 * 
-	 * @param
-	 * @return int Admin
-	 * @exception Exception
-	 */
-	public int updateAdmin(Admin vo) throws Exception {
-		return update("admin.updateAdmin",vo);
-	}
-	
-	/**
 	 * 태그 추가
 	 * 
-	 * @param
-	 * @return int Admin
+	 * @param	Admin
+	 * @return 	int 
 	 * @exception Exception
 	 */
 	public int insertTag(Admin vo) throws Exception {
 		return insert("admin.insertTag",vo);
+	}
+	
+	/**
+	 * 메인태그 수정
+	 * 
+	 * @param	Admin
+	 * @return 	int 
+	 * @exception Exception
+	 */
+	public int updateTag(Admin vo) throws Exception {
+		return update("admin.updateTag",vo);
 	}
 	
 	/**

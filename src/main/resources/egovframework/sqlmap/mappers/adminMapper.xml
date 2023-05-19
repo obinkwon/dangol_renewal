@@ -8,59 +8,51 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
 <mapper namespace="admin">
-	<!-- admin 하나만 검색 -->
-	<select id="selectAdminTypeOne" parameterType="admin" resultType="admin">
+	<!-- admin 카운트 -->
+	<select id="selectAdminListCnt" parameterType="admin" resultType="admin">
 		SELECT 
-			ANUM AS anum
-			,ATYPE AS atype
-			,AVALUE AS avalue
-			,AIMAGE AS aimage
+			COUNT(ANUM)
 		FROM 
 			ADMINS 
-		WHERE 
-			ATYPE = #{atype} 
+		WHERE 1=1 
+		<if test='atype != null and atype != ""'>AND ATYPE = #{atype}</if>
+		<if test='anum != null and anum != ""'>AND ANUM = #{anum}</if>
 	</select>
 	
-	<!-- admin 하나만 검색 (타입) -->
+	<!-- admin 하나만 검색 -->
 	<select id="selectAdminOne" parameterType="admin" resultType="admin">
 		SELECT 
-			ANUM AS anum
-			,ATYPE AS atype
-			,AVALUE AS avalue
-			,AIMAGE AS aimage
-		FROM 
-			ADMINS 
+			  ANUM
+			, ATYPE
+			, AVALUE
+			, AIMAGE
+			, REGIST_DT
+			, MODIFY_DT
+			, REGIST_ID
+			, MODIFY_ID
+		FROM
+			ADMINS
 		WHERE 
-			ANUM = #{anum} 
+			ANUM = #{anum}
 	</select>
 	
-	<!-- admin 여러개 검색 (타입) -->
-	<select id="selectAdminTypeList" parameterType="admin" resultType="admin">
+	<!-- admin 여러개 검색 -->
+	<select id="selectAdminList" parameterType="admin" resultType="admin">
 		SELECT 
-			ANUM AS anum
-			,ATYPE AS atype
-			,AVALUE AS avalue
-			,AIMAGE AS aimage
+			  ANUM
+			, ATYPE
+			, AVALUE
+			, AIMAGE
+			, REGIST_DT
+			, MODIFY_DT
+			, REGIST_ID
+			, MODIFY_ID
 		FROM 
 			ADMINS 
-		WHERE 
-			ATYPE = #{atype} 
+		WHERE 1=1
+		<if test='atype != null and atype != ""'>AND ATYPE = #{atype}</if>
+		<if test='anum != null and anum != ""'>AND ANUM = #{anum}</if>
 		ORDER BY ANUM
-	</select>
-	
-	<!-- admin 여러개 검색 (anum) -->
-	<select id="selectAdminMtagList" parameterType="admin" resultType="admin">
-		SELECT 
-			A.ANUM AS anum
-			,A.ATYPE AS atype
-			,A.AVALUE AS avalue
-			,A.AIMAGE AS aimage
-		FROM 
-			ADMINS A
-			INNER JOIN MTAG MT ON A.ANUM = MT.ANUM
-		WHERE 
-			MT.MID = #{mid}
-		ORDER BY A.ANUM
 	</select>
 	
 	<!-- 태그 추가 -->
@@ -84,6 +76,33 @@
 		)
 	</insert>
 	
+	
+	<!-- 메인 태그 수정 -->
+	<update id="updateTag" parameterType="admin">
+		UPDATE ADMINS SET
+			  MODIFY_DT = CURRENT_TIMESTAMP
+			, MODIFY_ID = 'ADMIN'
+			<if test='avalue != null and avalue != ""'>, AVALUE = #{avalue}</if>
+			<if test='aimage != null and aimage != ""'>, AIMAGE = #{aimage}</if>
+		WHERE
+			ANUM = #{anum}
+	</update>
+	
+	<!-- admin 여러개 검색 (anum) -->
+	<select id="selectAdminMtagList" parameterType="admin" resultType="admin">
+		SELECT 
+			A.ANUM AS anum
+			,A.ATYPE AS atype
+			,A.AVALUE AS avalue
+			,A.AIMAGE AS aimage
+		FROM 
+			ADMINS A
+			INNER JOIN MTAG MT ON A.ANUM = MT.ANUM
+		WHERE 
+			MT.MID = #{mid}
+		ORDER BY A.ANUM
+	</select>
+	
 	<!-- 태그 삭제 -->
 	<delete id="deleteTag" parameterType="admin">
 		DELETE FROM 
@@ -91,16 +110,6 @@
 		WHERE 
 			ANUM = #{anum}
 	</delete>
-	
-	<!-- 메인 태그 수정 -->
-	<update id="updateAdmin" parameterType="admin">
-		UPDATE 
-			ADMINS 
-		SET 
-			AVALUE=#{avalue} 
-		WHERE 
-			ATYPE = #{atype}
-	</update>
 	
 	<!-- 1:1문의 리스트 조회-->
 	<select id="selectInquiryList" parameterType="inquiry" resultType="inquiry">

@@ -94,12 +94,12 @@
 				<div class="position-sticky pt-3">
 		        	<ul class="nav flex-column">
 		          		<li class="nav-item">
-		            		<a class="nav-link active" aria-current="page" href="/admin/recommandTag.do">
+		            		<a class="nav-link <c:if test="${atype eq 'main'}">active</c:if>" href="/admin/recommandTag.do">
 		              			추천태그
 		            		</a>
 		          		</li>
 		          		<li class="nav-item">
-		            		<a class="nav-link" href="/admin/themeTag.do">
+		            		<a class="nav-link <c:if test="${atype eq 'theme'}">active</c:if>" href="/admin/themeTag.do">
 		              			테마별 태그
 		            		</a>
 		          		</li>

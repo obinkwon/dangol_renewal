@@ -55,17 +55,18 @@ public class AdminController {
 		try {
 			// 현재 설정된 메인추천 1, 2
 			admin.setAtype("main1");
-			model.addAttribute("main1", adminService.selectAdminTypeOne(admin));
+			List<Admin> main1List = adminService.selectAdminList(admin);
+			model.addAttribute("main1", main1List.size() > 0 ? main1List.get(0) : null);
 			
 			admin.setAtype("main2");
-			model.addAttribute("main2", adminService.selectAdminTypeOne(admin));
+			List<Admin> main2List = adminService.selectAdminList(admin);
+			model.addAttribute("main2", main2List.size() > 0 ? main2List.get(0) : null);
+
 			// 드롭다운에 들어갈 themetags 출력
 			admin.setAtype("theme");
+			model.addAttribute("themes", adminService.selectAdminList(admin));
 			
-			List<Admin> themeList =  adminService.selectAdminTypeList(admin);
-			
-			model.addAttribute("themes",themeList);
-			model.addAttribute("themesCnt",themeList.size());
+			model.addAttribute("atype", "main");
 			
 			returnPage = "admin/recommandTag";
 
@@ -74,6 +75,54 @@ public class AdminController {
 		}
 
 		return returnPage;
+	}
+	
+	/**
+	 * 관리자가 메인추천 태그 적용
+	 * @param model
+	 * @return "/insertTag.do"
+	 * @exception Exception
+	 */
+	@ResponseBody
+	@RequestMapping("/insertMain.do")
+	public ResponseEntity<?> adminInsertMain(HttpServletRequest request
+			, HttpSession session 
+			, HttpServletResponse response
+			, Model model
+			, @ModelAttribute("admin") Admin admin) throws Exception {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int result = 0;
+			if(admin.getAtype() != null) {
+				List<Admin> tagList = adminService.selectAdminList(admin);
+				if(tagList.size() > 0) {
+					//update
+					admin.setAnum(tagList.get(0).getAnum());
+					result = adminService.updateTag(admin);
+				}else { 
+					//insert
+					result = adminService.insertTag(admin);
+				}
+			}
+			
+			if(result > 0) {
+				// 정상 데이터 결과
+				resultMap.put("code", "3001");
+				resultMap.put("message", "success");
+				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+			}else {
+				// 정상 데이터 결과
+				resultMap.put("code", "3000");
+				resultMap.put("message", "fail");
+				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+			}
+		}catch(Exception e) {
+			logger.error(" AdminController.adminInsertMain :: exception ::: " + e.getMessage());
+		}
+		
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 	
 	/**
@@ -91,7 +140,9 @@ public class AdminController {
 		
 		try {
 			admin.setAtype("theme");
-			model.addAttribute("themeTags", adminService.selectAdminTypeList(admin));
+			model.addAttribute("themeTags", adminService.selectAdminList(admin));
+			
+			model.addAttribute("atype","theme");
 			returnPage = "admin/themeTag";
 
 		}catch(Exception e) {
@@ -173,20 +224,6 @@ public class AdminController {
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 	
-	//관리자가 메인추천 태그 적용
-	@RequestMapping("selectMain.do")
-	public String selectMain(Admin admin) throws Exception {
-		if(admin.getAtype() != null) {
-			Admin tag = adminService.selectAdminOne(admin);
-			if(tag == null) { //insert
-				adminService.insertTag(admin);
-			}else { //update
-				adminService.updateAdmin(admin);
-			}
-		}
-		return "redirect:adminRecommandTag.do";
-	}
-	
 	//관리자 태그 추가(파일)
 	@RequestMapping("insertTagFile.do")
 	public String insertTagFile(Admin admin,
@@ -202,7 +239,7 @@ public class AdminController {
 		// FoodTags 출력
 		Admin admin = new Admin();
 		admin.setAtype("food");
-		mav.addObject("foodTags", adminService.selectAdminTypeList(admin));
+		mav.addObject("foodTags", adminService.selectAdminList(admin));
 		mav.setViewName("Admin/adminFoodTag");
 		return mav;
 	}
@@ -214,7 +251,7 @@ public class AdminController {
 		// TasteTags 출력
 		Admin admin = new Admin();
 		admin.setAtype("taste");
-		mav.addObject("tasteTags", adminService.selectAdminTypeList(admin));
+		mav.addObject("tasteTags", adminService.selectAdminList(admin));
 		mav.setViewName("Admin/adminTasteTag");
 		return mav;
 	}
