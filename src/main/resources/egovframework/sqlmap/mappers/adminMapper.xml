@@ -1,7 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><!-- 수정일 수정자 수정내용 ========= ======= 
-	================================================= 2011.8.26 서준식 FAQ 를 위한 
-	쿼리 추가 2011.09.27 서준식 컬럼 변경 SUB_DN 을 CRTFC_DN_VALUE 로 변경 2011.09.28 서준식 컬럼 
-	변경 entrprsmber_id 을 ENTRPRS_MBER_ID 로 변경 -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	수정일                 수정자                          수정내용
+  =========     =======    =================================================
+  2022.10.18   	obkwon      최초 생성
+-->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
@@ -64,15 +66,21 @@
 	<!-- 태그 추가 -->
 	<insert id="insertTag" parameterType="admin">
 		INSERT INTO ADMINS(
-			ANUM
-			,ATYPE
-			,AVALUE
-			,AIMAGE
+			  ATYPE
+			, AVALUE
+			, AIMAGE
+			, REGIST_DT
+			, MODIFY_DT
+			, REGIST_ID
+			, MODIFY_ID
 		)VALUES(
-			ADMINS_SEQ.NEXTVAL
-			,#{atype}
-			,#{avalue}
-			,#{aimage,jdbcType=VARCHAR}
+			  #{atype}
+			, #{avalue}
+			, #{aimage}
+			, CURRENT_TIMESTAMP
+			, CURRENT_TIMESTAMP
+			, 'ADMIN'
+			, 'ADMIN'
 		)
 	</insert>
 	

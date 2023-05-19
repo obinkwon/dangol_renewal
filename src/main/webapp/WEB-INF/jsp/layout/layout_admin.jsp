@@ -99,7 +99,7 @@
 		            		</a>
 		          		</li>
 		          		<li class="nav-item">
-		            		<a class="nav-link" href="/admin/adminThemeTag.do">
+		            		<a class="nav-link" href="/admin/themeTag.do">
 		              			테마별 태그
 		            		</a>
 		          		</li>

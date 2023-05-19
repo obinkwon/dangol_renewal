@@ -2,19 +2,25 @@ package egovframework.controller;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
@@ -40,7 +46,7 @@ public class AdminController {
 	 * @exception Exception
 	 */
 	@RequestMapping("/recommandTag.do")
-	public String recommandTag(HttpServletRequest request
+	public String adminRecommandTag(HttpServletRequest request
 			, HttpServletResponse response
 			, Model model
 			, @ModelAttribute("admin") Admin admin) throws Exception {
@@ -64,10 +70,72 @@ public class AdminController {
 			returnPage = "admin/recommandTag";
 
 		}catch(Exception e) {
-			logger.error(" AdminController.recommandTag :: exception ::: "+e.getMessage());
+			logger.error(" AdminController.adminRecommandTag :: exception ::: "+e.getMessage());
 		}
 
 		return returnPage;
+	}
+	
+	/**
+	 * 관리자 테마 페이지 로드
+	 * @param model
+	 * @return "/adminThemeTag.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/themeTag.do")
+	public String adminThemeTag(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model
+			, @ModelAttribute("admin") Admin admin) throws Exception {
+		String returnPage = "";
+		
+		try {
+			admin.setAtype("theme");
+			model.addAttribute("themeTags", adminService.selectAdminTypeList(admin));
+			returnPage = "admin/themeTag";
+
+		}catch(Exception e) {
+			logger.error(" AdminController.adminThemeTag :: exception ::: " + e.getMessage());
+		}
+		
+		return returnPage;
+	}
+	
+	/**
+	 * 관리자 태그 추가
+	 * @param model
+	 * @return "/insertTag.do"
+	 * @exception Exception
+	 */
+	@ResponseBody
+	@RequestMapping("/insertTag.do")
+	public ResponseEntity<?> adminInsertTag(HttpServletRequest request
+			, HttpSession session 
+			, HttpServletResponse response
+			, Model model
+			, @ModelAttribute("admin") Admin admin) throws Exception {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			logger.debug("admin ::: {}",admin);
+			int result = adminService.insertTag(admin);
+			if(result > 0) {
+				// 정상 데이터 결과
+				resultMap.put("code", "3001");
+				resultMap.put("message", "success");
+				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+			}else {
+				// 정상 데이터 결과
+				resultMap.put("code", "3000");
+				resultMap.put("message", "fail");
+				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+			}
+		}catch(Exception e) {
+			logger.error(" AdminController.adminInsertTag :: exception ::: " + e.getMessage());
+		}
+		
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 
 	//관리자가 메인추천 태그 적용
@@ -91,31 +159,12 @@ public class AdminController {
 		return "redirect:"+returnUrl;
 	}
 	
-	//관리자 태그 추가
-	@RequestMapping("insertTag.do")
-	public String insertTag(Admin admin, String returnUrl) throws Exception {
-		adminService.insertTag(admin);
-		return "redirect:"+returnUrl;
-	}
-	
 	//관리자 태그 추가(파일)
 	@RequestMapping("insertTagFile.do")
 	public String insertTagFile(Admin admin,
 			@RequestParam(value="afile") MultipartFile afile) throws Exception{
 		adminService.insertTagFile(admin, afile);
 		return "redirect:adminFoodTag.do";
-	}
-
-	//관리자 테마 페이지 로드
-	@RequestMapping("adminThemeTag.do")
-	public ModelAndView adminThemeTag() throws Exception {
-		ModelAndView mav = new ModelAndView();
-		// themeTags 출력
-		Admin admin = new Admin();
-		admin.setAtype("theme");
-		mav.addObject("themeTags", adminService.selectAdminTypeList(admin));
-		mav.setViewName("Admin/adminThemeTag");
-		return mav;
 	}
 	
 	//관리자 음식 페이지 로드
