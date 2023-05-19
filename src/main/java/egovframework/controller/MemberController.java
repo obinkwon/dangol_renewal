@@ -65,7 +65,7 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		Admin admin = new Admin();
 		admin.setAtype("theme");
-		mav.addObject("themeList", aService.selectAdminTypeList(admin));
+		mav.addObject("themeList", aService.selectAdminList(admin));
 		mav.setViewName("jsp/signUpMembersForm");
 		return mav;
 	}

@@ -70,16 +70,14 @@
 <div class="container-fluid">
 	<div class="p-5">
 		<h3>테마태그 설정</h3>
-		<form id="frmList" action="insertThemeTag.do" method="get">
-			<div class="row g-3">
-				<div class="col">
-					<input type="text" class="form-control" name="keyword" placeholder="추가할 태그를 입력하세요" aria-label="keyword" id="themeTagText">
-				</div>
-				<div class="col">
-					<button type="button" class="btn btn-outline-primary" onclick="addThemeTag(); return false;">추가하기</button>
-				</div>
+		<div class="row g-3">
+			<div class="col">
+				<input type="text" class="form-control" name="keyword" placeholder="추가할 태그를 입력하세요" aria-label="keyword" id="themeTagText">
 			</div>
-		</form>
+			<div class="col">
+				<button type="button" class="btn btn-outline-primary" onclick="addThemeTag(); return false;">추가하기</button>
+			</div>
+		</div>
 		<table class="table table-hover">
 			<thead>
 				<tr>

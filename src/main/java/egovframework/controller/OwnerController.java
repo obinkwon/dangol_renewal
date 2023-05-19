@@ -223,10 +223,10 @@ public class OwnerController {
 		if(bid != null && !bid.equals("") ) {
 			//가게정보 업종 불러오기 mav.addObject(); 
 			admin.setAtype("food");
-			mav.addObject("foodTagList",aService.selectAdminTypeList(admin));
+			mav.addObject("foodTagList",aService.selectAdminList(admin));
 			//해시태그 불러오기 mav.addObject();
 			admin.setAtype("theme");
-			mav.addObject("themeTagList",aService.selectAdminTypeList(admin));
+			mav.addObject("themeTagList",aService.selectAdminList(admin));
 			if(mode.equals("MOD")){
 				store = oService.selectStoreOne(store);
 				String[] stime = new String[4];

@@ -90,7 +90,7 @@ public class CategoryController {
 			}
 			
 			admin.setAtype("food");
-			List<Admin> aList = adminService.selectAdminTypeList(admin); // admin type 리스트
+			List<Admin> aList = adminService.selectAdminList(admin); // admin type 리스트
 			List<Store> sList = null;
 			
 			if(aList.size() > 0) { //음식 종류가 하나라도 있을때
@@ -125,7 +125,7 @@ public class CategoryController {
 		}
 		
 		admin.setAtype("theme");
-		List<Admin> aList = adminService.selectAdminTypeList(admin); // admin type 리스트
+		List<Admin> aList = adminService.selectAdminList(admin); // admin type 리스트
 		List<Store> sList = null;
 		
 		if(aList.size() > 0) { //테마 종류가 하나라도 있을때
@@ -194,7 +194,7 @@ public class CategoryController {
 			member = mService.selectMember(member);
 			if(member != null) {
 				admin.setMid(member.getMid());
-				List<Admin> aList = adminService.selectAdminMtagList(admin); // admin type 리스트
+				List<Admin> aList = adminService.selectAdminList(admin); // admin type 리스트
 				List<Integer> anumList = new ArrayList<Integer>();
 				for(Admin ad : aList) {
 					anumList.add(ad.getAnum());

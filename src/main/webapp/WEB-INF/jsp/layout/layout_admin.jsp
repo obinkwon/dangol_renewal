@@ -19,63 +19,6 @@
 	<link href="/css/headers.css" rel="stylesheet">
 	<link href="/css/sidebars.css" rel="stylesheet">
 	<link href="/css/dashboard.css" rel="stylesheet">
-	<style type="text/css">
-		div.nav{
-			margin-top: 50px;
-			float: left;
-			width: 13%;
-			margin-left: 50px;
-		}
-		li.nav_active {
-			background-color: #66ccff;
-		}
-		a.navTitle {
-			font-size: 15px;
-			font-weight: bold;
-			color: #000000;
-			text-align: center;
-		}
-		a.nav {
-			text-align: center;
-			font-size: 14px;
-			color: #000000;
-		}
-		.inputText {
-		    height: 40px;
-		    line-height: 40px;
-		    color: #7b6e66;
-		    padding: 0 7px;
-		    border: 1px solid #7b6e66;
-		    background-color: transparent;
-		    vertical-align: middle;
-		    float: left;
-		}
-		.w300 {
-		    width: 300px;
-		}
-		.btn-view {
-		    width: 200px;
-		    font-size: 1.4rem;
-		    background-color: #fff;
-		    color: #000000;
-		    height: 4rem;
-		    line-height: 3.9rem;
-		    font-weight: 600;
-		    letter-spacing: 0.5px;
-		    transition-duration: .5s;
-		    border: 0.1rem solid #66ccff;
-		}
-	</style>
-	
-	<script type="text/javascript">
-		function applyTag(type){ // 태그 적용
-			if(type == 1){ //main1
-				location.href="selectMain.do?atype=main1&avalue="+$('#select_main1').val();
-			}else{ //main2
-				location.href="selectMain.do?atype=main2&avalue="+$('#select_main2').val();
-			}
-		}
-	</script>
 	
 	<decorator:head ></decorator:head>
 </head>
@@ -104,12 +47,12 @@
 		            		</a>
 		          		</li>
 		          		<li class="nav-item">
-		            		<a class="nav-link" href="/admin/adminFoodTag.do">
+		            		<a class="nav-link <c:if test="${atype eq 'food'}">active</c:if>" href="/admin/foodTag.do">
 								업종별 태그
 		            		</a>
 		          		</li>
 		          		<li class="nav-item">
-		            		<a class="nav-link" href="/admin/adminTasteTag.do">
+		            		<a class="nav-link <c:if test="${atype eq 'taste'}">active</c:if>" href="/admin/tasteTag.do">
 								맛별 태그
 		            		</a>
 		          		</li>

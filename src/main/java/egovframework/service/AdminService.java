@@ -56,12 +56,13 @@ public interface AdminService {
 	 */
 	public int updateTag(Admin admin) throws Exception;
 	
-	//admin 여러개 검색 (mtag)
-	public List<Admin> selectAdminMtagList(Admin admin) throws Exception;
-	
-	
-	
-	//태그 삭제
+	/**
+	 * 태그 삭제
+	 * 
+	 * @param	Admin
+	 * @return  int
+	 * @exception Exception
+	 */
 	public int deleteTag(Admin admin) throws Exception;
 
 	//태그 추가(파일)

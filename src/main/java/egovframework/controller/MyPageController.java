@@ -56,7 +56,7 @@ public class MyPageController {
 			Member member = new Member();
 			member.setMid(mid);
 			mav.addObject("Member", mService.selectMember(member));
-			mav.addObject("themeList", aService.selectAdminTypeList(admin));
+			mav.addObject("themeList", aService.selectAdminList(admin));
 			mav.addObject("mtagList", mService.selectMtag(member));
 			mav.setViewName("mypage/myPage");
 		}else {
@@ -238,7 +238,7 @@ public class MyPageController {
 			
 			Admin admin = new Admin();
 			admin.setAtype("taste");
-			mav.addObject("tasteList", aService.selectAdminTypeList(admin));
+			mav.addObject("tasteList", aService.selectAdminList(admin));
 			mav.addObject("mimage", member.getMimage());
 			mav.addObject("details", details);
 			mav.setViewName("mypage/createCommentForm");

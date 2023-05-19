@@ -224,6 +224,33 @@ public class AdminController {
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 	
+	/**
+	 * 관리자 음식 페이지 로드
+	 * @param model
+	 * @return "/deleteTag.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/foodTag.do")
+	public String adminFoodTag(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model
+			, @ModelAttribute("admin") Admin admin) throws Exception {
+		String returnPage = "";
+		
+		try {
+			admin.setAtype("food");
+			model.addAttribute("foodTags", adminService.selectAdminList(admin));
+			
+			model.addAttribute("atype","food");
+			returnPage = "admin/foodTag";
+
+		}catch(Exception e) {
+			logger.error(" AdminController.adminThemeTag :: exception ::: " + e.getMessage());
+		}
+		
+		return returnPage;
+	}
+	
 	//관리자 태그 추가(파일)
 	@RequestMapping("insertTagFile.do")
 	public String insertTagFile(Admin admin,
@@ -232,17 +259,6 @@ public class AdminController {
 		return "redirect:adminFoodTag.do";
 	}
 	
-	//관리자 음식 페이지 로드
-	@RequestMapping("adminFoodTag.do")
-	public ModelAndView adminFoodTag() throws Exception {
-		ModelAndView mav = new ModelAndView();
-		// FoodTags 출력
-		Admin admin = new Admin();
-		admin.setAtype("food");
-		mav.addObject("foodTags", adminService.selectAdminList(admin));
-		mav.setViewName("Admin/adminFoodTag");
-		return mav;
-	}
 
 	//관리자 맛 페이지 로드
 	@RequestMapping("adminTasteTag.do")

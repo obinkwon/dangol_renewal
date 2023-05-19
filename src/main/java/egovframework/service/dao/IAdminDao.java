@@ -58,17 +58,6 @@ public class IAdminDao extends EgovAbstractMapper {
 	}
 	
 	/**
-	 * admin 여러개 검색(mtag)
-	 * 
-	 * @param	Admin
-	 * @return 	List 
-	 * @exception Exception
-	 */
-	public List<Admin> selectAdminMtagList(Admin vo) throws Exception {
-		return selectList("admin.selectAdminMtagList",vo);
-	}
-	
-	/**
 	 * 태그 추가
 	 * 
 	 * @param	Admin

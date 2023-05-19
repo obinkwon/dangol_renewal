@@ -47,12 +47,6 @@ public class AdminServiceImpl extends EgovAbstractServiceImpl implements AdminSe
 	public int updateTag(Admin admin) throws Exception {
 		return adminDao.updateTag(admin);
 	}
-	
-	// admin 여러개 검색 (mtag)
-	public List<Admin> selectAdminMtagList(Admin admin) throws Exception {
-		return adminDao.selectAdminMtagList(admin);
-	}
-
 
 	// 태그 삭제
 	public int deleteTag(Admin admin) throws Exception {

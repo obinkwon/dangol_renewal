@@ -39,20 +39,22 @@
 	<!-- admin 여러개 검색 -->
 	<select id="selectAdminList" parameterType="admin" resultType="admin">
 		SELECT 
-			  ANUM
-			, ATYPE
-			, AVALUE
-			, AIMAGE
-			, REGIST_DT
-			, MODIFY_DT
-			, REGIST_ID
-			, MODIFY_ID
+			  A.ANUM
+			, A.ATYPE
+			, A.AVALUE
+			, A.AIMAGE
+			, A.REGIST_DT
+			, A.MODIFY_DT
+			, A.REGIST_ID
+			, A.MODIFY_ID
 		FROM 
-			ADMINS 
+			ADMINS A
+			<if test='mid != null and mid != ""'>INNER JOIN MTAG MT ON A.ANUM = MT.ANUM</if>
 		WHERE 1=1
-		<if test='atype != null and atype != ""'>AND ATYPE = #{atype}</if>
-		<if test='anum != null and anum != ""'>AND ANUM = #{anum}</if>
-		ORDER BY ANUM
+		<if test='atype != null and atype != ""'>AND A.ATYPE = #{atype}</if>
+		<if test='anum != null and anum != ""'>AND A.ANUM = #{anum}</if>
+		<if test='mid != null and mid != ""'>AND MT.MID = #{mid}</if>
+		ORDER BY A.ANUM
 	</select>
 	
 	<!-- 태그 추가 -->
@@ -77,7 +79,7 @@
 	</insert>
 	
 	
-	<!-- 메인 태그 수정 -->
+	<!-- 태그 수정 -->
 	<update id="updateTag" parameterType="admin">
 		UPDATE ADMINS SET
 			  MODIFY_DT = CURRENT_TIMESTAMP
@@ -88,27 +90,10 @@
 			ANUM = #{anum}
 	</update>
 	
-	<!-- admin 여러개 검색 (anum) -->
-	<select id="selectAdminMtagList" parameterType="admin" resultType="admin">
-		SELECT 
-			A.ANUM AS anum
-			,A.ATYPE AS atype
-			,A.AVALUE AS avalue
-			,A.AIMAGE AS aimage
-		FROM 
-			ADMINS A
-			INNER JOIN MTAG MT ON A.ANUM = MT.ANUM
-		WHERE 
-			MT.MID = #{mid}
-		ORDER BY A.ANUM
-	</select>
-	
 	<!-- 태그 삭제 -->
 	<delete id="deleteTag" parameterType="admin">
-		DELETE FROM 
-			ADMINS 
-		WHERE 
-			ANUM = #{anum}
+		DELETE FROM ADMINS 
+		WHERE ANUM = #{anum}
 	</delete>
 	
 	<!-- 1:1문의 리스트 조회-->
