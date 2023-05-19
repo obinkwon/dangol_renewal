@@ -78,7 +78,6 @@
 		)
 	</insert>
 	
-	
 	<!-- 태그 수정 -->
 	<update id="updateTag" parameterType="admin">
 		UPDATE ADMINS SET

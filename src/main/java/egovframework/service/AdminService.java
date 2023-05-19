@@ -64,10 +64,16 @@ public interface AdminService {
 	 * @exception Exception
 	 */
 	public int deleteTag(Admin admin) throws Exception;
-
-	//태그 추가(파일)
-	public int insertTagFile(Admin admin, MultipartFile afile) throws Exception;
 	
+	/**
+	 * 태그 추가(파일)
+	 * 
+	 * @param	Admin, MultipartFile
+	 * @return  int
+	 * @exception Exception
+	 */
+	public int insertTagFile(Admin admin, MultipartFile afile) throws Exception;
+
 	//1:1문의 
 	//전체 글 로드
 	public List<Inquiry> selectInquiryList(Inquiry inquiry) throws Exception;
@@ -83,6 +89,4 @@ public interface AdminService {
 	//파일 경로 생성
 	public File getAttachedFile(int anum) throws Exception;
 	
-	public File insertFile(MultipartFile afile) throws Exception;
-
 }

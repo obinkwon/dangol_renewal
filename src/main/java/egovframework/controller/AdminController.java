@@ -93,6 +93,10 @@ public class AdminController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
+		resultMap.put("code", "3000");
+		resultMap.put("message", "fail");
+		resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+		
 		try {
 			int result = 0;
 			if(admin.getAtype() != null) {
@@ -111,11 +115,6 @@ public class AdminController {
 				// 정상 데이터 결과
 				resultMap.put("code", "3001");
 				resultMap.put("message", "success");
-				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
-			}else {
-				// 정상 데이터 결과
-				resultMap.put("code", "3000");
-				resultMap.put("message", "fail");
 				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
 			}
 		}catch(Exception e) {
@@ -168,17 +167,16 @@ public class AdminController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
+		resultMap.put("code", "3000");
+		resultMap.put("message", "fail");
+		resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+		
 		try {
 			int result = adminService.insertTag(admin);
 			if(result > 0) {
 				// 정상 데이터 결과
 				resultMap.put("code", "3001");
 				resultMap.put("message", "success");
-				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
-			}else {
-				// 정상 데이터 결과
-				resultMap.put("code", "3000");
-				resultMap.put("message", "fail");
 				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
 			}
 		}catch(Exception e) {
@@ -204,17 +202,16 @@ public class AdminController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
+		resultMap.put("code", "3000");
+		resultMap.put("message", "fail");
+		resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+
 		try {
 			int result = adminService.deleteTag(admin);
 			if(result > 0) {
 				// 정상 데이터 결과
 				resultMap.put("code", "3001");
 				resultMap.put("message", "success");
-				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
-			}else {
-				// 정상 데이터 결과
-				resultMap.put("code", "3000");
-				resultMap.put("message", "fail");
 				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
 			}
 		}catch(Exception e) {
@@ -227,7 +224,7 @@ public class AdminController {
 	/**
 	 * 관리자 음식 페이지 로드
 	 * @param model
-	 * @return "/deleteTag.do"
+	 * @return "/foodTag.do"
 	 * @exception Exception
 	 */
 	@RequestMapping("/foodTag.do")
@@ -245,18 +242,45 @@ public class AdminController {
 			returnPage = "admin/foodTag";
 
 		}catch(Exception e) {
-			logger.error(" AdminController.adminThemeTag :: exception ::: " + e.getMessage());
+			logger.error(" AdminController.adminFoodTag :: exception ::: " + e.getMessage());
 		}
 		
 		return returnPage;
 	}
 	
-	//관리자 태그 추가(파일)
-	@RequestMapping("insertTagFile.do")
-	public String insertTagFile(Admin admin,
-			@RequestParam(value="afile") MultipartFile afile) throws Exception{
-		adminService.insertTagFile(admin, afile);
-		return "redirect:adminFoodTag.do";
+	/**
+	 * 관리자 태그 추가(파일)
+	 * @param model
+	 * @return "/insertTagFile.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/insertTagFile.do")
+	public ResponseEntity<?> adminInsertTagFile(HttpServletRequest request
+			, HttpSession session 
+			, HttpServletResponse response
+			, Model model
+			, @ModelAttribute("admin") Admin admin
+			, @ModelAttribute("uploadFile") MultipartFile uploadFile) throws Exception{
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap.put("code", "3000");
+		resultMap.put("message", "fail");
+		resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+
+		try {
+			int result = adminService.insertTagFile(admin, uploadFile);
+			if(result > 0) {
+				// 정상 데이터 결과
+				resultMap.put("code", "3001");
+				resultMap.put("message", "success");
+				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+			}
+		}catch(Exception e) {
+			logger.error(" AdminController.adminInsertTagFile :: exception ::: " + e.getMessage());
+		}
+		
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 	
 

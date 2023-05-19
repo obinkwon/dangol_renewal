@@ -43,7 +43,7 @@
 			
 			if (confirm("정말로 삭제하시겠습니까?")) {
 				if(anum == ''){
-					alert('추가할 태그를 입력하세요');
+					alert('삭제할 태그가 없습니다');
 				}else{
 					$.ajax({
 				        url : "/admin/deleteTag.do",
@@ -90,7 +90,7 @@
 				<tr>
 					<td><c:out value="${themeTag.avalue}"/></td>
 					<td>
-						<button type="button" class="btn-close" aria-label="Close" onclick="deleteTag('<c:out value="${themeTag.anum}"/>');"></button>
+						<button type="button" class="btn-close" aria-label="delete" onclick="deleteTag('<c:out value="${themeTag.anum}"/>');"></button>
 					</td>
 				</tr>
 			</c:forEach>
