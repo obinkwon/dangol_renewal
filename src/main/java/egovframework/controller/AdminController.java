@@ -337,7 +337,8 @@ public class AdminController {
 			model.addAttribute("iList", iList);
 			model.addAttribute("cntList", adminService.inquiryListCount());
 			
-			model.addAttribute("state","state");
+			model.addAttribute("searchVO", inquiry);
+			model.addAttribute("state", state);
 			returnPage = "admin/inquiry";
 
 		}catch(Exception e) {

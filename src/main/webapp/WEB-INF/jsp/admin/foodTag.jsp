@@ -113,17 +113,11 @@
 					<input type="text" class="form-control" name="avalue" placeholder="추가할 태그를 입력하세요" aria-label="avalue" id="foodTagText">
 				</div>
 				<div class="col">
-					<div class="row g-3">
-						<div class="col">
-							<img id="img" src="" class="img-thumbnail" alt="썸네일이미지" style="display:none;width:100px;height: 100px">
-						</div>
-					</div>
+					<img id="img" src="" class="img-thumbnail" alt="썸네일이미지" style="display:none;width:100px;height: 100px">
 				</div>
 				<div class="col">
 					<button type="button" class="btn btn-secondary" onclick="imgUpload();">이미지 업로드</button>
 					<input type="file" name="uploadFile" id="uploadFile" style="display:none;">
-				</div>
-				<div class="col">
 					<button type="button" class="btn btn-outline-primary" onclick="addFoodTag();">추가하기</button>
 				</div>
 			</div>
