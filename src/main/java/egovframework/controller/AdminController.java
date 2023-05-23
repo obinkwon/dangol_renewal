@@ -320,7 +320,7 @@ public class AdminController {
 	 * @exception Exception
 	 */
 	@RequestMapping("/inquirys.do")
-	public String selectAllInquirys(HttpServletRequest request
+	public String adminInquirys(HttpServletRequest request
 			, HttpServletResponse response
 			, Model model
 			, @ModelAttribute("inquiry") Inquiry inquiry) throws Exception{
@@ -348,8 +348,13 @@ public class AdminController {
 		return returnPage;
 	}
 	
-	//1:1문의 상세 글 불러오기
-	@RequestMapping("selectInquiryDetail.do")
+	/**
+	 * 1:1문의 상세 글 불러오기 - 1:1문의
+	 * @param model
+	 * @return "/inquiry/detail.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/inquiry/detail.do")
 	public ModelAndView selectInquiryDetail(Inquiry inquiry) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("inquiry", adminService.selectInquiry(inquiry));

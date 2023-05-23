@@ -22,11 +22,12 @@
 			location.href = url;
 		}
 			
-		function selInquiry(type){ // 전체 / 답변완료 / 미답변 클릭
+		// 전체 / 답변완료 / 미답변 클릭
+		function selInquiry(type){
 			if(type == 'all'){
-				location.href="selectAllInquirys.do";
+				location.href="/admin/inquirys.do";
 			}else{
-				location.href="selectAllInquirys.do?istate="+type;
+				location.href="/admin/inquirys.do?istate="+type;
 			}
 		}
 	</script>

@@ -3,12 +3,13 @@ package egovframework.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,12 +21,16 @@ import egovframework.service.InquiryService;
 
 
 @Controller
+@RequestMapping("/inquiry")
 public class InquiryController {
 	
-	@Autowired
-	private InquiryService iService;
+	/** The Constant logger. */
+	private static final Logger logger = LoggerFactory.getLogger(InquiryController.class);
+	
+	@Resource(name = "inquiryService")
+	private InquiryService inquiryService;
 
-	@RequestMapping("faq.do")
+	@RequestMapping("/faq.do")
 	public String faqService(@RequestParam(defaultValue="all") String type) {
 		if(type.equals("all")) {
 			return "inquiry/faq";
@@ -46,12 +51,12 @@ public class InquiryController {
 		
 		if(session.getAttribute("mid")!=null) {
 			String mid = (String)session.getAttribute("mid");
-		mav.addObject("inquirylist",iService.selectInquiryByMid(mid));
+		mav.addObject("inquirylist",inquiryService.selectInquiryByMid(mid));
 		mav.setViewName("inquiry/inquiry");
 		return mav;
 		}else if (session.getAttribute("bid")!=null) {
 			String bid = (String) session.getAttribute("bid");
-			mav.addObject("inquirylist",iService.selectInquiryByBid(bid));
+			mav.addObject("inquirylist",inquiryService.selectInquiryByBid(bid));
 			mav.setViewName("inquiry/inquiry");
 			return mav;
 		}else {
@@ -67,7 +72,7 @@ public class InquiryController {
 	}
 	@RequestMapping("removeInquiry.do")
 	public String removeInquiry(int inum) {
-		iService.deleteInquiryOne(inum);
+		inquiryService.deleteInquiryOne(inum);
 		return "redirect:inquiry.do";
 		
 	}
@@ -86,12 +91,12 @@ public class InquiryController {
 		String mid= (String) session.getAttribute("mid");
 		inquiry.setMid(mid);
 		System.out.println(inquiry);
-		iService.insertInquiry(inquiry);
+		inquiryService.insertInquiry(inquiry);
 	}else {
 		String bid=(String)session.getAttribute("bid");
 		inquiry.setBid(bid);
 		System.out.println(inquiry);
-		iService.insertInquiry(inquiry);
+		inquiryService.insertInquiry(inquiry);
 	}
 	str = "<script language='javascript'>";
 	str += "alert('1:1문의가 등록되었습니다.');";
@@ -104,7 +109,7 @@ public class InquiryController {
 	@RequestMapping("inquiryView.do")
 	public ModelAndView inquiryView(int inum) {
 	ModelAndView mav = new ModelAndView();
-		mav.addObject("inquiry",iService.selectInquiryOne(inum));
+		mav.addObject("inquiry",inquiryService.selectInquiryOne(inum));
 		mav.setViewName("inquiry/inquiryView");
 		return mav;
 		
@@ -114,12 +119,12 @@ public class InquiryController {
 		ModelAndView mav= new ModelAndView();
 		if(session.getAttribute("mid")!=null) {
 			String mid= (String) session.getAttribute("mid");
-			mav.addObject("inquirylist",iService.searchInquiryListByMid(mid,keyword));
+			mav.addObject("inquirylist",inquiryService.searchInquiryListByMid(mid,keyword));
 			mav.setViewName("inquiry/inquiry");
 			return mav;
 		}else {
 			String bid=(String) session.getAttribute("bid");
-			mav.addObject("inquirylist",iService.searchInquiryListByBid(bid,keyword));
+			mav.addObject("inquirylist",inquiryService.searchInquiryListByBid(bid,keyword));
 			mav.setViewName("inquiry/inquiry");
 			return mav;
 		}

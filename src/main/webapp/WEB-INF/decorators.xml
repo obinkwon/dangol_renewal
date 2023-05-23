@@ -14,7 +14,7 @@
     </decorator>
 
     <!-- front 페이지 layout 설정 -->
-    <decorator name="layout_front" page="layout_admin.jsp">
+    <decorator name="layout_front" page="layout_front.jsp">
        <pattern>/*</pattern>
     </decorator>  
     
