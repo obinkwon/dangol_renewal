@@ -45,7 +45,7 @@ public class InquiryController {
 			, @RequestParam(required=false) String type) {
 		String returnPage = "";
 		
-		if(type != null) {
+		if(!type.equals("")) {
 			if(type.equals("service")) {
 				returnPage = "inquiry/faqService";
 			}else {

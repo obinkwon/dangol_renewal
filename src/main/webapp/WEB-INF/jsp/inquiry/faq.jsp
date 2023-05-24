@@ -41,16 +41,15 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<div class="nav">
-			<ul class="nav nav-pills nav-stacked">
-				<li class="navTitle"><a class="navTitle">고객센터</a></li>
-				<li class="active"><a class="nav" href="faq.do">자주 묻는 질문</a></li>
-				<li class="nav"><a class="nav" href="inquiry.do">1:1문의</a></li>
+		<div class="p-5">
+			<ul class="nav nav-pills">
+				<li class="nav-item"><a href="#" class="nav-link">고객센터</a></li>
+				<li class="nav-item"><a href="faq.do" class="nav-link active">자주 묻는 질문</a></li>
+				<li class="nav-item"><a href="inquiry.do" class="nav-link" >1:1문의</a></li>
 			</ul>
-		</div>
-		<div class="faqList">
+			
 			<h2>자주묻는 질문</h2>
-			<div class="faqDiv">
+			<div class="row g-3 mt-2">
 				<select class="form-select" id="faqSelect">
 					<option value="" <c:if test="${empty param.type}">selected</c:if>>전체</option>
 					<option value="service" <c:if test="${param.type eq 'service' }">selected</c:if>>서비스 이용</option>
@@ -143,7 +142,6 @@
 				</tbody>
 			</table>
 		</div>
-
 	</div>
 </body>
 </html>

@@ -11,7 +11,7 @@
 				location.href="faq.do?type="+this.value;
 			});
 			
-			for(var i =1; i<4;i++){
+			for(var i =1; i<7;i++){
 				$('#panel'+i).hide();
 			/* 	$('#'+i).click(function(){
 					$('#panel'+i).slideDown("fast");	
@@ -32,15 +32,13 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<div class="nav">
-			<ul class="nav nav-pills nav-stacked">
-				<li class="navTitle"><a class="navTitle">고객센터</a></li>
-				<li class="active"><a class="nav" href="faq.do">자주 묻는 질문</a></li>
-				<li class="nav"><a class="nav" href="inquiry.do">1:1문의</a></li>
+		<div class="p-5">
+			<ul class="nav nav-pills">
+				<li class="nav-item"><a href="#" class="nav-link">고객센터</a></li>
+				<li class="nav-item"><a href="faq.do" class="nav-link active">자주 묻는 질문</a></li>
+				<li class="nav-item"><a href="inquiry.do" class="nav-link" >1:1문의</a></li>
 			</ul>
-		</div>
 	
-		<div class="faqList">
 			<h2>자주묻는 질문</h2>
 			<div class="row g-3 mt-2">
 				<select class="form-select" id="faqSelect">
