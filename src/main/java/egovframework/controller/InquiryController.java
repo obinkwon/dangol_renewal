@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,16 +32,31 @@ public class InquiryController {
 	@Resource(name = "inquiryService")
 	private InquiryService inquiryService;
 
+	/**
+	 * 자주묻는 질문 - 고객센터
+	 * @param model
+	 * @return "/faq.do"
+	 * @exception Exception
+	 */
 	@RequestMapping("/faq.do")
-	public String faqService(@RequestParam(defaultValue="all") String type) {
-		if(type.equals("all")) {
-			return "inquiry/faq";
-		}else if(type.equals("service")) {
-			return "inquiry/faqService";
-		}else {
-			return "inquiry/faqSite";
-		}
+	public String inquiryFaqList(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model
+			, @RequestParam(required=false) String type) {
+		String returnPage = "";
 		
+		if(type != null) {
+			if(type.equals("service")) {
+				returnPage = "inquiry/faqService";
+			}else {
+				returnPage = "inquiry/faqSite";
+			}
+		}else {
+			returnPage = "inquiry/faq";
+		}
+		model.addAttribute("type", type);
+		
+		return returnPage;
 	}
 	
 	@RequestMapping("inquiry.do")
