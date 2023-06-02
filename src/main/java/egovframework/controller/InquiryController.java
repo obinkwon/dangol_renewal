@@ -42,7 +42,7 @@ public class InquiryController {
 	public String inquiryFaqList(HttpServletRequest request
 			, HttpServletResponse response
 			, Model model
-			, @RequestParam(required=false) String type) {
+			, @RequestParam(required=false) String type) throws Exception {
 		String returnPage = "";
 		
 		if(!type.equals("")) {
@@ -59,23 +59,23 @@ public class InquiryController {
 		return returnPage;
 	}
 	
-	@RequestMapping("inquiry.do")
-	public ModelAndView inquiry (HttpSession session, HttpServletResponse resp) throws IOException {
-		ModelAndView mav = new ModelAndView();
-		resp.setContentType("text/html; charset=UTF-8");
-		PrintWriter pw = resp.getWriter();
+	@RequestMapping("/list.do")
+	public String inquiryList (HttpServletRequest request
+			, HttpServletResponse response
+			, HttpSession session 
+			, Model model) throws Exception {
+		String returnPage = "inquiry/list";
+		
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter pw = response.getWriter();
 		String str = "";
 		
-		if(session.getAttribute("mid")!=null) {
+		if(session.getAttribute("mid") != null) {
 			String mid = (String)session.getAttribute("mid");
-		mav.addObject("inquirylist",inquiryService.selectInquiryByMid(mid));
-		mav.setViewName("inquiry/inquiry");
-		return mav;
-		}else if (session.getAttribute("bid")!=null) {
+			model.addAttribute("inquirylist",inquiryService.selectInquiryByMid(mid));
+		}else if (session.getAttribute("bid") != null) {
 			String bid = (String) session.getAttribute("bid");
-			mav.addObject("inquirylist",inquiryService.selectInquiryByBid(bid));
-			mav.setViewName("inquiry/inquiry");
-			return mav;
+			model.addAttribute("inquirylist",inquiryService.selectInquiryByBid(bid));
 		}else {
 			str = "<script language='javascript'>";
 			str += "alert('로그인 후 이용 가능 합니다.');";
@@ -83,10 +83,11 @@ public class InquiryController {
 			str += "</script>";
 			pw.print(str);
 			return null;
-			
 		}
 		
+		return returnPage;
 	}
+	
 	@RequestMapping("removeInquiry.do")
 	public String removeInquiry(int inum) {
 		inquiryService.deleteInquiryOne(inum);

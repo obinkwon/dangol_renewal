@@ -13,7 +13,7 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("IMemberDao")
-public class IMemberDao extends EgovAbstractMapper {//memberMapper.xml
+public class IMemberDao extends EgovAbstractMapper {
 	
 	private final Logger logger = LoggerFactory.getLogger(IMemberDao.class);
 	
@@ -32,8 +32,16 @@ public class IMemberDao extends EgovAbstractMapper {//memberMapper.xml
 	public int insertMtag(Member member);
 	//회원 태그 조회
 	public List<Member> selectMtag(Member member);
-	//회원 정보 조회
-	public Member selectMember(Member member);
+	/**
+	 * 회원 정보 조회
+	 * 
+	 * @param	Member
+	 * @return	int
+	 * @exception Exception
+	 */
+	public Member selectMember(Member vo)throws Exception {
+		return selectOne("member.selectMember", vo);
+	}
 	//패널티 추가
 	public int updateMpenalty(Member member);
 }

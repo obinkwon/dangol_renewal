@@ -3,13 +3,22 @@ package egovframework.controller;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
 import egovframework.model.Admin;
+import egovframework.model.Login;
 import egovframework.model.Member;
 import egovframework.model.Store;
 import egovframework.service.AdminService;
@@ -26,21 +36,95 @@ import egovframework.service.OwnerService;
 
 
 @Controller
+@RequestMapping("/login")
 public class MemberController {
 
-	@Autowired
-	private MemberService mService;
+	/** The Constant logger. */
+	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
-	@Autowired
-	private OwnerService oService;
+	@Resource(name = "memberService")
+	private MemberService memberService;
 	
-	@Autowired
-	private AdminService aService;
+	@Resource(name = "ownerService")
+	private OwnerService ownerService;
 	
-	//로그인 폼 이동
-	@RequestMapping("loginForm.do")
-	public String loginForm() { 
-		return "jsp/loginForm";
+	@Resource(name = "adminService")
+	private AdminService adminService;
+	
+	//
+	/**
+	 * 로그인 폼 이동 - 로그인
+	 * @param model
+	 * @return "/loginForm.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/loginForm.do")
+	public String loginForm(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model) throws Exception {
+		String returnPage = "";
+		
+		try {
+			returnPage = "login/loginForm";
+		}catch(Exception e) {
+			logger.error(" MemberController.loginForm :: exception ::: "+e.getMessage());
+		}
+
+		return returnPage;
+	}
+	
+	/**
+	 * 로그인 Action - 로그인
+	 * @param model
+	 * @return "/loginAct.do"
+	 * @exception Exception
+	 */
+	@ResponseBody
+	@RequestMapping("/loginAct.do")
+	public ResponseEntity<?> loginAct(HttpServletRequest request
+			, HttpServletResponse response
+			, HttpSession session 
+			, Model model
+			, @ModelAttribute("login") Login login) throws Exception {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap.put("code", "3000");
+		resultMap.put("message", "fail");
+		resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+		
+		try {
+			if(login != null) {
+				String loginUser = login.getLoginUser();
+				String sessionId = "";
+				String path = "";
+				
+				//사용자 로그인일때
+				if (loginUser.equals("user")) {
+					int memberCnt = memberService.loginMembers(login);
+					logger.debug("memberCnt ::: {}",memberCnt);
+					sessionId = memberCnt == 0 ? "mid" : "loginAdmin";
+					path = "main.do";
+				} else { //점장 로그인일때
+					if (ownerService.loginBoss(login.getId(), login.getPwd()) == 0) {
+					} else {
+					}
+					path = "main.do";
+				}
+				session.setAttribute(sessionId, login.getId());
+				if(!path.equals("")) {
+					// 정상 데이터 결과
+					resultMap.put("code", "3001");
+					resultMap.put("message", "success");
+					resultMap.put("path", path);
+					resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+				}
+			}
+		}catch(Exception e) {
+			logger.error(" MemberController.loginAct :: exception ::: " + e.getMessage());
+		}
+		
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 	
 	//회원가입 폼 이동
@@ -68,48 +152,6 @@ public class MemberController {
 		mav.addObject("themeList", aService.selectAdminList(admin));
 		mav.setViewName("jsp/signUpMembersForm");
 		return mav;
-	}
-
-	//로그인
-	@RequestMapping("login.do")
-	public String login(HttpServletResponse resp
-			, HttpSession session
-			, String loginUser
-			, String id
-			, String pwd) throws Exception{
-
-		resp.setContentType("text/html; charset=UTF-8");
-		PrintWriter pw = resp.getWriter();
-		String str = "";
-		if (loginUser.equals("user")) { //사용자 로그인일때
-			int memberCnt = mService.loginMembers(id, pwd);
-			if (memberCnt == 0) {
-				session.setAttribute("mid", id);
-				return "redirect:main.do";
-			} else if (memberCnt == 1) {
-				session.setAttribute("loginAdmin", id);
-				return "redirect:adminRecommandTag.do";
-			} else {
-				str = "<script language='javascript'>";
-				str += "alert('회원정보가 일치하지 않습니다.');";
-				str += "history.go(-1);";
-				str += "</script>";
-				pw.print(str);
-				return null;
-			}
-		} else { //점장 로그인일때
-			if (oService.loginBoss(id, pwd) == 0) {
-				session.setAttribute("bid", id);
-				return "redirect:main.do";
-			} else {
-				str = "<script language='javascript'>";
-				str += "alert('회원정보가 일치하지 않습니다.');";
-				str += "history.go(-1);";
-				str += "</script>";
-				pw.print(str);
-				return null;
-			}
-		}
 	}
 
 	//id 찾기
