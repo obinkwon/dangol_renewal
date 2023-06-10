@@ -40,7 +40,7 @@
 		}
 	</script>
 	<link href="/css/sign-in.css" rel="stylesheet">
-</head>s
+</head>
 <body>
 	<div class="container text-center">
 		<div class="form-signin w-100 m-auto">

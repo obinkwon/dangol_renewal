@@ -5,6 +5,7 @@ CREATE TABLE `members` (
   `mpw` varchar(20) NOT NULL COMMENT '회원PW',
   `mphone` varchar(20) NOT NULL COMMENT '회원전화번호',
   `maddress` varchar(40) NOT NULL COMMENT '회원주소',
+  `maddress_d` varchar(500) NOT NULL COMMENT '상세주소',
   `mgender` varchar(2) NOT NULL COMMENT '회원성별(M/F)',
   `mjob` varchar(25) DEFAULT NULL COMMENT '회원직업',
   `mtype` varchar(10) NOT NULL DEFAULT 'MEMBER' COMMENT '회원유형 (ADMIN/MEMBER)',

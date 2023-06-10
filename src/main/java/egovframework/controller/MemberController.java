@@ -51,7 +51,6 @@ public class MemberController {
 	@Resource(name = "adminService")
 	private AdminService adminService;
 	
-	//
 	/**
 	 * 로그인 폼 이동 - 로그인
 	 * @param model
@@ -127,10 +126,25 @@ public class MemberController {
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 	
-	//회원가입 폼 이동
-	@RequestMapping("signUpForm.do")
-	public String signUpForm() {
-		return "jsp/signUpForm";
+	/**
+	 * 회원가입 폼 이동 - 로그인
+	 * @param model
+	 * @return "/loginForm.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/signUpForm.do")
+	public String signUpForm(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model) throws Exception {
+		String returnPage = "";
+		
+		try {
+			returnPage = "login/signUpForm";
+		}catch(Exception e) {
+			logger.error(" MemberController.signUpForm :: exception ::: "+e.getMessage());
+		}
+
+		return returnPage;
 	}
 	
 	//id, pwd 찾기 폼 이동
