@@ -27,7 +27,7 @@ public class MemberServiceImpl implements MemberService{
 	
 	private String imagePath = "C:\\eclipse-workspace\\dangol\\WebContent\\images\\";
 
-	public int loginMembers(Login login) throws Exception{
+	public int loginMembers(Login login) throws Exception {
 		Member member = new Member();
 		member.setMid(login.getId());
 		member = memberDao.selectMember(member);
@@ -44,15 +44,19 @@ public class MemberServiceImpl implements MemberService{
 			return 3;
 		}
 	}
+	
+	public Member selectMember(Member member) throws Exception {
+		return memberDao.selectMember(member);
+	}
 
 	public List<Member> findId(String phone) throws Exception{
 		Member member = new Member();
 		member.setMphone(phone);
-		return mdao.findId(member);
+		return memberDao.findId(member);
 	}
 
 	public Member findPw(Member member) throws Exception{
-		return mdao.findPw(member);
+		return memberDao.findPw(member);
 	}
 
 	//회원 가입
@@ -70,12 +74,12 @@ public class MemberServiceImpl implements MemberService{
 			}
 		}
 		member.setMimage(mimage);//db에 파일 정보 저장을 하기위해 모델객체에 setting하기
-		return mdao.insertMember(member);
+		return memberDao.insertMember(member);
 	}
 	
 	// 회원 태그 리스트 가져오기
 	public List<Member> selectMtag(Member member) {
-		return mdao.selectMtag(member);
+		return memberDao.selectMtag(member);
 	}
 	
 	//회원 태그 등록
@@ -88,21 +92,16 @@ public class MemberServiceImpl implements MemberService{
 			Member m = new Member();
 			m.setAnum(mt);
 			m.setMid(mid);
-			result += mdao.insertMtag(m);
+			result += memberDao.insertMtag(m);
 		}
 		return result;
-	}
-	
-	//회원 정보 가져오기
-	public Member selectMember(Member member){
-		return mdao.selectMember(member);
 	}
 	
 	//회원 파일 경로 생성
 	public File getAttachedFile(String mid) throws Exception{
 		Member member = new Member();
 		member.setMid(mid);
-		member = mdao.selectMember(member);
+		member = memberDao.selectMember(member);
 		String fileName = member.getMimage();
 		String path = imagePath + "member\\";
 		return new File(path+fileName);

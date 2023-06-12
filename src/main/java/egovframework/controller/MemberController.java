@@ -129,7 +129,7 @@ public class MemberController {
 	/**
 	 * 회원가입 폼 이동 - 로그인
 	 * @param model
-	 * @return "/loginForm.do"
+	 * @return "/signUpForm.do"
 	 * @exception Exception
 	 */
 	@RequestMapping("/signUpForm.do")
@@ -147,6 +147,51 @@ public class MemberController {
 		return returnPage;
 	}
 	
+	/**
+	 * 사용자 회원 가입 폼 이동 - 로그인
+	 * @param model
+	 * @return "/signup/membersForm.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/signup/membersForm.do")
+	public String signUpMembersForm(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model) throws Exception{
+		String returnPage = "";
+		Admin admin = new Admin();
+		
+		try {
+			// 회원가입시 해시태그 리스트 가져오기
+			admin.setAtype("theme");
+			model.addAttribute("themeList", adminService.selectAdminList(admin));
+			returnPage = "login/signup/membersForm";
+		}catch(Exception e) {
+			logger.error(" MemberController.signUpMembersForm :: exception ::: "+e.getMessage());
+		}
+
+		return returnPage;
+	}
+	
+	// 
+	/**
+	 * 회원가입시 id 중복체크 - 로그인
+	 * @param model
+	 * @return "/checkIdMember.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/checkIdMember.do")
+	@ResponseBody
+	public boolean checkId(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model
+			, Member member) throws Exception{
+		if (memberService.selectMember(member) == null) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
 	//id, pwd 찾기 폼 이동
 	@RequestMapping("findIdPwForm.do")
 	public ModelAndView findIdPwForm(String type) { 
@@ -156,18 +201,6 @@ public class MemberController {
 		return mav;
 	}
 	
-	//회원 가입 폼 이동
-	@RequestMapping("signUpMembersForm.do")
-	public ModelAndView signUpMembersForm() throws Exception{
-		// 회원가입시 해시태그 리스트 가져오기
-		ModelAndView mav = new ModelAndView();
-		Admin admin = new Admin();
-		admin.setAtype("theme");
-		mav.addObject("themeList", aService.selectAdminList(admin));
-		mav.setViewName("jsp/signUpMembersForm");
-		return mav;
-	}
-
 	//id 찾기
 	@RequestMapping("findId.do")
 	@ResponseBody
@@ -222,17 +255,6 @@ public class MemberController {
 		return result;
 	}
 
-	// 회원가입시 id 중복체크
-	@RequestMapping("checkIdMember.do")
-	@ResponseBody
-	public boolean checkId(Member member) throws Exception{
-		if (mService.selectMember(member) == null) {
-			return true;
-		}else {
-			return false;
-		}
-	}
-	
 	// 회원가입
 	@RequestMapping("signUp.do")
 	public String signUp(HttpServletResponse resp

@@ -22,6 +22,19 @@ public class IMemberDao extends EgovAbstractMapper {
 		super.setSqlSessionFactory(sqlSession);
 	}
 	
+	/**
+	 * 회원 정보 조회
+	 * 
+	 * @param	Member
+	 * @return	Member
+	 * @exception Exception
+	 */
+	public Member selectMember(Member vo)throws Exception {
+		return selectOne("member.selectMember", vo);
+	}
+	//패널티 추가
+	public int updateMpenalty(Member member);
+	
 	//ID 찾기
 	public List<Member> findId(Member member);
 	//비밀번호 찾기
@@ -32,16 +45,4 @@ public class IMemberDao extends EgovAbstractMapper {
 	public int insertMtag(Member member);
 	//회원 태그 조회
 	public List<Member> selectMtag(Member member);
-	/**
-	 * 회원 정보 조회
-	 * 
-	 * @param	Member
-	 * @return	int
-	 * @exception Exception
-	 */
-	public Member selectMember(Member vo)throws Exception {
-		return selectOne("member.selectMember", vo);
-	}
-	//패널티 추가
-	public int updateMpenalty(Member member);
 }

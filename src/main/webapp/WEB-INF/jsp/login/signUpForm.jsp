@@ -11,13 +11,13 @@
 		<div class="row mt-4">
 			<div class="col">
 				<div class="card shadow-sm">
-					<a href="signUpMembersForm.do"><img class="img-fluid" src="/img/myPage.png" width="100" height="100"></a>
+					<a href="/login/signup/membersForm.do"><img class="img-fluid" src="/img/myPage.png" width="100" height="100"></a>
 					<b>일반</b>
 				</div>
 			</div>
 			<div class="col">
 				<div class="card shadow-sm">
-					<a href="signUpBossForm.do"><img class="img-fluid" src="/img/ceo.png" width="100" height="100"></a>
+					<a href="/login/signup/bossForm.do"><img class="img-fluid" src="/img/ceo.png" width="100" height="100"></a>
 					<b>가맹점주</b>
 				</div>
 			</div>	

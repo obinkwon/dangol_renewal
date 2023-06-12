@@ -18,6 +18,15 @@ public interface MemberService {
 	 * @exception Exception
 	 */
 	public int loginMembers(Login login) throws Exception;
+	
+	/**
+	 * 회원 정보 가져오기
+	 * 
+	 * @param	Member
+	 * @return  Member
+	 * @exception Exception
+	 */
+	public Member selectMember(Member member) throws Exception;
 
 	public List<Member> findId(String phone) throws Exception;
 
@@ -31,9 +40,6 @@ public interface MemberService {
 	
 	//회원 태그 등록
 	public int insertMtag(Member member);
-	
-	//회원 정보 가져오기
-	public Member selectMember(Member member);
 	
 	//회원 파일 경로 생성
 	public File getAttachedFile(String mid) throws Exception;

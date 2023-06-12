@@ -56,7 +56,7 @@
 				
 				<div class="mt-2">
 					<div class="form-floating">
-						<input type="email" class="form-control" name="id" id="floatingInput" placeholder="아이디">
+						<input type="text" class="form-control" name="id" id="floatingInput" placeholder="아이디">
 				      	<label for="floatingInput">아이디</label>
 				    </div>
 				    <div class="form-floating">
