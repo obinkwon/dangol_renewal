@@ -31,51 +31,58 @@
 			AND MPHONE = #{mphone} 
 	</select>
 	
-	<!-- 회원 등록 -->
+	<!-- 사용자 등록 -->
 	<insert id="insertMember" parameterType="member">
 		INSERT INTO MEMBERS(
-			MID
-			,MPW
-			,MPHONE
-			,MADDRESS
-			,MADDRESS_D
-			,MGENDER
+			  MID
+			, MPW
+			, MPHONE
+			, MADDRESS
+			, MADDRESS_D
+			, MGENDER
 			<if test="mjob != null and mjob != ''">
-			,MJOB
+			, MJOB
 			</if>
-			,MTYPE
+			, MTYPE
 			<if test="marea1 != null and marea1 != ''">
-			,MAREA1
+			, MAREA1
 			</if>
 			<if test="marea2 != null and marea2 != ''">
-			,MAREA2
+			, MAREA2
 			</if>
 			<if test="mimage != null and mimage != ''">
-			,MIMAGE
+			, MIMAGE
 			</if>
-			,MPENALTY	
-		) 
-		VALUES (
-				#{mid}
-			, 	#{mpw}
-			, 	#{mphone}
-			, 	#{maddress}
-			,	#{maddress_d}
-			, 	#{mgender}
+			, MPENALTY	
+			, REGIST_DT
+			, MODIFY_DT
+			, REGIST_ID
+			, MODIFY_ID
+		) VALUES (
+			  #{mid}
+			, #{mpw}
+			, #{mphone}
+			, #{maddress}
+			, #{maddress_d}
+			, #{mgender}
 			<if test="mjob != null and mjob != ''">
-			,	#{mjob}
+			, #{mjob}
 			</if>
-			,	'user'
+			, 'user'
 			<if test="marea1 != null and marea1 != ''">
-			,	#{marea1}
+			, #{marea1}
 			</if>
 			<if test="marea2 != null and marea2 != ''">
-			,	#{marea2}
+			, #{marea2}
 			</if>
 			<if test="mimage != null and mimage != ''">
-			,	#{mimage}
+			, #{mimage}
 			</if>
-			,	0
+			, 0
+			, CURRENT_TIMESTAMP
+			, CURRENT_TIMESTAMP
+			, #{mid}
+			, #{mid}
 		)
 	</insert>
 

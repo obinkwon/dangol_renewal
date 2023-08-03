@@ -30,9 +30,12 @@ public class FileUtils {
 		
 		//파일 경로 확인
 		File file = new File(filePath); 
-		if(!file.exists()) file.mkdirs(); 
+		if(!file.exists()) file.mkdirs();
+		
+		logger.error("uploadFile :::::: "+uploadFile.isEmpty());
 		
 		if(!uploadFile.isEmpty()){ 
+			logger.error("uploadFile :::::: is not empty !!");
 			originalFileName = uploadFile.getOriginalFilename(); 
 			fileExt = originalFileName.substring(originalFileName.lastIndexOf("."));
 			storedFileName = new Date().getTime() + fileExt; 

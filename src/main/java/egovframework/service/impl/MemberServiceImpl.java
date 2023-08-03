@@ -2,30 +2,35 @@ package egovframework.service.impl;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import egovframework.com.utils.FileUtils;
 import egovframework.model.Login;
 import egovframework.model.Member;
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.service.MemberService;
 import egovframework.service.dao.IAdminDao;
 import egovframework.service.dao.IMemberDao;
 
 
 @Service("memberService")
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl extends EgovAbstractServiceImpl implements MemberService {
 
 	@Resource(name = "IMemberDao")
 	private IMemberDao memberDao;
 	
-	@Autowired
-	private IAdminDao adao;
+	@Resource(name = "IAdminDao")
+	private IAdminDao adminDao;
 	
-	private String imagePath = "C:\\eclipse-workspace\\dangol\\WebContent\\images\\";
+	@Value("${Globals.FilePath}")
+    private String FilePath;
 
 	public int loginMembers(Login login) throws Exception {
 		Member member = new Member();
@@ -45,10 +50,24 @@ public class MemberServiceImpl implements MemberService{
 		}
 	}
 	
+	// 사용자 검색
 	public Member selectMember(Member member) throws Exception {
 		return memberDao.selectMember(member);
 	}
 
+	//회원 가입
+	public int insertMember(Member member, MultipartFile uploadFile) throws Exception{
+		String filePath = FilePath + "member\\";
+		Map<String,Object> attachMap = FileUtils.uploadFile(filePath, uploadFile);
+		
+		if(attachMap != null) {
+			String mimage = (String) attachMap.get("storedFileName");
+			member.setMimage(mimage);
+		}
+		
+		return memberDao.insertMember(member);
+	}
+	
 	public List<Member> findId(String phone) throws Exception{
 		Member member = new Member();
 		member.setMphone(phone);
@@ -59,23 +78,6 @@ public class MemberServiceImpl implements MemberService{
 		return memberDao.findPw(member);
 	}
 
-	//회원 가입
-	public int insertMember(Member member
-			, MultipartFile mfile) throws Exception{
-		String path = imagePath +"member\\";
-		File dir = new File(path);
-		if(!dir.exists()) dir.mkdirs();
-		String mimage = "";
-		if(mfile != null) {
-			mimage = mfile.getOriginalFilename();
-			if(!mimage.equals("")) {
-				File attachFile = new File(path+mimage);
-				mfile.transferTo(attachFile);  //웹으로 받아온 파일을 복사
-			}
-		}
-		member.setMimage(mimage);//db에 파일 정보 저장을 하기위해 모델객체에 setting하기
-		return memberDao.insertMember(member);
-	}
 	
 	// 회원 태그 리스트 가져오기
 	public List<Member> selectMtag(Member member) {
@@ -99,12 +101,12 @@ public class MemberServiceImpl implements MemberService{
 	
 	//회원 파일 경로 생성
 	public File getAttachedFile(String mid) throws Exception{
-		Member member = new Member();
-		member.setMid(mid);
-		member = memberDao.selectMember(member);
+		Member vo = new Member();
+		vo.setMid(mid);
+		Member member = memberDao.selectMember(vo);
 		String fileName = member.getMimage();
-		String path = imagePath + "member\\";
-		return new File(path+fileName);
+		String path = FilePath + "member\\";
+		return new File(path + fileName);
 	}
 
 }

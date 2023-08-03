@@ -28,6 +28,7 @@ import egovframework.service.OwnerService;
 
 
 @Controller
+@RequestMapping("/main")
 public class MainController {
 	
 	/** The Constant logger. */
@@ -44,7 +45,9 @@ public class MainController {
 	
 	//메인 페이지 요청부분
 	@RequestMapping("/main.do")
-	public String main(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String main(HttpServletRequest request
+			, HttpServletResponse response
+			, Model model) throws Exception {
 		logger.debug("main.do ::::: ");
 //		List<Store> sList = (List<Store>)params.get("sList");
 		List<Store> sList = new ArrayList<Store>();

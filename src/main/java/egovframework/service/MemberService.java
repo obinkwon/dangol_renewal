@@ -28,12 +28,21 @@ public interface MemberService {
 	 */
 	public Member selectMember(Member member) throws Exception;
 
+	/**
+	 * 회원 정보 등록
+	 * 
+	 * @param	Member
+	 * @return  int
+	 * @exception Exception
+	 */
+	public int insertMember(Member member, MultipartFile uploadFile) throws Exception;
+	
+	
+	
 	public List<Member> findId(String phone) throws Exception;
 
 	public Member findPw(Member member) throws Exception;
 
-	//회원 가입
-	public int insertMember(Member member, MultipartFile mfile) throws Exception;
 	
 	// 회원 태그 리스트 가져오기
 	public List<Member> selectMtag(Member member);

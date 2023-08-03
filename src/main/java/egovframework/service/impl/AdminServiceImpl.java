@@ -60,9 +60,12 @@ public class AdminServiceImpl extends EgovAbstractServiceImpl implements AdminSe
 	public int insertTagFile(Admin admin, MultipartFile uploadFile) throws Exception {
 		String filePath = FilePath + "admin\\";
 		Map<String,Object> attachMap = FileUtils.uploadFile(filePath, uploadFile);
-		String aimage = (String) attachMap.get("storedFileName");
 		
-		admin.setAimage(aimage);
+		if(attachMap != null) {
+			String aimage = (String) attachMap.get("storedFileName");
+			admin.setAimage(aimage);
+		}
+		
 		return adminDao.insertTag(admin);
 	}
 

@@ -29,9 +29,21 @@ public class IMemberDao extends EgovAbstractMapper {
 	 * @return	Member
 	 * @exception Exception
 	 */
-	public Member selectMember(Member vo)throws Exception {
+	public Member selectMember(Member vo) throws Exception {
 		return selectOne("member.selectMember", vo);
 	}
+	
+	/**
+	 * 회원 정보 등록
+	 * 
+	 * @param	Member
+	 * @return	int
+	 * @exception Exception
+	 */
+	public int insertMember(Member vo) throws Exception{
+		return insert("member.insertMember", vo);
+	}
+	
 	//패널티 추가
 	public int updateMpenalty(Member member);
 	
@@ -40,7 +52,6 @@ public class IMemberDao extends EgovAbstractMapper {
 	//비밀번호 찾기
 	public Member findPw(Member member);
 	//회원 등록
-	public int insertMember(Member member);
 	//회원 태그 등록
 	public int insertMtag(Member member);
 	//회원 태그 조회

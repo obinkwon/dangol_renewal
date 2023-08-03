@@ -101,9 +101,9 @@ public class MemberController {
 				//사용자 로그인일때
 				if (loginUser.equals("user")) {
 					int memberCnt = memberService.loginMembers(login);
-					logger.debug("memberCnt ::: {}",memberCnt);
+					logger.debug("memberCnt ::: {}", memberCnt);
 					sessionId = memberCnt == 0 ? "mid" : "loginAdmin";
-					path = "main.do";
+					path = "/main/main.do";
 				} else { //점장 로그인일때
 					if (ownerService.loginBoss(login.getId(), login.getPwd()) == 0) {
 					} else {
@@ -172,7 +172,6 @@ public class MemberController {
 		return returnPage;
 	}
 	
-	// 
 	/**
 	 * 회원가입시 id 중복체크 - 로그인
 	 * @param model
@@ -181,15 +180,72 @@ public class MemberController {
 	 */
 	@RequestMapping("/checkIdMember.do")
 	@ResponseBody
-	public boolean checkId(HttpServletRequest request
+	public ResponseEntity<?> checkIdMember(HttpServletRequest request
+			, HttpSession session 
 			, HttpServletResponse response
 			, Model model
-			, Member member) throws Exception{
-		if (memberService.selectMember(member) == null) {
-			return true;
-		}else {
-			return false;
+			, @ModelAttribute("member") Member member) throws Exception{
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap.put("code", "3000");
+		resultMap.put("message", "fail");
+		resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+		
+		try {
+			Member resultVO = memberService.selectMember(member);
+			if(resultVO == null) {
+				// 정상 데이터 결과
+				resultMap.put("code", "3001");
+				resultMap.put("message", "success");
+				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+			}
+		}catch(Exception e) {
+			logger.error(" AdminController.adminInsertTagFile :: exception ::: " + e.getMessage());
 		}
+		
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
+	}
+	
+	// 회원가입
+	/**
+	 * 회원가입 Action - 로그인
+	 * @param model
+	 * @return "/signUpAct.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/signUpAct.do")
+	public ResponseEntity<?> signUpAct(HttpServletRequest request
+			, HttpSession session 
+			, HttpServletResponse response
+			, Model model
+			, @ModelAttribute("member") Member member
+			, @ModelAttribute("uploadFile") MultipartFile uploadFile) throws Exception {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap.put("code", "3000");
+		resultMap.put("message", "fail");
+		resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+		
+		try {
+			int result = memberService.insertMember(member, uploadFile);
+			if(result > 0) {
+				if(member.getMtag() != null) {
+					memberService.insertMtag(member);
+				}
+				// 정상 데이터 결과
+				resultMap.put("code", "3001");
+				resultMap.put("message", "success");
+				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+			}
+		}catch(Exception e) {
+			logger.error(" MemberController.signUpAct :: exception ::: " + e.getMessage());
+		}
+		
+		
+		
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 	
 	//id, pwd 찾기 폼 이동
@@ -255,30 +311,6 @@ public class MemberController {
 		return result;
 	}
 
-	// 회원가입
-	@RequestMapping("signUp.do")
-	public String signUp(HttpServletResponse resp
-			, Member member
-			, @RequestParam("mfile") MultipartFile mfile) throws Exception {
-		resp.setContentType("text/html; charset=UTF-8");
-		PrintWriter pw = resp.getWriter();
-		String str = "<script language='javascript'>";
-		int result = mService.insertMember(member, mfile);
-		if(member.getMtag() != null) {
-			mService.insertMtag(member);
-		}
-		if(result > 0) {
-			str += "alert('가입이 완료되었습니다.');";
-		}else {
-			str += "alert('가입에 실패하였습니다.');";
-		}
-		str += "location.href='loginForm.do'";
-		str += "</script>";
-		pw.print(str);
-		return null;
-
-	}
-	
 	//저장된 이미지 불러오기
 	@RequestMapping("downloadMImage.do") 
 	public View download(String mid) throws Exception{

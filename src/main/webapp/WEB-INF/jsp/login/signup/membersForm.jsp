@@ -40,6 +40,10 @@
 			//중복체크
 			$("#mid").on("blur",function(){
 				var mid = $('#mid').val();
+				var params = {
+					mid : mid
+				};
+				
 				if(mid == ''){
 					$('#invalidMid').text('id를 입력해주세요');
 					$('#mid').removeClass('is-valid');
@@ -47,18 +51,17 @@
 				}else{
 					$.ajax({
 						url : "/login/checkIdMember.do",
-						data : {
-							mid : mid
-						},
-						type : "json",
-						success : function(data) {
-							if (data) {
-								$('#mid').removeClass('is-invalid');
-								$('#mid').addClass('is-valid');
-							} else {
+						type : "post",
+						dataType : "json",
+						data : params,
+						success : function(response) {
+							if (response.code != "3001") {
 								$('#invalidMid').text('중복된 id 입니다.');
 								$('#mid').removeClass('is-valid');
 								$('#mid').addClass('is-invalid');
+							} else {
+								$('#mid').removeClass('is-invalid');
+								$('#mid').addClass('is-valid');
 							}
 						}
 					});
@@ -102,7 +105,7 @@
 		var sel_files = [];
 		
 		$(document).ready(function(){
-			$("#file").on("change",SelectImg);
+			$("#uploadFile").on("change",SelectImg);
 		});
 		function SelectImg(e){//이미지 미리보기
 			var files=e.target.files;
@@ -147,7 +150,30 @@
 		function addMember(){ //회원가입
 			if(formCheck()){
 				if(confirm('가입 하시겠습니까?')){
-					$('#signUp').submit();
+					var form = $('#signUpForm')[0];
+				    var formData = new FormData(form);
+				    
+					$.ajax({
+				        url : "/login/signUpAct.do",
+				        enctype: 'multipart/form-data',
+				        type : "post",
+				        dataType : "json",
+				        data : formData,
+				        processData : false,
+				        contentType : false,
+				        cache : false,
+				        success : function(response) {
+				            console.log(response);
+				            if( response.code != "3001"){
+				            	alert('가입에 실패하였습니다.');
+				            }else{
+				            	alert('가입이 완료되었습니다.');
+				            	location.href = '/login/loginForm.do';
+				            }
+				        }, error : function(jqXHR, status, e) {
+				            console.error(status + " : " + e);
+				        }
+				    });
 				}
 			}
 		}
@@ -178,7 +204,7 @@
 				alert('아이디를 입력해주세요.');
 				$('#mid').focus();
 				return false;
-			}else if($('#canId').text() != '사용가능한 id 입니다'){
+			}else if($('#mid').hasClass('is-invalid')){
 				alert('중복된 아이디입니다.');
 				$('#mid').focus();
 				return false;
@@ -211,7 +237,7 @@
 <body>
 	<div class="container text-center">
 		<div class="form-signin w-100 m-auto">
-			<form action="signUp.do" id="signUp" enctype="multipart/form-data" method="post">
+			<form id="signUpForm" action="" enctype="multipart/form-data" method="post">
 				<h1 class="h3 mb-3 fw-normal">일반 가입</h1>
 				
 				<div class="form-floating mt-2">
@@ -241,9 +267,9 @@
 		    	</div>
 		    	
 			    <div class="form-floating mt-4 input-group">
-		    		<input type="text" class="form-control" id="useraddr" name="maddress" disabled>
+		    		<input type="text" class="form-control" id="useraddr" name="maddress">
 					<label for="useraddr"><span style="color:red">* </span>주소</label>
-					<button type="button" class="btn btn-secondary" onclick="goPopup()">주소검색</button>
+					<button type="button" class="btn btn-secondary" onclick="goPopup()"  disabled>주소검색</button>
 		    	</div>
 		    	
 		    	<div class="form-floating mt-4">
@@ -333,7 +359,7 @@
 						</tr>
 						<tr>
 							<td>회원이미지</td>
-							<td colspan="2"><input id="file" type="file" name="mfile"></td>
+							<td colspan="2"><input id="uploadFile" type="file" name="uploadFile"></td>
 						</tr>
 					</tbody>
 				</table>
