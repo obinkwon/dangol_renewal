@@ -44,8 +44,8 @@
 		<div class="p-5">
 			<ul class="nav nav-pills">
 				<li class="nav-item"><a href="#" class="nav-link">고객센터</a></li>
-				<li class="nav-item"><a href="faq.do" class="nav-link active">자주 묻는 질문</a></li>
-				<li class="nav-item"><a href="inquiry.do" class="nav-link" >1:1문의</a></li>
+				<li class="nav-item"><a href="/inquiry/faq.do" class="nav-link active">자주 묻는 질문</a></li>
+				<li class="nav-item"><a href="/inquiry/list.do" class="nav-link" >1:1문의</a></li>
 			</ul>
 			
 			<h2>자주묻는 질문</h2>

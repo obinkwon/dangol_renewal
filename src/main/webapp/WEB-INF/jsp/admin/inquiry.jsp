@@ -88,7 +88,7 @@
 					</td>
 					<td><a href="selectInquiryDetail.do?inum=${inquiry.inum}">${inquiry.ititle}</a></td>
 					<td><fmt:formatDate value="${inquiry.idate}" pattern="yyyy.MM.dd"/></td>
-					<td><c:out value="${inquiry.istate == 'yes' ? '답변완료' : '미답변'}" /></td>
+					<td><c:out value="${inquiry.istate == 'Y' ? '답변완료' : '미답변'}" /></td>
 				</tr>
 				</c:forEach>	
 			</tbody>

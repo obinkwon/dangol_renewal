@@ -15,13 +15,17 @@ public interface InquiryService {
 	 */
 	public List<Inquiry> selectInquiryList(Inquiry inquiry) throws Exception;
 	
-	public List<Inquiry> selectInquiryByMid(String mid);
-
-	public List<Inquiry> selectInquiryByBid(String bid);
-
+	/**
+	 * 문의 등록
+	 * 
+	 * @param	Inquiry
+	 * @return  int
+	 * @exception Exception
+	 */
+	public int insertInquiry(Inquiry inquiry) throws Exception;
+	
 	public void deleteInquiryOne(int inum);
 
-	public void insertInquiry(Inquiry inquiry);
 
 	public Inquiry selectInquiryOne(int inum);
 

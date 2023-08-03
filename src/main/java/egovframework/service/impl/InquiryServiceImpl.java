@@ -3,45 +3,39 @@ package egovframework.service.impl;
 import java.util.HashMap;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 
 import egovframework.model.Inquiry;
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.service.InquiryService;
 import egovframework.service.dao.IInquiryDao;
 
 @Service("inquiryService")
-public class InquiryServiceImpl implements InquiryService{
+public class InquiryServiceImpl extends EgovAbstractServiceImpl implements InquiryService{
 
-	@Autowired
-	private IInquiryDao inqryDao;
+	@Resource(name = "IInquiryDao")
+	private IInquiryDao inquiryDao;
 
 	// 문의 리스트
 	public List<Inquiry> selectInquiryList(Inquiry inquiry) throws Exception {
-		return inqryDao.selectInquiryList(inquiry);
+		return inquiryDao.selectInquiryList(inquiry);
 	}
-		
-	public List<Inquiry> selectInquiryByMid(String mid) {
-		List<Inquiry> inquiry = inqryDao.selectInquiryByMid(mid);
-		return inquiry;
+	
+	// 문의 등록
+	public int insertInquiry(Inquiry inquiry) throws Exception {
+		return inquiryDao.insertInquiry(inquiry);
 	}
-
-	public List<Inquiry> selectInquiryByBid(String bid) {
-		List<Inquiry> inquiry = inqryDao.selectInquiryByBid(bid);
-		return inquiry;
-	}
-
+	
 	public void deleteInquiryOne(int inum) {
-		inqryDao.deleteInquiryOne(inum);
+		inquiryDao.deleteInquiryOne(inum);
 
 	}
 
-	public void insertInquiry(Inquiry inquiry) {
-		inqryDao.insertInquiry(inquiry);
-	}
 
 	public Inquiry selectInquiryOne(int inum) {
-		Inquiry inquiry = inqryDao.selectInquiryOne(inum);
+		Inquiry inquiry = inquiryDao.selectInquiryOne(inum);
 		return inquiry;
 	}
 
@@ -49,7 +43,7 @@ public class InquiryServiceImpl implements InquiryService{
 		HashMap<String, Object> param = new HashMap<String, Object>();
 		param.put("mid", mid);
 		param.put("keyword", keyword);
-		List<Inquiry> inquiry = inqryDao.searchInquiryListByMid(param);
+		List<Inquiry> inquiry = inquiryDao.searchInquiryListByMid(param);
 		return inquiry;
 	}
 
@@ -57,7 +51,7 @@ public class InquiryServiceImpl implements InquiryService{
 		HashMap<String, Object> param = new HashMap<String, Object>();
 		param.put("bid", bid);
 		param.put("keyword", keyword);
-		List<Inquiry> inquiry = inqryDao.searchInquiryListByBid(param);
+		List<Inquiry> inquiry = inquiryDao.searchInquiryListByBid(param);
 		return inquiry;
 	}
 }

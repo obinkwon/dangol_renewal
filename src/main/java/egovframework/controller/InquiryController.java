@@ -3,6 +3,9 @@ package egovframework.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -11,12 +14,17 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.model.Admin;
 import egovframework.model.Inquiry;
 import egovframework.service.InquiryService;
 
@@ -45,16 +53,21 @@ public class InquiryController {
 			, @RequestParam(required=false) String type) throws Exception {
 		String returnPage = "";
 		
-		if(!type.equals("")) {
-			if(type.equals("service")) {
-				returnPage = "inquiry/faqService";
+		try {
+			if(type != null) {
+				if(type.equals("service")) {
+					returnPage = "inquiry/faqService";
+				}else {
+					returnPage = "inquiry/faqSite";
+				}
 			}else {
-				returnPage = "inquiry/faqSite";
+				returnPage = "inquiry/faq";
 			}
-		}else {
-			returnPage = "inquiry/faq";
+			model.addAttribute("type", type);
+
+		}catch(Exception e) {
+			logger.error(" InquiryController.inquiryFaqList :: exception ::: "+e.getMessage());
 		}
-		model.addAttribute("type", type);
 		
 		return returnPage;
 	}
@@ -63,29 +76,85 @@ public class InquiryController {
 	public String inquiryList (HttpServletRequest request
 			, HttpServletResponse response
 			, HttpSession session 
-			, Model model) throws Exception {
-		String returnPage = "inquiry/list";
+			, Model model
+			, @ModelAttribute("inquiry") Inquiry inquiry) throws Exception {
 		
-		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter pw = response.getWriter();
-		String str = "";
+		String returnPage = "";
 		
-		if(session.getAttribute("mid") != null) {
-			String mid = (String)session.getAttribute("mid");
-			model.addAttribute("inquirylist",inquiryService.selectInquiryByMid(mid));
-		}else if (session.getAttribute("bid") != null) {
-			String bid = (String) session.getAttribute("bid");
-			model.addAttribute("inquirylist",inquiryService.selectInquiryByBid(bid));
-		}else {
-			str = "<script language='javascript'>";
-			str += "alert('로그인 후 이용 가능 합니다.');";
-			str += "location.href='loginForm.do';";
-			str += "</script>";
-			pw.print(str);
-			return null;
+		try {
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter pw = response.getWriter();
+			String str = "";
+			
+			if(session.getAttribute("mid") != null || session.getAttribute("bid") != null) {
+				inquiry.setMid((String)session.getAttribute("mid"));
+				inquiry.setBid((String)session.getAttribute("bid"));
+				model.addAttribute("inquirylist",inquiryService.selectInquiryList(inquiry));
+			}else {
+				str = "<script language='javascript'>";
+				str += "alert('로그인 후 이용 가능 합니다.');";
+				str += "location.href='/login/loginForm.do';";
+				str += "</script>";
+				pw.print(str);
+				return null;
+			}
+			
+			returnPage = "inquiry/list";
+
+		}catch(Exception e) {
+			logger.error(" InquiryController.inquiryList :: exception ::: "+e.getMessage());
 		}
 		
 		return returnPage;
+	}
+	
+	@RequestMapping("/inquiryForm.do")
+	public String inquiryForm (HttpServletRequest request
+			, HttpServletResponse response
+			, HttpSession session 
+			, Model model) throws Exception {
+		
+		String returnPage = "";
+		
+		try {
+			returnPage = "inquiry/inquiryForm";
+		}catch(Exception e) {
+			logger.error(" InquiryController.inquiryForm :: exception ::: "+e.getMessage());
+		}
+
+		return returnPage;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/insertInquiry.do")
+	public ResponseEntity<?> insertInquiry(HttpServletRequest request
+			, HttpServletResponse response
+			, HttpSession session
+			, @ModelAttribute("inquiry") Inquiry inquiry) throws IOException {
+			
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap.put("code", "3000");
+		resultMap.put("message", "fail");
+		resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+		
+		try {
+			inquiry.setMid((String) session.getAttribute("mid"));
+			inquiry.setBid((String)session.getAttribute("bid"));
+			
+			int result = inquiryService.insertInquiry(inquiry);
+			if(result > 0) {
+				// 정상 데이터 결과
+				resultMap.put("code", "3001");
+				resultMap.put("message", "success");
+				resultMap.put("httpStatusCode", HttpStatus.OK.value());	// 200
+			}
+		}catch(Exception e) {
+			logger.error(" InquiryController.insertInquiry :: exception ::: " + e.getMessage());
+		}
+		
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
+		
 	}
 	
 	@RequestMapping("removeInquiry.do")
@@ -94,36 +163,7 @@ public class InquiryController {
 		return "redirect:inquiry.do";
 		
 	}
-	@RequestMapping("registInquiryForm.do")
-	public String registInquiryForm() {
-		return "inquiry/registInquiryForm";
-	}
-	@RequestMapping("registInquiry.do")
-	public String registInquiry(Inquiry inquiry, HttpSession session, HttpServletResponse resp) throws IOException {
-		resp.setContentType("text/html; charset=UTF-8");
-		PrintWriter pw = resp.getWriter();
-		String str = "";
-		
-	if(session.getAttribute("mid")!=null) {
-		System.out.println("여기여기");
-		String mid= (String) session.getAttribute("mid");
-		inquiry.setMid(mid);
-		System.out.println(inquiry);
-		inquiryService.insertInquiry(inquiry);
-	}else {
-		String bid=(String)session.getAttribute("bid");
-		inquiry.setBid(bid);
-		System.out.println(inquiry);
-		inquiryService.insertInquiry(inquiry);
-	}
-	str = "<script language='javascript'>";
-	str += "alert('1:1문의가 등록되었습니다.');";
-	str += "location.href='inquiry.do';";
-	str += "</script>";
-	pw.print(str);
-	return null;
 	
-}
 	@RequestMapping("inquiryView.do")
 	public ModelAndView inquiryView(int inum) {
 	ModelAndView mav = new ModelAndView();

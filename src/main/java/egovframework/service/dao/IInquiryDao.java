@@ -8,12 +8,13 @@ import javax.annotation.Resource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import egovframework.model.Inquiry;
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
-@Mapper("IInquiryDao")
+@Repository("IInquiryDao")
 public class IInquiryDao extends EgovAbstractMapper {
 	
 	private final Logger logger = LoggerFactory.getLogger(IInquiryDao.class);
@@ -26,18 +27,26 @@ public class IInquiryDao extends EgovAbstractMapper {
 	/**
 	 * 1:1문의 리스트 조회
 	 * 
-	 * @param
-	 * @return List Inquiry
+	 * @param	Inquiry
+	 * @return 	List
 	 * @exception Exception
 	 */
 	public List<Inquiry> selectInquiryList(Inquiry vo) throws Exception {
 		return selectList("inquiry.selectInquiryList",vo);
 	}
 	
-	public List<Inquiry> selectInquiryByMid (String mid);
-	public List<Inquiry> selectInquiryByBid (String bid);
+	/**
+	 * 1:1문의 리스트 조회
+	 * 
+	 * @param	Inquiry
+	 * @return 	int
+	 * @exception Exception
+	 */
+	public int insertInquiry(Inquiry vo) throws Exception {
+		return insert("inquiry.insertInquiry", vo);
+	}
+	
 	public void deleteInquiryOne(int inum);
-	public void insertInquiry(Inquiry inquiry);
 	public Inquiry selectInquiryOne(int inum);
 	public List<Inquiry> searchInquiryListByMid (HashMap<String, Object>param);
 	public List<Inquiry> searchInquiryListByBid (HashMap<String, Object>param);

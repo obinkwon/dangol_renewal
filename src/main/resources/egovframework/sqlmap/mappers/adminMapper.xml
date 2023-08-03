@@ -106,20 +106,20 @@
 		UNION ALL 
 		SELECT 
 			'답변완료' AS ititle
-			,'yes' AS itype
+			,'Y' AS itype
 			, count(*) AS cnt
 		FROM 
 			INQUIRYS 
-		WHERE ISTATE = 'yes'
+		WHERE ISTATE = 'Y'
 		UNION ALL 
 		SELECT 
 			'미답변' AS ititle
-			,'no' AS itype
+			,'N' AS itype
 			, count(*) AS cnt
 		FROM 
 			INQUIRYS 
 		WHERE 
-			ISTATE = 'no'
+			ISTATE = 'N'
 	</select>
 	
 	<!-- 문의 상세보기 -->
