@@ -265,14 +265,14 @@ public class MemberController {
 		List<String> str = new ArrayList<String>();
 
 		if (loginUser.equals("user")) { //사용자 일때
-			List<Member> mlist = mService.findId(phone);
+			List<Member> mlist = memberService.findId(phone);
 			if (mlist.size() > 0) {
 				for (int i = 0; i < mlist.size(); i++) {
 					str.add(mlist.get(i).getMid());
 				}
 			}
 		} else { //점장 일때
-			List<Store> blist = oService.findId(phone);
+			List<Store> blist = ownerService.findId(phone);
 			if (blist.size() > 0) {
 				for (int i = 0; i < blist.size(); i++) {
 					str.add(blist.get(i).getBid());
@@ -295,7 +295,7 @@ public class MemberController {
 			member.setMid(id);
 			member.setMphone(phone);
 			
-			member = mService.findPw(member);
+			member = memberService.findPw(member);
 			if (member != null) {
 				result = member.getMpw();
 			}
@@ -303,7 +303,7 @@ public class MemberController {
 			Store store = new Store();
 			store.setBid(id);
 			store.setBphone(phone);
-			store = oService.findPw(store);
+			store = ownerService.findPw(store);
 			if (store != null) {
 				result = store.getBid();
 			}
@@ -314,7 +314,7 @@ public class MemberController {
 	//저장된 이미지 불러오기
 	@RequestMapping("downloadMImage.do") 
 	public View download(String mid) throws Exception{
-		File attachFile= mService.getAttachedFile(mid);
+		File attachFile= memberService.getAttachedFile(mid);
 		View view = new DownloadView(attachFile);
 		return view;
 	}
