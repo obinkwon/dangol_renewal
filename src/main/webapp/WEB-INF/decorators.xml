@@ -6,6 +6,7 @@
       <pattern>/ajax/*</pattern>
       <pattern>/common/*</pattern>
       <pattern>/updata/*</pattern>
+      <pattern>/login/*</pattern>
     </excludes>    
       
     <!-- admin 페이지 layout 설정 -->

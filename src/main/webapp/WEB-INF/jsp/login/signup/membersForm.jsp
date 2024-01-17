@@ -4,6 +4,7 @@
 <html>
 <head>
 	<title>회원가입_사용자</title>
+	<link rel="stylesheet" href="/css/signup.css" />
 	<script type="text/javascript">
 		$(document).ready(function() {
 			//id 특수문자 제외
@@ -239,38 +240,6 @@
 		<div class="form-signin w-100 m-auto">
 			<form id="signUpForm" action="" enctype="multipart/form-data" method="post">
 				<h1 class="h3 mb-3 fw-normal">일반 가입</h1>
-				
-				<div class="form-floating mt-2">
-					<input type="text" class="form-control" id="mid" name="mid" maxlength="10" placeholder="특수문자 없이 10자이내" onKeyup="this.value=this.value.replace(/^[A-Za-z0-9]$/,'');">
-			      	<label for="mid"><span style="color:red">* </span>아이디</label>
-					<div class="valid-feedback">사용 가능한 아이디 입니다.</div>
-					<div class="invalid-feedback" id="invalidMid"></div>
-			    </div>
-		    	<div class="row mt-4">
-				    <div class="form-floating col">
-						<input type="password" class="form-control" id="pwd" name="mpw" maxlength="13" placeholder="공백없이 13자이내" onKeyup="this.value=this.value.replace(/^[A-Za-z0-9]$/,'');">
-						<label for="pwd"><span style="color:red">* </span>비밀번호</label>
-						<div class="valid-feedback">사용 가능한 비밀번호 입니다.</div>
-						<div class="invalid-feedback" id="invalidPwd"></div>
-					</div>
-			    	<div class=" form-floating col">
-						<input type="password" class="form-control" id="pwdCheck" maxlength="13" placeholder="공백없이 13자이내">
-						<label for="pwdCheck"><span style="color:red">* </span>비밀번호 확인</label>
-						<div class="valid-feedback">비밀번호가 일치합니다.</div>
-						<div class="invalid-feedback" id="invalidPwdChk"></div>
-			    	</div>
-		    	</div>
-		    	
-		    	<div class="form-floating mt-4">
-		    		<input type="text" class="form-control" id="mphone" name="mphone"  maxlength="11" placeholder="(-)제외  11자리이내" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');">
-					<label for="mphone"><span style="color:red">* </span>전화번호</label>
-		    	</div>
-		    	
-			    <div class="form-floating mt-4 input-group">
-		    		<input type="text" class="form-control" id="useraddr" name="maddress">
-					<label for="useraddr"><span style="color:red">* </span>주소</label>
-					<button type="button" class="btn btn-secondary" onclick="goPopup()"  disabled>주소검색</button>
-		    	</div>
 		    	
 		    	<div class="form-floating mt-4">
 		    		<input type="text" class="form-control" id="useraddrDetail" name="maddress_d" placeholder="상세주소">
@@ -372,5 +341,37 @@
 			</form>
 		</div>
 	</div>
+	
+	
+	
+	<div class="cotn_principal">
+	<div class="cont_centrar">
+  		<div class="cont_login">
+			<div class="cont_forms cont_forms_active_sign_up" >
+				<div class="cont_form_sign_up">
+					<a href="#" onclick="hidden_login_and_sign_up()">
+						<i class="material-icons">&#xE5C4;</i>
+					</a>
+					<h2>SIGN UP</h2>
+					<input type="text" id="mid" name="mid" maxlength="10" placeholder="아이디(특수문자 없이 10자이내)" onKeyup="this.value=this.value.replace(/^[A-Za-z0-9]$/,'');">
+					<div class="invalid-feedback" id="invalidMid"></div>
+					
+					<input type="password" id="pwd" name="mpw" maxlength="13" placeholder="비밀번호(공백없이 13자이내)" onKeyup="this.value=this.value.replace(/^[A-Za-z0-9]$/,'');">
+					<div class="invalid-feedback" id="invalidPwd"></div>
+					
+					<input type="password" id="pwdCheck" maxlength="13" placeholder="비밀번호 확인(공백없이 13자이내)">
+					<div class="invalid-feedback" id="invalidPwdChk"></div>
+						
+					<input type="text" id="mphone" name="mphone"  maxlength="11" placeholder="번호(-)제외  11자리이내" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');">
+					
+					<input type="text" id="useraddr" name="maddress" placeholder="주소">
+					<button class="btn_search" onclick="goPopup()">검색</button>
+					
+					<button class="btn_sign_up" onclick="change_to_sign_up()">SIGN UP</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 </html>
