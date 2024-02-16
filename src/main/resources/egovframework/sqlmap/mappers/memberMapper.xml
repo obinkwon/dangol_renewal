@@ -38,11 +38,6 @@
 			, MPW
 			, MPHONE
 			, MADDRESS
-			, MADDRESS_D
-			, MGENDER
-			<if test="mjob != null and mjob != ''">
-			, MJOB
-			</if>
 			, MTYPE
 			<if test="marea1 != null and marea1 != ''">
 			, MAREA1
@@ -63,11 +58,6 @@
 			, #{mpw}
 			, #{mphone}
 			, #{maddress}
-			, #{maddress_d}
-			, #{mgender}
-			<if test="mjob != null and mjob != ''">
-			, #{mjob}
-			</if>
 			, 'user'
 			<if test="marea1 != null and marea1 != ''">
 			, #{marea1}
@@ -103,9 +93,6 @@
 			,MPW AS mpw
 			,MPHONE AS mphone
 			,MADDRESS AS maddress
-			,MADDRESS_D AS maddress_d
-			,MGENDER AS mgender
-			,MJOB AS mjob
 			,MTYPE AS mtype
 			,MAREA1 AS marea1
 			,MAREA2 AS marea2

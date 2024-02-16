@@ -52,9 +52,6 @@
 			MPW = #{mpw}
 			, MPHONE = #{mphone}
 			, MADDRESS = #{maddress}
-			, MADDRESS_D = #{maddress_d}
-			, MGENDER = #{mgender}
-			, MJOB = <include refid="mjob"/>
 			, MAREA1 = <include refid="marea1"/>
 			, MAREA2 = <include refid="marea2"/>
 			, MIMAGE = <include refid="mimage"/> 

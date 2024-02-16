@@ -5,6 +5,7 @@
 <head>
 	<title>회원가입_사용자</title>
 	<link rel="stylesheet" href="/css/signup.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			//id 특수문자 제외
@@ -46,7 +47,6 @@
 				};
 				
 				if(mid == ''){
-					$('#invalidMid').text('id를 입력해주세요');
 					$('#mid').removeClass('is-valid');
 					$('#mid').addClass('is-invalid');
 				}else{
@@ -57,7 +57,6 @@
 						data : params,
 						success : function(response) {
 							if (response.code != "3001") {
-								$('#invalidMid').text('중복된 id 입니다.');
 								$('#mid').removeClass('is-valid');
 								$('#mid').addClass('is-invalid');
 							} else {
@@ -74,11 +73,10 @@
 				if($('#pwd').val() == ''){
 					$('#pwd').removeClass('is-valid');
 					$('#pwd').addClass('is-invalid');
-					$('#invalidPwd').text('비밀번호를 입력해주세요');
+					alert('비밀번호를 입력해주세요');
 				}else{
 					$('#pwd').removeClass('is-invalid');
 					$('#pwd').addClass('is-valid');
-					$('#invalidPwd').text('');
 				}
 			});
 			
@@ -87,7 +85,7 @@
 				if($('#pwdCheck').val() == ''){
 					$('#pwdCheck').removeClass('is-valid');
 					$('#pwdCheck').addClass('is-invalid');
-					$('#invalidPwdChk').text('비밀번호 확인을 입력해주세요');
+					alert('비밀번호 확인을 입력해주세요');
 				}else{
 					if(($('#pwd').val()) == ($('#pwdCheck').val())){
 						$('#pwdCheck').removeClass('is-invalid');
@@ -95,7 +93,7 @@
 					}else{
 						$('#pwdCheck').removeClass('is-valid');
 						$('#pwdCheck').addClass('is-invalid');
-						$('#invalidPwdChk').text("비밀번호가 일치하지 않습니다");
+						alert("비밀번호가 일치하지 않습니다");
 					}
 				}
 				
@@ -236,115 +234,7 @@
 	</script>
 </head>
 <body>
-	<div class="container text-center">
-		<div class="form-signin w-100 m-auto">
-			<form id="signUpForm" action="" enctype="multipart/form-data" method="post">
-				<h1 class="h3 mb-3 fw-normal">일반 가입</h1>
-		    	
-		    	<div class="form-floating mt-4">
-		    		<input type="text" class="form-control" id="useraddrDetail" name="maddress_d" placeholder="상세주소">
-					<label for="useraddrDetail">상세주소</label>
-		    	</div>
-		    	
-				
-				<table class="signForm">
-					<colgroup>
-						<col width="30%">
-						<col width="*">
-						<col width="30%">
-					</colgroup>
-					<tbody>
-						<tr>
-							<td><span style="color:red">* </span>성별</td>
-							<td colspan="2">
-								<div class="formArea">
-									<ul>
-										<li>
-											<input class="inputRadio" type="radio" name="mgender" id="mgender-m" value="m" checked>
-											<label for="mgender-m">남</label>
-										</li>
-										<li>
-											<input class="inputRadio" type="radio" name="mgender" id="mgender-f" value="f">
-											<label for="mgender-f">여</label>
-										</li>
-									</ul>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td>직업</td>
-							<td colspan="2"><input type="text" name="mjob" class="inputText w300" id="mjob"></td>
-						</tr>
-						<tr>
-							<td>선호지역</td>
-							<td>
-								<input type="text" id="preferaddr" name="marea1" class="inputText w300" readonly="readonly">
-							</td>
-							<td>
-								<button type="button" class="btn-view btn-mint" onclick="prefer1()" style="width:100px;">주소검색</button>
-							</td> 
-						</tr>
-						<tr>
-							<td>&nbsp;</td>
-							<td>
-								<input type="text" id="preferaddr2" name="marea2" class="inputText w300" readonly="readonly">
-							</td>
-							<td>
-								<button type="button" class="btn-view btn-mint" onclick="prefer2()" style="width:100px;">주소검색</button>
-							</td>
-						</tr>
-						<tr>
-							<td>해시태그</td>
-							<td>
-								<select id="ttag" class="inputText w300">
-								<c:forEach var="themeTag" items="${themeList}">
-									<option value="${themeTag.anum}">#${themeTag.avalue}</option>
-								</c:forEach>
-								<c:if test="${empty themeList}">
-									<option selected disabled>태그 없음</option>
-								</c:if>
-								</select>
-							</td> 
-							<td>
-								<button class="btn-view btn-mint" type="button" onclick="addTag()" style="width:100px;">추가</button>
-							</td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td>
-							<td colspan="2">
-								<div id="tagDiv"></div>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								<p class="tagText">해시태그는 회원별 추천에 사용됩니다.</p>
-								<p class="tagText">※태그최대 등록 갯수: 3개</p>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								<img id="img" class="memberImg" src="myPage.png">
-							</td>
-						</tr>
-						<tr>
-							<td>회원이미지</td>
-							<td colspan="2"><input id="uploadFile" type="file" name="uploadFile"></td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="contentsTitGroup">
-					<h4 class="contentTit" style="opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);"><span style="color:red">* </span>표시는 필수 입력 사항입니다.</h4>
-				</div>
-				<div class="btn-wrap">
-					<button class="btn-view btn-mint" onclick="addMember()" type="button">가입하기</button>
-				</div>
-			</form>
-		</div>
-	</div>
-	
-	
-	
-	<div class="cotn_principal">
+<div class="cotn_principal">
 	<div class="cont_centrar">
   		<div class="cont_login">
 			<div class="cont_forms cont_forms_active_sign_up" >
@@ -352,22 +242,36 @@
 					<a href="#" onclick="hidden_login_and_sign_up()">
 						<i class="material-icons">&#xE5C4;</i>
 					</a>
-					<h2>SIGN UP</h2>
-					<input type="text" id="mid" name="mid" maxlength="10" placeholder="아이디(특수문자 없이 10자이내)" onKeyup="this.value=this.value.replace(/^[A-Za-z0-9]$/,'');">
-					<div class="invalid-feedback" id="invalidMid"></div>
-					
-					<input type="password" id="pwd" name="mpw" maxlength="13" placeholder="비밀번호(공백없이 13자이내)" onKeyup="this.value=this.value.replace(/^[A-Za-z0-9]$/,'');">
-					<div class="invalid-feedback" id="invalidPwd"></div>
-					
+					<h2>일반 가입</h2>
+					<input type="text" id="mid" name="mid" maxlength="10" placeholder="아이디(특수문자 없이 10자이내)" onKeyup="this.value=this.value.replace(/^[A-Za-z0-9]$/,'');"/>
+					<input type="password" id="pwd" name="mpw" maxlength="13" placeholder="비밀번호(공백없이 13자이내)" onKeyup="this.value=this.value.replace(/^[A-Za-z0-9]$/,'');"/>
 					<input type="password" id="pwdCheck" maxlength="13" placeholder="비밀번호 확인(공백없이 13자이내)">
-					<div class="invalid-feedback" id="invalidPwdChk"></div>
 						
-					<input type="text" id="mphone" name="mphone"  maxlength="11" placeholder="번호(-)제외  11자리이내" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');">
+					<input type="text" id="mphone" name="mphone"  maxlength="11" placeholder="번호(-)제외  11자리이내" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
 					
-					<input type="text" id="useraddr" name="maddress" placeholder="주소">
-					<button class="btn_search" onclick="goPopup()">검색</button>
+					<input type="text" id="useraddr" name="maddress" placeholder="주소"/>
+					<input type="text" id="useraddrDetail" name="maddress_d" placeholder="상세주소"/>
 					
-					<button class="btn_sign_up" onclick="change_to_sign_up()">SIGN UP</button>
+					<input type="text" id="preferaddr" name="marea1" readonly="readonly" placeholder="선호하는 주소1" onclick="prefer1()"/>
+					<input type="text" id="preferaddr2" name="marea2" readonly="readonly" placeholder="선호하는 주소2" onclick="prefer2()"/>
+					
+					<div id="tagDiv"></div>
+					<select id="ttag" class="selectBox">
+						<c:forEach var="themeTag" items="${themeList}">
+							<option value="${themeTag.anum}">#${themeTag.avalue}</option>
+						</c:forEach>
+						<c:if test="${empty themeList}">
+							<option selected disabled>태그 없음</option>
+						</c:if>
+					</select>
+					
+					<button class="btn_search" type="button" onclick="addTag()">추가</button>
+					<div class="cont_ba_opcitiy"><p>해시태그는 회원별 추천에 사용됩니다.<br/> ※태그최대 등록 갯수: 3개</p></div>
+					
+					<img id="img" src="myPage.png" width=100 height=100>
+					<input id="uploadFile" type="file" name="uploadFile">
+					
+					<button class="btn_sign_up" onclick="addMember()">SIGN UP</button>
 				</div>
 			</div>
 		</div>
