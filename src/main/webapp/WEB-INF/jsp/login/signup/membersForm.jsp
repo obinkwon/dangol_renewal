@@ -239,9 +239,7 @@
   		<div class="cont_login">
 			<div class="cont_forms cont_forms_active_sign_up" >
 				<div class="cont_form_sign_up">
-					<a href="#" onclick="hidden_login_and_sign_up()">
-						<i class="material-icons">&#xE5C4;</i>
-					</a>
+					<a href="javascript:history.back();">이전</a>
 					<h2>일반 가입</h2>
 					<input type="text" id="mid" name="mid" maxlength="10" placeholder="아이디(특수문자 없이 10자이내)" onKeyup="this.value=this.value.replace(/^[A-Za-z0-9]$/,'');"/>
 					<input type="password" id="pwd" name="mpw" maxlength="13" placeholder="비밀번호(공백없이 13자이내)" onKeyup="this.value=this.value.replace(/^[A-Za-z0-9]$/,'');"/>
